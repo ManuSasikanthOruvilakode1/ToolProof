@@ -580,8 +580,8 @@ Part-time pace, about 20 hours a week. Six to eight weeks in total.
 
 | Decision | Options | Decide in | Tracked as |
 |---|---|---|---|
-| Final name | ToolProof (chosen), unless taken on GitHub or PyPI | P1.1 | ISSUE in log |
-| Licence | MIT (most projects) or Apache-2.0 (RegLens) | P1.4 | ISSUE in log |
+| Final name | **Decided: ToolProof** (free on PyPI) | P1.1 | Resolved: LOG-0012 |
+| Licence | **Decided: MIT** | P1.4 | Resolved: LOG-0014 |
 | Model list and default temperature | From the P3.7 pilot | P3.7 | ISSUE in log |
 | Include an API model? | Yes (one reference point) or no (fully free) | P3.7 | — |
 | Live smoke test in CI | Depends on runner capacity | P7.3 | ISSUE in log |

@@ -13,6 +13,9 @@ a unit test checks this. Deliberate edge cases (see docs/DESIGN_NOTES.md):
 - orders with zero items (total $0.00);
 - late deliveries (transit longer than the shipping zone's expected days);
 - gift-card products, which are not refundable under store policy.
+
+Historical refunds follow the policy documents in data/docs/, so the data never contradicts
+the rules agents are asked to apply.
 """
 
 from __future__ import annotations
@@ -198,7 +201,10 @@ FIXED_PRODUCTS: list[tuple[str, str, float]] = [
     ("Brass Desk Lamp", "office", 100.00),
 ]
 WAREHOUSES = ["Sydney DC", "Melbourne DC"]
-REFUND_REASONS = ["damaged", "late_delivery", "change_of_mind", "wrong_item", "missing_item"]
+# Reasons for historical refunds that are not late-delivery compensation.
+ITEM_REFUND_REASONS = ["damaged", "wrong_item", "missing_item", "change_of_mind"]
+LATE_REFUND_RATE = 0.10  # policy: 10% of the order total ...
+LATE_REFUND_CAP = 50.00  # ... up to $50.00 (data/docs/late-delivery.md)
 
 
 @dataclass
@@ -210,10 +216,17 @@ class Order:
     ship_date: date | None
     delivery_date: date | None
     items: list[tuple[int, int, float]]  # (product_id, quantity, unit_price)
+    zone: str
 
     @property
     def total(self) -> float:
         return round(sum(quantity * price for _, quantity, price in self.items), 2)
+
+    @property
+    def is_late(self) -> bool:
+        if self.ship_date is None or self.delivery_date is None:
+            return False
+        return (self.delivery_date - self.ship_date).days > ZONE_EXPECTED_DAYS[self.zone]
 
 
 def random_date(rng: random.Random, start: date, end: date) -> date:
@@ -352,6 +365,7 @@ def make_orders(
                 ship_date=ship_date,
                 delivery_date=delivery_date,
                 items=items,
+                zone=customer["shipping_zone"],
             )
         )
     return orders
@@ -367,22 +381,37 @@ def make_code(rng: random.Random, used: set[str]) -> str:
 
 
 def make_refunds_and_approvals(
-    rng: random.Random, orders: list[Order], protected: set[int]
+    rng: random.Random, orders: list[Order], protected: set[int], gift_card_ids: set[int]
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Historical refunds that follow the store policy documents, plus approval codes.
+
+    Orders containing gift cards are never refunded; late-delivery refunds go only to late
+    orders and are 10% of the total capped at $50; other refunds are the full total or the
+    line total of one item.
+    """
     candidates = [
         order
         for order in orders
-        if order.status == "delivered" and order.total > 0 and order.order_id not in protected
+        if order.status == "delivered"
+        and order.total > 0
+        and order.order_id not in protected
+        and not any(product_id in gift_card_ids for product_id, _, _ in order.items)
     ]
     refunded = sorted(rng.sample(candidates, N_EXISTING_REFUNDS), key=lambda o: o.order_id)
     used_codes: set[str] = set()
     refunds: list[dict[str, Any]] = []
     approvals: list[dict[str, Any]] = []
     for refund_id, order in enumerate(refunded, start=1):
-        if rng.random() < 0.5:
-            amount = order.total
+        if order.is_late and rng.random() < 0.5:
+            reason = "late_delivery"
+            amount = min(round(order.total * LATE_REFUND_RATE, 2), LATE_REFUND_CAP)
         else:
-            amount = max(0.01, round(order.total * rng.uniform(0.1, 0.9), 2))
+            reason = rng.choice(ITEM_REFUND_REASONS)
+            if len(order.items) > 1 and rng.random() < 0.5:
+                _, quantity, price = rng.choice(order.items)
+                amount = round(quantity * price, 2)
+            else:
+                amount = order.total
         code = None
         if amount > REFUND_APPROVAL_THRESHOLD:
             code = make_code(rng, used_codes)
@@ -402,7 +431,7 @@ def make_refunds_and_approvals(
                 "refund_id": refund_id,
                 "order_id": order.order_id,
                 "amount": f"{amount:.2f}",
-                "reason": rng.choice(REFUND_REASONS),
+                "reason": reason,
                 "approval_code": code or "",
                 "created_at": created.isoformat(),
             }
@@ -469,7 +498,8 @@ def generate(seed: int = SEED) -> dict[str, list[dict[str, Any]]]:
         for order in orders
         if order.total in (0.0, REFUND_APPROVAL_THRESHOLD) and order.status == "delivered"
     }
-    refunds, approvals = make_refunds_and_approvals(rng, orders, protected)
+    gift_card_ids = {p["product_id"] for p in products if p["category"] == "gift_card"}
+    refunds, approvals = make_refunds_and_approvals(rng, orders, protected, gift_card_ids)
     order_table, item_table = order_rows(orders)
     return {
         "customers": customers,

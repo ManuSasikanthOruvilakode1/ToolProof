@@ -119,6 +119,40 @@ def test_refunds_respect_policy(tables: dict[str, list[dict[str, Any]]]) -> None
         assert float(orders[approval["order_id"]]["total"]) > 200
 
 
+def test_historical_refunds_follow_policy_docs(tables: dict[str, list[dict[str, Any]]]) -> None:
+    """Seed refunds must not contradict data/docs (gift cards, late-delivery formula, reasons)."""
+    orders = {row["order_id"]: row for row in tables["orders"]}
+    zones = {row["customer_id"]: row["shipping_zone"] for row in tables["customers"]}
+    gift_cards = {p["product_id"] for p in tables["products"] if p["category"] == "gift_card"}
+    lines: dict[int, list[float]] = {}
+    has_gift_card: set[int] = set()
+    for item in tables["order_items"]:
+        lines.setdefault(item["order_id"], []).append(
+            round(item["quantity"] * float(item["unit_price"]), 2)
+        )
+        if item["product_id"] in gift_cards:
+            has_gift_card.add(item["order_id"])
+    allowed_reasons = {"damaged", "wrong_item", "missing_item", "change_of_mind", "late_delivery"}
+    for refund in tables["refunds"]:
+        order = orders[refund["order_id"]]
+        amount = float(refund["amount"])
+        total = float(order["total"])
+        assert refund["order_id"] not in has_gift_card
+        assert refund["reason"] in allowed_reasons
+        if refund["reason"] == "late_delivery":
+            transit = date.fromisoformat(order["delivery_date"]) - date.fromisoformat(
+                order["ship_date"]
+            )
+            assert transit.days > generator.ZONE_EXPECTED_DAYS[zones[order["customer_id"]]]
+            assert amount == pytest.approx(min(round(total * 0.10, 2), 50.00))
+        else:
+            assert amount == pytest.approx(total) or amount in lines[refund["order_id"]]
+        days_after_delivery = (
+            date.fromisoformat(refund["created_at"]) - date.fromisoformat(order["delivery_date"])
+        ).days
+        assert 0 < days_after_delivery <= 30
+
+
 def test_gift_cards_are_not_refundable(tables: dict[str, list[dict[str, Any]]]) -> None:
     for product in tables["products"]:
         assert product["refundable"] == (0 if product["category"] == "gift_card" else 1)
