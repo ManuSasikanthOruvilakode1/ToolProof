@@ -232,7 +232,7 @@ task is complete **and** a matching `DONE` entry exists in the log.
 - [x] **P1.4** Choose the licence (see [§16](#16-decisions-still-open)) and add `LICENSE`.
 - [x] **P1.5** GitHub Actions `ci.yml`: `uv sync` → ruff → mypy → pytest → `devlog.py verify`.
 - [x] **P1.6** CLI skeleton: `toolproof --help` lists `run`, `report`, `compare`, `bench`, `trace`, `runs`.
-- [ ] **P1.7** First commit, tag `checkpoint/CP-0002`, save a checkpoint.
+- [x] **P1.7** First commit, tag `checkpoint/CP-0002`, save a checkpoint.
 - **Done when:** CI is green; `uv run toolproof --help` works; `devlog.py verify` passes in CI.
 
 ### P2: Sandbox world (≈ 5–6 days)
