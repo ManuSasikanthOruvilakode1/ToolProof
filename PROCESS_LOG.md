@@ -415,3 +415,17 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - GitHub Packages does not host PyPI packages, so a container image is how ToolProof appears under the repo's Packages section
   - Image auth uses the built-in GITHUB_TOKEN (no secrets); new packages start private and must be made public once in package settings
 - **Next:** In P9.2 add .github/workflows/publish.yml alongside the Dockerfile; in P9.6 tag v0.1.0 to trigger it
+
+---
+
+### LOG-0038 | 2026-11-17 19:09 +11:00 | DECISION | P8.6
+
+**Summary:** Add a hosted read-only FastAPI service on Render (new tasks P8.6 and P9.7, goal G10); plan version 1.0 -> 1.1
+
+- **Files:** `PLAN.md`
+- **Details:**
+  - Requested by the project owner, following the set-up of an earlier portfolio API (FastAPI on Render with Swagger at /docs)
+  - Endpoints: /, /health, /tools, /sandbox/call, /tasks (dev split only), /leaderboard, /runs/{id} and example traces; read-only, no model calls on the server
+  - Naming: service and URL use 'toolproof' only; no student field, course code or assignment details (RULES 1-2)
+- **Findings:** Render's free tier is enough because the server only serves the deterministic sandbox and committed results
+- **Next:** Build in P8.6 after results exist; deploy in P9.7. An early version with /tools and /sandbox/call is possible any time after P2

@@ -1,6 +1,6 @@
 # ToolProof: Project Plan
 
-> **Plan version:** 1.0 · **Created:** 2026-11-17 · **Status:** Phase 0 (Planning) complete; Phase 1 next.
+> **Plan version:** 1.1 · **Created:** 2026-11-17 · **Updated:** 2026-11-17 (hosted read-only API added, LOG-0038) · **Status:** P0–P2 complete; P3 next.
 >
 > This file describes **what** to build and **how to judge it**. It changes only through a logged
 > decision (`DECISION` entry in [PROCESS_LOG.md](PROCESS_LOG.md)). Current progress is in
@@ -83,6 +83,7 @@ number has a confidence interval, and every failure is assigned a type from a fi
 - G6. Six experiments (E1–E6) answering RQ1–RQ6.
 - G7. A CI regression gate that replays recorded LLM responses.
 - G8. A Streamlit viewer for the leaderboard, traces and failures.
+- G10. A hosted, read-only FastAPI service (Render) exposing the tools, sandbox, tasks and published results, with Swagger docs at `/docs`.
 - G9. One-command reproduction (`scripts/reproduce.sh`) and Docker.
 
 ### Non-goals (v0.1)
@@ -100,6 +101,7 @@ number has a confidence interval, and every failure is assigned a type from a fi
 - [ ] The regression gate is shown to work: deliberately breaking a tool makes the gate fail.
 - [ ] Failure-classifier agreement with manual labels is reported (target Cohen's κ ≥ 0.70; the actual value is reported either way).
 - [ ] `docker compose up` starts the viewer with the published results.
+- [ ] The hosted API is live on Render, linked from the README and the repository's About box, and serves the published results.
 - [ ] The final review against [RULES.md](RULES.md) passes (PII scan, AI-watermark scan, results honesty).
 
 ---
@@ -120,6 +122,7 @@ number has a confidence interval, and every failure is assigned a type from a fi
 | Agent framework | Written from scratch (~200–300 lines) | Full control over steps and logging; shows understanding |
 | Primary scoring | Rule-based checkers only (answer, final state, safety) | No LLM-judge noise in the main metric |
 | Experiment tracking | Run manifests + JSONL; MLflow optional (as in RegLens) | Plain files are easy to diff, resume and publish |
+| Hosting | Read-only FastAPI service on Render (free tier); no model runs on the server | A live, clickable demo; same set-up as earlier portfolio APIs |
 
 ---
 
@@ -331,6 +334,7 @@ task is complete **and** a matching `DONE` entry exists in the log.
 - [ ] **P8.3** Failure explorer: filter by failure type and jump to example traces.
 - [ ] **P8.4** Compare view: one task under two configs, side by side.
 - [ ] **P8.5** Screenshots and a short GIF in `docs/images/`.
+- [ ] **P8.6** FastAPI app (`src/toolproof/api/`), read-only: `GET /` (project info), `GET /health`, `GET /tools?level=`, `POST /sandbox/call` (one tool call on a fresh sandbox; returns result and state diff; rate-limited and size-capped), `GET /tasks` (dev split only), `GET /leaderboard`, `GET /runs/{id}` and example traces from `reports/`. Swagger at `/docs`. Tests with FastAPI's test client. **No agent runs, no model calls, no writes outside a temporary sandbox.**
 
 ### P9: Packaging and publication (≈ 3–4 days)
 
@@ -340,6 +344,7 @@ task is complete **and** a matching `DONE` entry exists in the log.
 - [ ] **P9.4** `PROJECT_EXPLANATION.md`: design decisions, trade-offs and what you would do next.
 - [ ] **P9.5** Final rules review: PII scan, AI-watermark scan, check every README number against the reports, check licences.
 - [ ] **P9.6** Tag `v0.1.0`, publish to GitHub, add the repository link to the README.
+- [ ] **P9.7** Deploy the API to Render from `main` (`render.yaml`, Docker or `uv` build command, health check `/health`). Add the live URL to the README and the repository's About box. Check that the deployed numbers match `reports/`.
 
 ---
 
