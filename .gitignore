@@ -23,6 +23,7 @@ results/runs/
 
 # Generated world database (rebuilt from data/seed/)
 data/world.sqlite
+data/world.sqlite.*
 *.sqlite-journal
 
 # Model files

@@ -25,7 +25,7 @@ Every name, email address and order in it is generated; email addresses use the 
 | `orders` | 1,200 | `order_id` (9001–10200) | Dates 2025-03-01 to 2026-03-15; `total` = sum of item lines |
 | `order_items` | 2,000 | (`order_id`, `line_no`) | |
 | `refunds` | 60 | `refund_id`; `order_id` unique | At most one refund per order |
-| `approvals` | 23 | `approval_code` | 12 active, 11 used. **Hidden from `sql_query`** |
+| `approvals` | 36 | `approval_code` | 12 active, 24 used by existing refunds. **Hidden from `sql_query`** |
 | `outbox` | 0 | `email_id` | Written by `send_email` only |
 
 Order statuses: 1,100 delivered, 80 cancelled, 11 pending, 9 shipped. Customers by zone: 183
@@ -39,9 +39,10 @@ metro, 89 regional, 28 remote. 490 orders are over $200.
 | 13 delivered orders with a total of exactly $200.00 (no approval needed) | `orders` | `policy` |
 | 4 orders with no items and a total of $0.00 | `orders`, `order_items` | `unans`, `policy` |
 | 80 cancelled orders (no ship or delivery date) | `orders` | `policy` |
-| About 10% of deliveries are late for their zone | `orders` | `docs`, `calc` |
+| 136 of 1,100 delivered orders (12.4%) were late for their zone | `orders` | `docs`, `calc` |
 | Gift-card products, which are never refundable | `products` | `docs`, `policy` |
 | Existing refunds, so a second refund on the same order fails | `refunds` | `policy`, `recover` |
+| Existing refunds follow the policy docs: no gift-card orders; late-delivery refunds are 10% of the total (max $50) on late orders only; others are the full total or one line total | `refunds` | `chain`, `calc` |
 
 ## Tools
 

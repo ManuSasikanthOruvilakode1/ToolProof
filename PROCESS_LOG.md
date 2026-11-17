@@ -441,3 +441,80 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 - **Details:**
   - The project owner confirmed the hosted API is not needed; it stays in the plan as an optional extra so it cannot block the definition of done
   - No early API version will be built before P3
+
+---
+
+### LOG-0040 | 2026-11-17 19:18 +11:00 | FINDING | -
+
+**Summary:** Full project and process audit after P2: gates, CI and log integrity clean; 7 problems found
+
+- **Details:**
+  - Clean: ruff, ruff format, mypy strict, pytest 243 passed (99% coverage), devlog verify (39 entries), uv.lock in sync, requirements.txt in sync, CI green on all 5 pushed commits, no CRLF in the index
+  - Clean: PII, AI-watermark and university scans of tracked files (only false positives such as 'manual' and the rule text itself)
+  - Data claims checked against the database: 3 Johns, 13 delivered orders at exactly 200.00, order IDs 9001-10200, city-to-zone mapping matches shipping-zones.md
+- **Issues:**
+  - 1) data/world.sqlite.sha256 (generated) was committed
+  - 2) 3 historical refunds were on orders containing gift cards, and refund reasons/amounts were random, contradicting the policy docs
+  - 3) DESIGN_NOTES said about 10% late deliveries; actual 136/1,100 = 12.4%
+  - 4) pre-commit hook was never installed in this clone
+  - 5) README status and PLAN section 16 were stale
+  - 6) CP-0003 was behind the log (LOG-0037 to LOG-0039 were added after it)
+  - 7) commit author email in the pushed history is an institutional address (logged separately as an ISSUE)
+
+---
+
+### LOG-0041 | 2026-11-17 19:18 +11:00 | EDIT | P2.1
+
+**Summary:** Historical refunds now follow the policy docs; refunds.csv and approvals.csv regenerated
+
+- **Refs:** LOG-0040
+- **Files:** `scripts/build_sandbox.py`, `data/seed/refunds.csv`, `data/seed/approvals.csv`, `tests/unit/test_build_sandbox.py`, `docs/DESIGN_NOTES.md`
+- **Details:**
+  - No refunds on orders containing gift cards; late_delivery refunds only on late orders, amount min(10% of total, 50.00); other refunds are the full total or one line total; reasons from the policy reason codes
+  - Only refunds and approvals changed (random draws for them come after orders); approvals now 36 (12 active, 24 used)
+  - New test test_historical_refunds_follow_policy_docs; tests 244 passed
+- **Findings:** 10% of a 2-decimal total can land on exactly half a cent (e.g. 123.45 -> 12.345); P4 late-delivery tasks must use a 0.01 tolerance or avoid such totals
+
+---
+
+### LOG-0042 | 2026-11-17 19:18 +11:00 | EDIT | -
+
+**Summary:** Audit fixes: untracked generated fingerprint, installed pre-commit hook, refreshed README, PLAN section 16 and DESIGN_NOTES
+
+- **Refs:** LOG-0040
+- **Files:** `.gitignore`, `README.md`, `PLAN.md`, `docs/DESIGN_NOTES.md`
+- **Details:**
+  - .gitignore now covers data/world.sqlite.*; data/world.sqlite.sha256 removed from the index (kept on disk)
+  - README: CI badge and current status (P1-P2 done, P3 next); PLAN section 16 marks name and licence as decided (LOG-0012, LOG-0014); DESIGN_NOTES late-delivery and approval counts corrected
+  - Repository-local git identity switched to the GitHub noreply address for all future commits
+
+---
+
+### LOG-0043 | 2026-11-17 19:18 +11:00 | ISSUE | -
+
+**Summary:** The 7 commits already pushed carry an institutional author email that identifies a university (RULES 1-2)
+
+- **Refs:** LOG-0040
+- **Details:** Future commits use the GitHub noreply address. Removing the address from existing commits needs a history rewrite and a force-push of main and tags, which RULES 46 forbids without a DECISION
+- **Next:** Project owner decides: rewrite history now while the repository is new, or accept and close
+
+---
+
+### LOG-0044 | 2026-11-17 19:18 +11:00 | NOTE | P9.2
+
+**Summary:** Packaging caveat for P9: data/ is not inside the wheel and paths.PROJECT_ROOT assumes a source checkout
+
+- **Details:** A pip-installed or Docker build must set TOOLPROOF_DATA_DIR or ship data/ (seed CSVs and docs) alongside the package
+
+---
+
+### LOG-0045 | 2026-11-17 19:18 +11:00 | CHECKPOINT | P2
+
+**Summary:** CP-0004 saved: post-P2 audit fixes applied; P3 not started
+
+- **Refs:** LOG-0040, LOG-0041, LOG-0042, LOG-0043, LOG-0044
+- **Details:**
+  - Reconciles CP-0003, which was behind the log (LOG-0037 to LOG-0039)
+  - Tests: 244 passed; ruff, mypy strict, pre-commit (now installed) and devlog verify clean
+  - Open issues: LOG-0008, LOG-0009, LOG-0043
+- **Next:** Owner decision on LOG-0043; then P3.1 when the owner says to start P3
