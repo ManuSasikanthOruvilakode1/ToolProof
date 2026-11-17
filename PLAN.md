@@ -237,27 +237,27 @@ task is complete **and** a matching `DONE` entry exists in the log.
 
 ### P2: Sandbox world (≈ 5–6 days)
 
-- [ ] **P2.1** `scripts/build_sandbox.py` (seed 42) generates `data/seed/*.csv`: about 300 customers, 1,200 orders, 80 products, 60 existing refunds and inventory. Include deliberate edge cases: duplicate customer first names (for ambiguity tasks), cancelled orders, orders exactly at the refund limit, and orders with zero items. Document the schema in `docs/DESIGN_NOTES.md`.
-- [ ] **P2.2** `env.World`: builds the SQLite file from the CSVs once, gives each trial a **fresh copy**, and provides `snapshot()` / `diff()` (rows added, removed and changed per table). Frozen clock: `TODAY = 2026-03-16`.
-- [ ] **P2.3** Tool base class: name, three description variants (`minimal`, `standard`, `detailed`), argument model (pydantic → JSON schema), `run()`, and typed errors `NotFound`, `InvalidArgument`, `PermissionDenied`, `ToolTimeout` and `RateLimited`.
-- [ ] **P2.4** Read tools:
+- [x] **P2.1** `scripts/build_sandbox.py` (seed 42) generates `data/seed/*.csv`: about 300 customers, 1,200 orders, 80 products, 60 existing refunds and inventory. Include deliberate edge cases: duplicate customer first names (for ambiguity tasks), cancelled orders, orders exactly at the refund limit, and orders with zero items. Document the schema in `docs/DESIGN_NOTES.md`.
+- [x] **P2.2** `env.World`: builds the SQLite file from the CSVs once, gives each trial a **fresh copy**, and provides `snapshot()` / `diff()` (rows added, removed and changed per table). Frozen clock: `TODAY = 2026-03-16`.
+- [x] **P2.3** Tool base class: name, three description variants (`minimal`, `standard`, `detailed`), argument model (pydantic → JSON schema), `run()`, and typed errors `NotFound`, `InvalidArgument`, `PermissionDenied`, `ToolTimeout` and `RateLimited`.
+- [x] **P2.4** Read tools:
   - `sql_query(query)`: read-only connection (`PRAGMA query_only = ON`), single statement only, 50-row cap, 2-second time limit; the schema is described in the tool description.
   - `get_order(order_id)`: returns the order with its items, or `NotFound`.
   - `search_docs(query, top_k=3)`: BM25 over `data/docs/`; returns snippets with doc IDs.
-- [ ] **P2.5** Pure tools:
+- [x] **P2.5** Pure tools:
   - `calculator(expression)`: safe AST evaluator that allows numbers, `+ - * / ** %`, parentheses, `round`, `min`, `max`, `sum` and `abs`, and **nothing else**.
   - `get_date()` and `add_days(date, n)`.
-- [ ] **P2.6** Write tools:
+- [x] **P2.6** Write tools:
   - `issue_refund(order_id, amount, reason, approval_code=None)`. Policy: the amount must be ≤ the order total; one refund per order; refunds over $200 need a valid `approval_code`, otherwise `PermissionDenied`; cancelled orders cannot be refunded.
   - `send_email(to, subject, body)`: writes to an `outbox` table. **No network, ever.**
-- [ ] **P2.7** `ask_user(question)` returns the task's scripted `user_replies` in order, then `"No further information is available."`
-- [ ] **P2.8** Fault injection (`env.faults`):
+- [x] **P2.7** `ask_user(question)` returns the task's scripted `user_replies` in order, then `"No further information is available."`
+- [x] **P2.8** Fault injection (`env.faults`):
   - per-task schedules, e.g. `{tool: get_order, call: 1, error: ToolTimeout}`;
   - a global seeded-random error rate for E6;
   - every injected error is recorded in the trace as `injected: true`.
-- [ ] **P2.9** 15 distractor tools with realistic schemas and plausible outputs, e.g. `get_weather`, `translate_text`, `convert_currency`, `get_stock_price`, `create_calendar_event`, `lookup_postcode`, `get_exchange_rate`, `summarise_text`, `get_news`, `check_inventory_supplier`, `book_courier`, `get_holiday_list`, `validate_email`, `generate_coupon` and `get_store_hours`. They must not be needed for any task.
-- [ ] **P2.10** About 30 policy and FAQ documents in `data/docs/`: refund policy, damaged items, late delivery, approval escalation, email etiquette, privacy (for example, never email one customer's data to another), shipping zones, and so on.
-- [ ] **P2.11** Unit tests for every tool, covering valid input, invalid input, each error type and policy limits. Determinism test: run the same call sequence twice and get identical output hashes.
+- [x] **P2.9** 15 distractor tools with realistic schemas and plausible outputs, e.g. `get_weather`, `translate_text`, `convert_currency`, `get_stock_price`, `create_calendar_event`, `lookup_postcode`, `get_exchange_rate`, `summarise_text`, `get_news`, `check_inventory_supplier`, `book_courier`, `get_holiday_list`, `validate_email`, `generate_coupon` and `get_store_hours`. They must not be needed for any task.
+- [x] **P2.10** About 30 policy and FAQ documents in `data/docs/`: refund policy, damaged items, late delivery, approval escalation, email etiquette, privacy (for example, never email one customer's data to another), shipping zones, and so on.
+- [x] **P2.11** Unit tests for every tool, covering valid input, invalid input, each error type and policy limits. Determinism test: run the same call sequence twice and get identical output hashes.
 - **Done when:** all tools are tested; coverage of `env/` is ≥ 90%; the determinism test passes.
 
 ### P3: Agent loop (≈ 4–5 days)

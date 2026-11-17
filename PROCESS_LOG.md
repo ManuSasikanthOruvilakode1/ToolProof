@@ -279,3 +279,110 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - Tests: pytest 16 passed; ruff, ruff format, mypy strict and devlog verify clean; pre-commit all hooks passed
   - Open issues: LOG-0008, LOG-0009, LOG-0020
 - **Next:** P2.1 write scripts/build_sandbox.py (seed 42) generating data/seed/*.csv
+
+---
+
+### LOG-0023 | 2026-11-17 18:46 +11:00 | RESOLVED | P1.5
+
+**Summary:** CI is green: first GitHub Actions run (44040740869) on commit 2b1238c passed
+
+- **Refs:** LOG-0020
+- **Details:**
+  - Remote origin added; main and tag checkpoint/CP-0002 pushed
+  - P1 done-condition now fully met: CI green, toolproof --help works, devlog verify passes in CI
+
+---
+
+### LOG-0024 | 2026-11-17 18:57 +11:00 | DONE | P2.1
+
+**Summary:** Seed data generator (seed 42) writes data/seed/*.csv: 300 customers, 80 products, 1,200 orders, 2,000 items, 60 refunds, 23 approvals
+
+- **Files:** `scripts/build_sandbox.py`, `data/seed`, `src/toolproof/paths.py`, `src/toolproof/env/clock.py`, `docs/DESIGN_NOTES.md`
+- **Details:** Edge cases: exactly 3 Johns and 2 Priyas (unique full names), 13 delivered orders at exactly 200.00, 4 zero-item orders, 80 cancelled, ~10% late deliveries, non-refundable gift cards
+- **Findings:** First price ranges put 951/1,200 orders over the 200 approval threshold; lowered ranges and basket sizes to 490/1,200 (median 169.99) so the approval rule is selective
+
+---
+
+### LOG-0025 | 2026-11-17 18:57 +11:00 | DONE | P2.2
+
+**Summary:** World: builds SQLite from CSVs with fingerprint-based rebuild, fresh copy per trial, snapshot/diff, frozen clock 2026-03-16
+
+- **Files:** `src/toolproof/env/world.py`, `src/toolproof/env/sandbox.py`
+
+---
+
+### LOG-0026 | 2026-11-17 18:57 +11:00 | DONE | P2.3
+
+**Summary:** Tool base class with 3 description levels, pydantic args (extra=forbid) -> JSON schema, typed errors, ToolBox dispatcher recording every call
+
+- **Files:** `src/toolproof/env/tools/base.py`, `src/toolproof/env/toolbox.py`
+
+---
+
+### LOG-0027 | 2026-11-17 18:57 +11:00 | DONE | P2.4
+
+**Summary:** Read tools: sql_query (read-only + authorizer, approvals hidden, 1 statement, 50-row cap, 2 s limit), get_order, search_docs (BM25 over doc sections)
+
+- **Files:** `src/toolproof/env/tools/read.py`, `src/toolproof/env/docs_index.py`
+- **Details:** approvals table is unreadable through sql_query so agents cannot look up approval codes
+- **Findings:** Short sections outranked the right document; counting titles twice (field boost) fixed most queries. 'damaged item refund policy' still ranks refund-policy first but damaged-items is in the default top 3
+
+---
+
+### LOG-0028 | 2026-11-17 18:57 +11:00 | DONE | P2.5
+
+**Summary:** Pure tools: whitelisted AST calculator (no eval/exec), get_date, add_days
+
+- **Files:** `src/toolproof/env/tools/pure.py`
+
+---
+
+### LOG-0029 | 2026-11-17 18:57 +11:00 | DONE | P2.6
+
+**Summary:** Write tools: issue_refund enforcing amount, one-per-order, cancelled and >200 approval rules; send_email writes to outbox only
+
+- **Files:** `src/toolproof/env/tools/write.py`
+- **Details:** Refund of exactly 200.00 needs no approval; a used approval code is marked used
+
+---
+
+### LOG-0030 | 2026-11-17 18:57 +11:00 | DONE | P2.7
+
+**Summary:** ask_user returns scripted replies in order, then 'No further information is available.', and records questions asked
+
+- **Files:** `src/toolproof/env/tools/interact.py`
+
+---
+
+### LOG-0031 | 2026-11-17 18:57 +11:00 | DONE | P2.8
+
+**Summary:** Fault injection: per-tool call schedules and a seeded random rate (ToolTimeout/RateLimited); injected errors marked injected=true and block side effects
+
+- **Files:** `src/toolproof/env/faults.py`
+
+---
+
+### LOG-0032 | 2026-11-17 18:57 +11:00 | DONE | P2.9
+
+**Summary:** 15 deterministic, stateless distractor tools (outputs seeded from a hash of name + args)
+
+- **Files:** `src/toolproof/env/tools/distractors.py`, `src/toolproof/env/tools/__init__.py`
+
+---
+
+### LOG-0033 | 2026-11-17 18:57 +11:00 | DONE | P2.10
+
+**Summary:** 30 policy and FAQ documents in data/docs/ for the fictional store Larkspur Home & Office
+
+- **Files:** `data/docs`
+- **Details:** Some rules are enforced by tools, others exist only in docs (delivered-only refunds, gift cards, late delivery 10% capped at 50, privacy, no bulk email); split documented in DESIGN_NOTES.md
+
+---
+
+### LOG-0034 | 2026-11-17 18:57 +11:00 | DONE | P2.11
+
+**Summary:** Tool tests: 243 passed; env/ coverage 99%; determinism test passes (identical hashes over a 12-call sequence with faults)
+
+- **Files:** `tests/conftest.py`, `tests/unit/test_build_sandbox.py`, `tests/unit/test_world.py`, `tests/unit/test_tools_read.py`, `tests/unit/test_tools_pure.py`, `tests/unit/test_tools_write.py`, `tests/unit/test_toolbox_and_faults.py`, `tests/unit/test_distractors_and_safety.py`
+- **Details:** Safety tests: no network imports, no eval/exec/compile, no real-clock calls anywhere in env/
+- **Findings:** Tests caught a real bug: schema title-stripping also deleted a property named 'title' (create_calendar_event), hiding a required argument from the model; fixed in base._strip_titles

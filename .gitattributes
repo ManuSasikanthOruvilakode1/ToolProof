@@ -11,3 +11,4 @@
 *.png binary
 *.gif binary
 *.sqlite binary
+*.csv text eol=lf
