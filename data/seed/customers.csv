@@ -1,0 +1,301 @@
+customer_id,first_name,last_name,email,city,state,shipping_zone,tier,signup_date
+1001,Olivia,Mitchell,olivia.mitchell.1001@mail.example,Melbourne,VIC,metro,standard,2023-03-05
+1002,Abigail,Harris,abigail.harris.1002@mail.example,Ballarat,VIC,regional,standard,2025-02-27
+1003,Amelia,Santos,amelia.santos.1003@mail.example,Alice Springs,NT,remote,gold,2025-02-22
+1004,Jasmine,Ryan,jasmine.ryan.1004@mail.example,Brisbane,QLD,metro,gold,2023-12-27
+1005,Fatima,Kelly,fatima.kelly.1005@mail.example,Geelong,VIC,regional,standard,2024-03-05
+1006,Noah,Robinson,noah.robinson.1006@mail.example,Geelong,VIC,regional,standard,2024-09-09
+1007,Fatima,Hughes,fatima.hughes.1007@mail.example,Perth,WA,metro,standard,2024-05-12
+1008,Ruby,Bennett,ruby.bennett.1008@mail.example,Brisbane,QLD,metro,standard,2024-02-19
+1009,Isla,Williams,isla.williams.1009@mail.example,Sydney,NSW,metro,standard,2023-05-11
+1010,John,Singh,john.singh.1010@mail.example,Perth,WA,metro,standard,2024-08-29
+1011,Kai,Ryan,kai.ryan.1011@mail.example,Newcastle,NSW,regional,gold,2024-03-14
+1012,Sakura,Evans,sakura.evans.1012@mail.example,Wagga Wagga,NSW,regional,standard,2023-09-24
+1013,Thomas,Lewis,thomas.lewis.1013@mail.example,Melbourne,VIC,metro,standard,2023-12-12
+1014,Oliver,Wright,oliver.wright.1014@mail.example,Wagga Wagga,NSW,regional,standard,2024-03-07
+1015,Wei,Jackson,wei.jackson.1015@mail.example,Ballarat,VIC,regional,standard,2025-02-06
+1016,Amelia,Robinson,amelia.robinson.1016@mail.example,Sydney,NSW,metro,standard,2023-08-18
+1017,Sakura,Taylor,sakura.taylor.1017@mail.example,Sydney,NSW,metro,standard,2023-02-11
+1018,Ava,Wright,ava.wright.1018@mail.example,Sydney,NSW,metro,standard,2023-01-21
+1019,Sakura,Singh,sakura.singh.1019@mail.example,Sydney,NSW,metro,gold,2024-11-16
+1020,Hannah,Edwards,hannah.edwards.1020@mail.example,Adelaide,SA,metro,standard,2024-12-17
+1021,Mei,Jackson,mei.jackson.1021@mail.example,Toowoomba,QLD,regional,standard,2024-09-13
+1022,Hannah,Wilson,hannah.wilson.1022@mail.example,Geelong,VIC,regional,standard,2023-06-17
+1023,Mei,Kelly,mei.kelly.1023@mail.example,Sydney,NSW,metro,gold,2023-11-16
+1024,Noah,Ryan,noah.ryan.1024@mail.example,Newcastle,NSW,regional,standard,2024-02-11
+1025,Wei,White,wei.white.1025@mail.example,Melbourne,VIC,metro,standard,2024-10-04
+1026,Ella,Ito,ella.ito.1026@mail.example,Sydney,NSW,metro,standard,2024-12-01
+1027,Henry,Scott,henry.scott.1027@mail.example,Toowoomba,QLD,regional,standard,2024-08-02
+1028,Chloe,Brown,chloe.brown.1028@mail.example,Brisbane,QLD,metro,standard,2024-01-15
+1029,Charlotte,Chen,charlotte.chen.1029@mail.example,Perth,WA,metro,standard,2024-03-06
+1030,Lucas,O'Brien,lucas.obrien.1030@mail.example,Sydney,NSW,metro,standard,2024-10-12
+1031,Lucas,Nguyen,lucas.nguyen.1031@mail.example,Newcastle,NSW,regional,standard,2025-01-21
+1032,Jasmine,Phillips,jasmine.phillips.1032@mail.example,Broome,WA,remote,standard,2024-07-05
+1033,Omar,Young,omar.young.1033@mail.example,Perth,WA,metro,standard,2025-01-18
+1034,Henry,Santos,henry.santos.1034@mail.example,Melbourne,VIC,metro,standard,2023-03-30
+1035,Ava,Johnson,ava.johnson.1035@mail.example,Wagga Wagga,NSW,regional,standard,2024-04-20
+1036,Isla,Ryan,isla.ryan.1036@mail.example,Adelaide,SA,metro,standard,2023-01-30
+1037,Ethan,O'Brien,ethan.obrien.1037@mail.example,Wagga Wagga,NSW,regional,standard,2023-08-06
+1038,Harper,King,harper.king.1038@mail.example,Toowoomba,QLD,regional,standard,2024-09-02
+1039,Henry,Wang,henry.wang.1039@mail.example,Wagga Wagga,NSW,regional,standard,2024-06-13
+1040,Ava,Hall,ava.hall.1040@mail.example,Sydney,NSW,metro,standard,2024-05-15
+1041,Harper,Rossi,harper.rossi.1041@mail.example,Geelong,VIC,regional,standard,2024-10-23
+1042,Wei,O'Brien,wei.obrien.1042@mail.example,Brisbane,QLD,metro,gold,2023-10-29
+1043,Samuel,Hughes,samuel.hughes.1043@mail.example,Brisbane,QLD,metro,standard,2024-11-10
+1044,Ava,Santos,ava.santos.1044@mail.example,Brisbane,QLD,metro,standard,2023-12-19
+1045,Liam,Moore,liam.moore.1045@mail.example,Mount Isa,QLD,remote,standard,2023-12-27
+1046,Wei,Wang,wei.wang.1046@mail.example,Brisbane,QLD,metro,standard,2023-08-25
+1047,Ava,Edwards,ava.edwards.1047@mail.example,Geelong,VIC,regional,standard,2025-01-30
+1048,Charlotte,Robinson,charlotte.robinson.1048@mail.example,Broome,WA,remote,standard,2023-07-16
+1049,Aiden,Harris,aiden.harris.1049@mail.example,Geelong,VIC,regional,standard,2024-08-26
+1050,Samuel,Wright,samuel.wright.1050@mail.example,Perth,WA,metro,standard,2023-04-13
+1051,Thomas,Hall,thomas.hall.1051@mail.example,Melbourne,VIC,metro,standard,2023-11-06
+1052,Ella,Anderson,ella.anderson.1052@mail.example,Newcastle,NSW,regional,gold,2023-02-16
+1053,Aarav,Campbell,aarav.campbell.1053@mail.example,Perth,WA,metro,standard,2023-05-10
+1054,Harper,Smith,harper.smith.1054@mail.example,Wagga Wagga,NSW,regional,standard,2023-01-13
+1055,Mei,Ryan,mei.ryan.1055@mail.example,Melbourne,VIC,metro,standard,2023-12-15
+1056,Omar,Green,omar.green.1056@mail.example,Broome,WA,remote,standard,2024-05-04
+1057,Henry,Edwards,henry.edwards.1057@mail.example,Ballarat,VIC,regional,standard,2023-03-17
+1058,Noah,Smith,noah.smith.1058@mail.example,Newcastle,NSW,regional,standard,2024-07-30
+1059,Kai,Kelly,kai.kelly.1059@mail.example,Sydney,NSW,metro,standard,2024-07-25
+1060,Samuel,Mitchell,samuel.mitchell.1060@mail.example,Adelaide,SA,metro,standard,2023-08-20
+1061,Ella,Young,ella.young.1061@mail.example,Perth,WA,metro,standard,2024-03-29
+1062,Mei,Santos,mei.santos.1062@mail.example,Mount Isa,QLD,remote,standard,2024-09-27
+1063,Sofia,Campbell,sofia.campbell.1063@mail.example,Adelaide,SA,metro,standard,2025-02-20
+1064,Sofia,Harris,sofia.harris.1064@mail.example,Adelaide,SA,metro,standard,2023-03-25
+1065,Jacob,Garcia,jacob.garcia.1065@mail.example,Melbourne,VIC,metro,standard,2023-06-10
+1066,Harper,Anderson,harper.anderson.1066@mail.example,Brisbane,QLD,metro,standard,2024-04-26
+1067,Lucas,Kaur,lucas.kaur.1067@mail.example,Sydney,NSW,metro,standard,2023-10-17
+1068,Harper,Wang,harper.wang.1068@mail.example,Wagga Wagga,NSW,regional,gold,2023-08-28
+1069,Omar,Jackson,omar.jackson.1069@mail.example,Toowoomba,QLD,regional,standard,2024-11-08
+1070,Ruby,Hall,ruby.hall.1070@mail.example,Brisbane,QLD,metro,standard,2024-10-25
+1071,Liam,Fischer,liam.fischer.1071@mail.example,Cairns,QLD,regional,standard,2023-03-15
+1072,Chloe,Campbell,chloe.campbell.1072@mail.example,Sydney,NSW,metro,standard,2025-02-05
+1073,Priya,Ryan,priya.ryan.1073@mail.example,Cairns,QLD,regional,standard,2024-04-24
+1074,Benjamin,Wang,benjamin.wang.1074@mail.example,Melbourne,VIC,metro,standard,2023-10-06
+1075,Fatima,Patel,fatima.patel.1075@mail.example,Perth,WA,metro,standard,2024-09-04
+1076,Charlotte,Brown,charlotte.brown.1076@mail.example,Cairns,QLD,regional,standard,2024-09-10
+1077,Amelia,Jackson,amelia.jackson.1077@mail.example,Sydney,NSW,metro,standard,2024-11-21
+1078,Thomas,Ryan,thomas.ryan.1078@mail.example,Adelaide,SA,metro,gold,2025-02-22
+1079,Sakura,Walker,sakura.walker.1079@mail.example,Ballarat,VIC,regional,standard,2025-02-20
+1080,Liam,Wright,liam.wright.1080@mail.example,Melbourne,VIC,metro,standard,2024-03-28
+1081,Sakura,Johnson,sakura.johnson.1081@mail.example,Melbourne,VIC,metro,standard,2024-10-12
+1082,Harper,O'Brien,harper.obrien.1082@mail.example,Broome,WA,remote,standard,2024-02-23
+1083,Olivia,Kim,olivia.kim.1083@mail.example,Melbourne,VIC,metro,gold,2023-06-14
+1084,Hannah,Kim,hannah.kim.1084@mail.example,Brisbane,QLD,metro,standard,2024-11-09
+1085,Mia,Martin,mia.martin.1085@mail.example,Ballarat,VIC,regional,standard,2024-04-10
+1086,Omar,Clarke,omar.clarke.1086@mail.example,Melbourne,VIC,metro,standard,2024-02-18
+1087,Oliver,Patel,oliver.patel.1087@mail.example,Ballarat,VIC,regional,gold,2024-07-09
+1088,Chloe,Nguyen,chloe.nguyen.1088@mail.example,Brisbane,QLD,metro,standard,2024-01-06
+1089,Omar,Singh,omar.singh.1089@mail.example,Geelong,VIC,regional,standard,2025-02-17
+1090,Sofia,Johnson,sofia.johnson.1090@mail.example,Perth,WA,metro,standard,2024-03-24
+1091,Samuel,Wang,samuel.wang.1091@mail.example,Perth,WA,metro,gold,2024-10-07
+1092,Ava,Scott,ava.scott.1092@mail.example,Toowoomba,QLD,regional,standard,2023-11-15
+1093,Benjamin,Rossi,benjamin.rossi.1093@mail.example,Sydney,NSW,metro,standard,2023-08-19
+1094,Amelia,Edwards,amelia.edwards.1094@mail.example,Brisbane,QLD,metro,gold,2023-06-07
+1095,Liam,O'Brien,liam.obrien.1095@mail.example,Alice Springs,NT,remote,standard,2024-12-23
+1096,Wei,Johnson,wei.johnson.1096@mail.example,Brisbane,QLD,metro,standard,2024-04-28
+1097,Grace,Ito,grace.ito.1097@mail.example,Brisbane,QLD,metro,gold,2023-07-15
+1098,Jack,Scott,jack.scott.1098@mail.example,Perth,WA,metro,standard,2023-03-13
+1099,Hannah,Johnson,hannah.johnson.1099@mail.example,Toowoomba,QLD,regional,standard,2023-12-15
+1100,Isla,Patel,isla.patel.1100@mail.example,Melbourne,VIC,metro,gold,2025-01-13
+1101,Mia,Kelly,mia.kelly.1101@mail.example,Ballarat,VIC,regional,standard,2024-11-06
+1102,Harper,Fischer,harper.fischer.1102@mail.example,Brisbane,QLD,metro,standard,2023-12-07
+1103,Sakura,Rossi,sakura.rossi.1103@mail.example,Toowoomba,QLD,regional,standard,2023-11-26
+1104,Benjamin,Hall,benjamin.hall.1104@mail.example,Kalgoorlie,WA,remote,standard,2024-01-28
+1105,Wei,Hughes,wei.hughes.1105@mail.example,Wagga Wagga,NSW,regional,standard,2023-11-22
+1106,Charlotte,Wilson,charlotte.wilson.1106@mail.example,Perth,WA,metro,standard,2024-01-26
+1107,Sofia,Lewis,sofia.lewis.1107@mail.example,Mount Isa,QLD,remote,standard,2024-10-29
+1108,Wei,Fischer,wei.fischer.1108@mail.example,Perth,WA,metro,gold,2024-05-29
+1109,Grace,Santos,grace.santos.1109@mail.example,Melbourne,VIC,metro,gold,2024-03-26
+1110,Hannah,Davies,hannah.davies.1110@mail.example,Perth,WA,metro,standard,2025-01-09
+1111,Amelia,Fischer,amelia.fischer.1111@mail.example,Brisbane,QLD,metro,standard,2023-06-08
+1112,Elena,Chen,elena.chen.1112@mail.example,Perth,WA,metro,standard,2023-12-13
+1113,Thomas,Singh,thomas.singh.1113@mail.example,Newcastle,NSW,regional,standard,2023-12-03
+1114,Samuel,Walker,samuel.walker.1114@mail.example,Wagga Wagga,NSW,regional,standard,2023-11-21
+1115,Aiden,Smith,aiden.smith.1115@mail.example,Geelong,VIC,regional,standard,2024-07-08
+1116,Harper,Brown,harper.brown.1116@mail.example,Adelaide,SA,metro,standard,2024-12-01
+1117,Hannah,Kaur,hannah.kaur.1117@mail.example,Mount Isa,QLD,remote,standard,2024-03-20
+1118,Wei,Davies,wei.davies.1118@mail.example,Geelong,VIC,regional,standard,2023-04-13
+1119,Olivia,Murphy,olivia.murphy.1119@mail.example,Sydney,NSW,metro,standard,2023-01-30
+1120,Lucas,Brown,lucas.brown.1120@mail.example,Melbourne,VIC,metro,gold,2024-01-03
+1121,Noah,Lee,noah.lee.1121@mail.example,Brisbane,QLD,metro,standard,2024-02-26
+1122,Ava,Ryan,ava.ryan.1122@mail.example,Newcastle,NSW,regional,standard,2023-06-29
+1123,Mia,Clarke,mia.clarke.1123@mail.example,Adelaide,SA,metro,standard,2024-11-30
+1124,Fatima,Ito,fatima.ito.1124@mail.example,Perth,WA,metro,standard,2023-08-26
+1125,Harper,Nguyen,harper.nguyen.1125@mail.example,Adelaide,SA,metro,standard,2024-11-13
+1126,Daniel,Anderson,daniel.anderson.1126@mail.example,Cairns,QLD,regional,standard,2023-10-22
+1127,Lucas,Walker,lucas.walker.1127@mail.example,Perth,WA,metro,gold,2023-12-20
+1128,Isla,Santos,isla.santos.1128@mail.example,Melbourne,VIC,metro,standard,2024-12-07
+1129,Henry,Jackson,henry.jackson.1129@mail.example,Brisbane,QLD,metro,standard,2024-01-29
+1130,Ella,Novak,ella.novak.1130@mail.example,Sydney,NSW,metro,standard,2024-01-03
+1131,Amelia,Ryan,amelia.ryan.1131@mail.example,Melbourne,VIC,metro,standard,2023-01-23
+1132,Harper,Thompson,harper.thompson.1132@mail.example,Brisbane,QLD,metro,gold,2024-12-03
+1133,James,Young,james.young.1133@mail.example,Geelong,VIC,regional,gold,2024-09-12
+1134,Sakura,Wilson,sakura.wilson.1134@mail.example,Perth,WA,metro,standard,2023-10-21
+1135,Amelia,Young,amelia.young.1135@mail.example,Toowoomba,QLD,regional,standard,2023-12-27
+1136,Mei,Hughes,mei.hughes.1136@mail.example,Adelaide,SA,metro,standard,2024-11-25
+1137,Chloe,Wright,chloe.wright.1137@mail.example,Geelong,VIC,regional,standard,2023-05-21
+1138,Fatima,Smith,fatima.smith.1138@mail.example,Sydney,NSW,metro,standard,2023-02-10
+1139,Hannah,Kelly,hannah.kelly.1139@mail.example,Toowoomba,QLD,regional,gold,2024-01-09
+1140,Aiden,Williams,aiden.williams.1140@mail.example,Sydney,NSW,metro,standard,2023-12-01
+1141,Grace,Wilson,grace.wilson.1141@mail.example,Brisbane,QLD,metro,standard,2024-07-06
+1142,Olivia,Lee,olivia.lee.1142@mail.example,Perth,WA,metro,standard,2023-06-18
+1143,Ruby,Jackson,ruby.jackson.1143@mail.example,Cairns,QLD,regional,standard,2023-10-30
+1144,Ethan,Wilson,ethan.wilson.1144@mail.example,Wagga Wagga,NSW,regional,standard,2024-04-24
+1145,Amelia,Chen,amelia.chen.1145@mail.example,Sydney,NSW,metro,standard,2024-11-23
+1146,Amelia,Williams,amelia.williams.1146@mail.example,Newcastle,NSW,regional,standard,2024-07-24
+1147,Thomas,Lee,thomas.lee.1147@mail.example,Sydney,NSW,metro,standard,2023-09-28
+1148,Oliver,Robinson,oliver.robinson.1148@mail.example,Sydney,NSW,metro,standard,2025-02-05
+1149,Isla,Walker,isla.walker.1149@mail.example,Melbourne,VIC,metro,standard,2024-10-15
+1150,Fatima,Lee,fatima.lee.1150@mail.example,Sydney,NSW,metro,standard,2023-01-26
+1151,Charlotte,Singh,charlotte.singh.1151@mail.example,Wagga Wagga,NSW,regional,standard,2024-09-16
+1152,Grace,Hughes,grace.hughes.1152@mail.example,Adelaide,SA,metro,standard,2024-04-20
+1153,Charlotte,Wang,charlotte.wang.1153@mail.example,Melbourne,VIC,metro,standard,2023-05-24
+1154,Mia,Brown,mia.brown.1154@mail.example,Alice Springs,NT,remote,standard,2024-05-19
+1155,Isla,Edwards,isla.edwards.1155@mail.example,Sydney,NSW,metro,standard,2023-05-19
+1156,Charlotte,Lewis,charlotte.lewis.1156@mail.example,Brisbane,QLD,metro,standard,2025-01-30
+1157,Jasmine,Wang,jasmine.wang.1157@mail.example,Alice Springs,NT,remote,standard,2025-01-30
+1158,Leo,Williams,leo.williams.1158@mail.example,Sydney,NSW,metro,standard,2023-04-12
+1159,Ruby,O'Brien,ruby.obrien.1159@mail.example,Adelaide,SA,metro,standard,2023-10-14
+1160,Ava,Brown,ava.brown.1160@mail.example,Newcastle,NSW,regional,standard,2024-03-31
+1161,Amelia,Ito,amelia.ito.1161@mail.example,Wagga Wagga,NSW,regional,gold,2024-12-03
+1162,Abigail,Lee,abigail.lee.1162@mail.example,Perth,WA,metro,standard,2024-01-03
+1163,Ella,Campbell,ella.campbell.1163@mail.example,Brisbane,QLD,metro,standard,2023-05-06
+1164,Isla,Nguyen,isla.nguyen.1164@mail.example,Sydney,NSW,metro,standard,2024-10-16
+1165,Elena,Scott,elena.scott.1165@mail.example,Broome,WA,remote,gold,2023-12-08
+1166,Noah,Ito,noah.ito.1166@mail.example,Mount Isa,QLD,remote,standard,2023-07-30
+1167,Sakura,Chen,sakura.chen.1167@mail.example,Ballarat,VIC,regional,standard,2024-08-23
+1168,Leo,Harris,leo.harris.1168@mail.example,Ballarat,VIC,regional,standard,2023-06-01
+1169,Sofia,Scott,sofia.scott.1169@mail.example,Sydney,NSW,metro,standard,2023-05-29
+1170,Hannah,Evans,hannah.evans.1170@mail.example,Perth,WA,metro,standard,2023-04-23
+1171,Hannah,Thompson,hannah.thompson.1171@mail.example,Wagga Wagga,NSW,regional,gold,2024-01-02
+1172,Olivia,Ito,olivia.ito.1172@mail.example,Adelaide,SA,metro,gold,2023-09-29
+1173,Elena,Campbell,elena.campbell.1173@mail.example,Sydney,NSW,metro,standard,2023-04-27
+1174,Zara,Wilson,zara.wilson.1174@mail.example,Sydney,NSW,metro,standard,2024-01-06
+1175,Chloe,Patel,chloe.patel.1175@mail.example,Adelaide,SA,metro,standard,2023-08-15
+1176,Ava,Singh,ava.singh.1176@mail.example,Sydney,NSW,metro,standard,2024-11-05
+1177,James,Phillips,james.phillips.1177@mail.example,Melbourne,VIC,metro,standard,2023-02-01
+1178,Mason,Campbell,mason.campbell.1178@mail.example,Mount Isa,QLD,remote,standard,2024-03-12
+1179,Charlotte,Walker,charlotte.walker.1179@mail.example,Sydney,NSW,metro,standard,2024-03-30
+1180,Mei,Chen,mei.chen.1180@mail.example,Cairns,QLD,regional,standard,2023-06-01
+1181,Mei,Evans,mei.evans.1181@mail.example,Melbourne,VIC,metro,standard,2024-07-15
+1182,Benjamin,White,benjamin.white.1182@mail.example,Melbourne,VIC,metro,standard,2024-06-27
+1183,Fatima,Kaur,fatima.kaur.1183@mail.example,Brisbane,QLD,metro,standard,2023-04-12
+1184,Kai,Wang,kai.wang.1184@mail.example,Sydney,NSW,metro,standard,2025-02-26
+1185,Jacob,Rossi,jacob.rossi.1185@mail.example,Geelong,VIC,regional,standard,2024-04-07
+1186,Abigail,Hughes,abigail.hughes.1186@mail.example,Brisbane,QLD,metro,standard,2024-02-13
+1187,Harper,Mitchell,harper.mitchell.1187@mail.example,Geelong,VIC,regional,standard,2023-11-17
+1188,Kai,Thompson,kai.thompson.1188@mail.example,Melbourne,VIC,metro,standard,2024-12-04
+1189,Lucas,Novak,lucas.novak.1189@mail.example,Sydney,NSW,metro,standard,2023-04-06
+1190,Ava,Moore,ava.moore.1190@mail.example,Sydney,NSW,metro,standard,2023-05-14
+1191,Jasmine,Rossi,jasmine.rossi.1191@mail.example,Sydney,NSW,metro,standard,2024-07-29
+1192,Aarav,Kim,aarav.kim.1192@mail.example,Newcastle,NSW,regional,standard,2024-11-12
+1193,Oliver,Moore,oliver.moore.1193@mail.example,Wagga Wagga,NSW,regional,standard,2023-10-22
+1194,Mei,Scott,mei.scott.1194@mail.example,Melbourne,VIC,metro,gold,2024-06-03
+1195,Aiden,Fischer,aiden.fischer.1195@mail.example,Newcastle,NSW,regional,standard,2023-04-21
+1196,Sakura,King,sakura.king.1196@mail.example,Ballarat,VIC,regional,standard,2025-02-19
+1197,Benjamin,Johnson,benjamin.johnson.1197@mail.example,Adelaide,SA,metro,standard,2024-07-28
+1198,Jack,Young,jack.young.1198@mail.example,Ballarat,VIC,regional,standard,2024-10-20
+1199,Sakura,Bennett,sakura.bennett.1199@mail.example,Adelaide,SA,metro,standard,2024-12-11
+1200,Mia,Johnson,mia.johnson.1200@mail.example,Sydney,NSW,metro,standard,2025-02-19
+1201,James,Kelly,james.kelly.1201@mail.example,Cairns,QLD,regional,standard,2023-07-05
+1202,Aarav,Fischer,aarav.fischer.1202@mail.example,Adelaide,SA,metro,standard,2023-05-26
+1203,Isla,Wilson,isla.wilson.1203@mail.example,Adelaide,SA,metro,gold,2025-02-03
+1204,Ella,Phillips,ella.phillips.1204@mail.example,Melbourne,VIC,metro,standard,2023-12-16
+1205,Daniel,Garcia,daniel.garcia.1205@mail.example,Brisbane,QLD,metro,standard,2024-08-04
+1206,Aarav,Scott,aarav.scott.1206@mail.example,Sydney,NSW,metro,gold,2023-06-11
+1207,Mei,Wright,mei.wright.1207@mail.example,Adelaide,SA,metro,standard,2023-10-06
+1208,Olivia,Thompson,olivia.thompson.1208@mail.example,Brisbane,QLD,metro,standard,2024-02-29
+1209,Oliver,Johnson,oliver.johnson.1209@mail.example,Melbourne,VIC,metro,standard,2023-12-20
+1210,Jacob,Moore,jacob.moore.1210@mail.example,Sydney,NSW,metro,standard,2024-08-30
+1211,Ava,O'Brien,ava.obrien.1211@mail.example,Perth,WA,metro,standard,2023-08-14
+1212,Hannah,Martin,hannah.martin.1212@mail.example,Kalgoorlie,WA,remote,gold,2023-07-29
+1213,Jack,Kelly,jack.kelly.1213@mail.example,Alice Springs,NT,remote,standard,2025-02-21
+1214,Grace,Jackson,grace.jackson.1214@mail.example,Melbourne,VIC,metro,gold,2024-05-24
+1215,Daniel,Wilson,daniel.wilson.1215@mail.example,Brisbane,QLD,metro,gold,2024-06-29
+1216,Grace,White,grace.white.1216@mail.example,Melbourne,VIC,metro,standard,2024-11-15
+1217,Hannah,King,hannah.king.1217@mail.example,Sydney,NSW,metro,standard,2023-02-13
+1218,John,Moore,john.moore.1218@mail.example,Sydney,NSW,metro,standard,2023-11-17
+1219,Aarav,Ryan,aarav.ryan.1219@mail.example,Brisbane,QLD,metro,standard,2024-10-17
+1220,Samuel,Kaur,samuel.kaur.1220@mail.example,Sydney,NSW,metro,gold,2023-11-29
+1221,Henry,Garcia,henry.garcia.1221@mail.example,Toowoomba,QLD,regional,standard,2024-12-07
+1222,Ella,Lee,ella.lee.1222@mail.example,Sydney,NSW,metro,standard,2023-09-07
+1223,Leo,Moore,leo.moore.1223@mail.example,Adelaide,SA,metro,standard,2024-02-10
+1224,Wei,Kelly,wei.kelly.1224@mail.example,Geelong,VIC,regional,standard,2023-06-22
+1225,Benjamin,Chen,benjamin.chen.1225@mail.example,Perth,WA,metro,gold,2024-06-06
+1226,Daniel,Hall,daniel.hall.1226@mail.example,Cairns,QLD,regional,standard,2025-01-14
+1227,Chloe,Taylor,chloe.taylor.1227@mail.example,Ballarat,VIC,regional,standard,2023-05-30
+1228,Ella,Jackson,ella.jackson.1228@mail.example,Melbourne,VIC,metro,standard,2025-02-17
+1229,Jasmine,Wright,jasmine.wright.1229@mail.example,Newcastle,NSW,regional,standard,2024-10-05
+1230,Samuel,O'Brien,samuel.obrien.1230@mail.example,Perth,WA,metro,standard,2024-08-16
+1231,John,Murphy,john.murphy.1231@mail.example,Newcastle,NSW,regional,standard,2024-10-20
+1232,Charlotte,Smith,charlotte.smith.1232@mail.example,Kalgoorlie,WA,remote,standard,2024-10-04
+1233,Leo,Khan,leo.khan.1233@mail.example,Sydney,NSW,metro,gold,2024-03-28
+1234,Omar,Smith,omar.smith.1234@mail.example,Melbourne,VIC,metro,standard,2023-02-27
+1235,Henry,King,henry.king.1235@mail.example,Perth,WA,metro,standard,2024-04-07
+1236,Ethan,Brown,ethan.brown.1236@mail.example,Sydney,NSW,metro,standard,2023-03-20
+1237,Abigail,Taylor,abigail.taylor.1237@mail.example,Wagga Wagga,NSW,regional,standard,2024-09-21
+1238,Benjamin,Scott,benjamin.scott.1238@mail.example,Perth,WA,metro,standard,2024-07-21
+1239,Grace,Brown,grace.brown.1239@mail.example,Brisbane,QLD,metro,standard,2024-10-29
+1240,Noah,Hall,noah.hall.1240@mail.example,Melbourne,VIC,metro,standard,2023-06-04
+1241,Mason,Murphy,mason.murphy.1241@mail.example,Sydney,NSW,metro,standard,2023-12-18
+1242,Benjamin,Clarke,benjamin.clarke.1242@mail.example,Perth,WA,metro,standard,2023-09-11
+1243,Aarav,White,aarav.white.1243@mail.example,Brisbane,QLD,metro,standard,2024-06-19
+1244,Noah,Singh,noah.singh.1244@mail.example,Sydney,NSW,metro,standard,2023-10-17
+1245,Noah,Lewis,noah.lewis.1245@mail.example,Brisbane,QLD,metro,standard,2024-09-04
+1246,Daniel,Campbell,daniel.campbell.1246@mail.example,Toowoomba,QLD,regional,standard,2023-03-09
+1247,Abigail,Kim,abigail.kim.1247@mail.example,Sydney,NSW,metro,standard,2023-10-18
+1248,Daniel,Jackson,daniel.jackson.1248@mail.example,Geelong,VIC,regional,standard,2024-09-09
+1249,Liam,Kim,liam.kim.1249@mail.example,Sydney,NSW,metro,standard,2023-12-25
+1250,James,Taylor,james.taylor.1250@mail.example,Newcastle,NSW,regional,standard,2024-09-01
+1251,Mei,White,mei.white.1251@mail.example,Alice Springs,NT,remote,standard,2024-01-21
+1252,Mason,Taylor,mason.taylor.1252@mail.example,Toowoomba,QLD,regional,standard,2024-11-17
+1253,Grace,Wang,grace.wang.1253@mail.example,Ballarat,VIC,regional,standard,2024-12-02
+1254,Leo,Phillips,leo.phillips.1254@mail.example,Sydney,NSW,metro,standard,2024-06-04
+1255,Noah,Bennett,noah.bennett.1255@mail.example,Brisbane,QLD,metro,standard,2023-08-08
+1256,Sakura,Kim,sakura.kim.1256@mail.example,Alice Springs,NT,remote,standard,2023-08-20
+1257,Samuel,Evans,samuel.evans.1257@mail.example,Sydney,NSW,metro,standard,2023-04-14
+1258,Fatima,Young,fatima.young.1258@mail.example,Perth,WA,metro,standard,2024-06-23
+1259,Jack,Brown,jack.brown.1259@mail.example,Newcastle,NSW,regional,standard,2024-09-24
+1260,Isla,Evans,isla.evans.1260@mail.example,Adelaide,SA,metro,standard,2023-07-05
+1261,Benjamin,Young,benjamin.young.1261@mail.example,Adelaide,SA,metro,standard,2025-01-08
+1262,Sakura,Murphy,sakura.murphy.1262@mail.example,Sydney,NSW,metro,standard,2025-01-06
+1263,Jack,Ito,jack.ito.1263@mail.example,Broome,WA,remote,standard,2025-02-09
+1264,Leo,Wilson,leo.wilson.1264@mail.example,Toowoomba,QLD,regional,standard,2023-09-02
+1265,Mason,Kelly,mason.kelly.1265@mail.example,Broome,WA,remote,standard,2023-07-18
+1266,Harper,Lee,harper.lee.1266@mail.example,Newcastle,NSW,regional,standard,2024-03-27
+1267,Omar,Nguyen,omar.nguyen.1267@mail.example,Toowoomba,QLD,regional,standard,2024-05-29
+1268,Leo,Mitchell,leo.mitchell.1268@mail.example,Broome,WA,remote,standard,2024-09-11
+1269,Ava,Evans,ava.evans.1269@mail.example,Wagga Wagga,NSW,regional,gold,2024-05-07
+1270,Jasmine,Lee,jasmine.lee.1270@mail.example,Perth,WA,metro,gold,2024-06-12
+1271,Samuel,Edwards,samuel.edwards.1271@mail.example,Melbourne,VIC,metro,standard,2023-10-07
+1272,Amelia,Murphy,amelia.murphy.1272@mail.example,Cairns,QLD,regional,gold,2024-03-23
+1273,Amelia,Clarke,amelia.clarke.1273@mail.example,Alice Springs,NT,remote,standard,2024-04-06
+1274,Ella,King,ella.king.1274@mail.example,Alice Springs,NT,remote,standard,2024-02-10
+1275,Thomas,Patel,thomas.patel.1275@mail.example,Brisbane,QLD,metro,standard,2023-03-25
+1276,Grace,Lee,grace.lee.1276@mail.example,Melbourne,VIC,metro,standard,2023-04-12
+1277,Chloe,White,chloe.white.1277@mail.example,Adelaide,SA,metro,standard,2023-05-21
+1278,Thomas,Brown,thomas.brown.1278@mail.example,Melbourne,VIC,metro,standard,2024-12-13
+1279,Priya,Evans,priya.evans.1279@mail.example,Geelong,VIC,regional,standard,2024-09-22
+1280,Elena,Anderson,elena.anderson.1280@mail.example,Cairns,QLD,regional,gold,2023-08-09
+1281,Ruby,Fischer,ruby.fischer.1281@mail.example,Perth,WA,metro,standard,2024-06-24
+1282,Charlotte,Moore,charlotte.moore.1282@mail.example,Sydney,NSW,metro,standard,2023-11-05
+1283,Elena,Edwards,elena.edwards.1283@mail.example,Sydney,NSW,metro,standard,2024-09-29
+1284,Liam,Nguyen,liam.nguyen.1284@mail.example,Sydney,NSW,metro,standard,2024-05-26
+1285,Thomas,Scott,thomas.scott.1285@mail.example,Perth,WA,metro,standard,2024-08-11
+1286,Sakura,Ito,sakura.ito.1286@mail.example,Geelong,VIC,regional,standard,2023-01-02
+1287,Ella,Singh,ella.singh.1287@mail.example,Brisbane,QLD,metro,standard,2023-07-11
+1288,James,Thompson,james.thompson.1288@mail.example,Newcastle,NSW,regional,standard,2024-01-05
+1289,Daniel,Chen,daniel.chen.1289@mail.example,Broome,WA,remote,standard,2024-06-03
+1290,Aarav,Rossi,aarav.rossi.1290@mail.example,Sydney,NSW,metro,standard,2023-02-14
+1291,Olivia,Smith,olivia.smith.1291@mail.example,Brisbane,QLD,metro,standard,2025-02-04
+1292,Liam,Bennett,liam.bennett.1292@mail.example,Brisbane,QLD,metro,gold,2023-09-04
+1293,Omar,Williams,omar.williams.1293@mail.example,Newcastle,NSW,regional,gold,2024-08-18
+1294,Isla,Wright,isla.wright.1294@mail.example,Melbourne,VIC,metro,gold,2024-07-13
+1295,Benjamin,Kim,benjamin.kim.1295@mail.example,Ballarat,VIC,regional,standard,2024-12-02
+1296,Hannah,Nguyen,hannah.nguyen.1296@mail.example,Kalgoorlie,WA,remote,standard,2023-07-06
+1297,Liam,Evans,liam.evans.1297@mail.example,Sydney,NSW,metro,standard,2024-04-13
+1298,Ella,Brown,ella.brown.1298@mail.example,Melbourne,VIC,metro,gold,2023-07-24
+1299,Aiden,Brown,aiden.brown.1299@mail.example,Melbourne,VIC,metro,standard,2024-02-12
+1300,Amelia,Novak,amelia.novak.1300@mail.example,Melbourne,VIC,metro,standard,2023-07-15

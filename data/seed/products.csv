@@ -1,0 +1,81 @@
+product_id,name,category,price,refundable
+501,Gift Card $25,gift_card,25.00,0
+502,Gift Card $50,gift_card,50.00,0
+503,Gift Card $100,gift_card,100.00,0
+504,Oak Bookshelf,home,200.00,1
+505,Brass Desk Lamp,office,100.00,1
+506,Cast Iron Teapot,kitchen,78.99,1
+507,Linen Curtains,home,67.99,1
+508,Ergonomic Notebook Set,office,116.99,1
+509,Teak Picnic Set,outdoor,197.99,1
+510,Rechargeable Desk Fan,electronics,311.99,1
+511,Bamboo Kettle,kitchen,48.99,1
+512,Walnut Floor Rug,home,146.99,1
+513,Steel Monitor Stand,office,25.99,1
+514,Hanging Deck Chair,outdoor,124.99,1
+515,Bluetooth Speaker,electronics,38.99,1
+516,Enamel Teapot,kitchen,32.99,1
+517,Walnut Curtains,home,83.99,1
+518,Adjustable Monitor Stand,office,16.99,1
+519,Solar Hammock,outdoor,219.99,1
+520,Bluetooth Webcam,electronics,313.99,1
+521,Ceramic Mixing Bowl Set,kitchen,62.99,1
+522,Rattan Floor Rug,home,97.99,1
+523,Steel Office Chair,office,247.99,1
+524,Folding Hammock,outdoor,151.99,1
+525,Rechargeable Speaker,electronics,53.99,1
+526,Copper Kettle,kitchen,37.99,1
+527,Rattan Side Table,home,16.99,1
+528,Compact Monitor Stand,office,246.99,1
+529,Solar Picnic Set,outdoor,169.99,1
+530,Noise-Cancelling Headphones,electronics,175.99,1
+531,Bamboo Teapot,kitchen,60.99,1
+532,Wool Throw Blanket,home,15.99,1
+533,Recycled Monitor Stand,office,237.99,1
+534,Weatherproof Planter Box,outdoor,172.99,1
+535,Mini Power Bank,electronics,79.99,1
+536,Glass Teapot,kitchen,64.99,1
+537,Rattan Cushion Cover,home,32.99,1
+538,Ergonomic Monitor Stand,office,49.99,1
+539,Portable Picnic Set,outdoor,218.99,1
+540,Mini Desk Fan,electronics,218.99,1
+541,Enamel Mixing Bowl Set,kitchen,52.99,1
+542,Velvet Floor Rug,home,154.99,1
+543,Adjustable Filing Cabinet,office,62.99,1
+544,Folding Deck Chair,outdoor,59.99,1
+545,Bluetooth Alarm Clock,electronics,189.99,1
+546,Bamboo Knife Block,kitchen,18.99,1
+547,Linen Throw Blanket,home,63.99,1
+548,Leather Filing Cabinet,office,24.99,1
+549,Solar Garden Lantern,outdoor,103.99,1
+550,Mini Alarm Clock,electronics,119.99,1
+551,Glass Kettle,kitchen,55.99,1
+552,Wool Wall Mirror,home,95.99,1
+553,Ergonomic Desk Organiser,office,137.99,1
+554,Solar Deck Chair,outdoor,43.99,1
+555,Mini Headphones,electronics,120.99,1
+556,Ceramic Teapot,kitchen,23.99,1
+557,Wool Curtains,home,62.99,1
+558,Recycled Desk Organiser,office,133.99,1
+559,Portable Hammock,outdoor,80.99,1
+560,Noise-Cancelling Speaker,electronics,266.99,1
+561,Ceramic Kettle,kitchen,70.99,1
+562,Velvet Curtains,home,46.99,1
+563,Adjustable Notebook Set,office,128.99,1
+564,Weatherproof Garden Lantern,outdoor,42.99,1
+565,Rechargeable Power Bank,electronics,156.99,1
+566,Cast Iron Knife Block,kitchen,19.99,1
+567,Cotton Floor Rug,home,134.99,1
+568,Compact Notebook Set,office,136.99,1
+569,Folding Picnic Set,outdoor,35.99,1
+570,Rechargeable Headphones,electronics,57.99,1
+571,Bamboo Frying Pan,kitchen,86.99,1
+572,Wool Floor Rug,home,168.99,1
+573,Steel Notebook Set,office,53.99,1
+574,Hanging Picnic Set,outdoor,114.99,1
+575,Bluetooth Power Bank,electronics,21.99,1
+576,Copper Knife Block,kitchen,36.99,1
+577,Linen Floor Rug,home,94.99,1
+578,Leather Office Chair,office,229.99,1
+579,Portable Planter Box,outdoor,169.99,1
+580,Noise-Cancelling Alarm Clock,electronics,73.99,1
