@@ -259,3 +259,23 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 
 - **Refs:** LOG-0018
 - **Next:** Create the GitHub repository, push main, and confirm the ci workflow passes
+
+---
+
+### LOG-0021 | 2026-11-17 16:55 +11:00 | DONE | P1.7
+
+**Summary:** First commit c679cc2 on main; checkpoint CP-0002 saved and tagged
+
+- **Files:** `CHECKPOINT.md`, `PLAN.md`
+
+---
+
+### LOG-0022 | 2026-11-17 16:55 +11:00 | CHECKPOINT | P1
+
+**Summary:** CP-0002 saved: P1 project setup complete locally; next P2.1 sandbox data generator
+
+- **Refs:** LOG-0015, LOG-0016, LOG-0017, LOG-0018, LOG-0019, LOG-0020, LOG-0021
+- **Details:**
+  - Tests: pytest 16 passed; ruff, ruff format, mypy strict and devlog verify clean; pre-commit all hooks passed
+  - Open issues: LOG-0008, LOG-0009, LOG-0020
+- **Next:** P2.1 write scripts/build_sandbox.py (seed 42) generating data/seed/*.csv

@@ -210,20 +210,20 @@ The runner design is in [PLAN.md §12](PLAN.md#12-run-level-checkpointing-and-re
 
 | Field | Value |
 |---|---|
-| **Checkpoint ID** | CP-0001 |
-| **Saved at** | 2026-11-17 16:43 +11:00 |
-| **Last log entry** | LOG-0010 |
-| **Phase / task** | P0 (Planning) complete → P1 / P1.1 next |
-| **Phase progress** | P0: 4/4 done · P1: 0/7 |
-| **Last completed** | P0.4: project documents and `scripts/devlog.py` created (LOG-0004) |
+| **Checkpoint ID** | CP-0002 |
+| **Saved at** | 2026-11-17 16:55 +11:00 |
+| **Last log entry** | LOG-0022 |
+| **Phase / task** | P1 (Project setup) complete locally → P2 / P2.1 next |
+| **Phase progress** | P1: 7/7 done · P2: 0/11 |
+| **Last completed** | P1.7: first commit and checkpoint (LOG-0021) |
 | **In progress** | none |
-| **Next step** | P1.1: in this folder run `git init`, then add `.gitignore` and `.gitattributes` as listed in PLAN.md P1.1 |
-| **Git state** | No repository yet (created in P1.1). No tag; CP-0002 will be the first tagged checkpoint |
-| **Tests** | none yet. `python scripts/devlog.py verify` → OK |
-| **Environment** | System Python 3.14.6 (project will pin 3.12), uv 0.12.0, git 2.55.0, Ollama client 0.35.1 (server not running; installed models unknown) |
+| **Next step** | P2.1: write `scripts/build_sandbox.py` (seed 42) that generates `data/seed/*.csv` with the counts and edge cases listed in PLAN.md P2.1 |
+| **Git state** | Branch `main`; commits `c679cc2` (project setup) + the checkpoint commit tagged `checkpoint/CP-0002`; clean; no stashes; no remote yet |
+| **Tests** | `uv run pytest -q` → 16 passed; ruff, ruff format, mypy strict, `devlog.py verify` and pre-commit all pass |
+| **Environment** | Project Python 3.12.13 (via uv; system Python 3.14.6), uv 0.12.0, git 2.55.0, Ollama client 0.35.1 (server not checked; models unknown) |
 | **Active runs** | none |
-| **Open issues** | LOG-0006 (name availability), LOG-0007 (licence), LOG-0008 (model list), LOG-0009 (CI runner capacity) |
+| **Open issues** | LOG-0008 (model list), LOG-0009 (CI runner capacity), LOG-0020 (CI not run yet: no remote) |
 | **Blockers** | none |
-| **Notes for the next session** | Files so far: PLAN.md, RULES.md, CHECKPOINT.md, PROCESS_LOG.md, scripts/devlog.py, .process_log.seal. The log is append-only: add entries with `python scripts/devlog.py add`. Before P3, start the Ollama server and run `ollama list` to see which models are available |
+| **Notes for the next session** | Work from P2 onward happens on branches `p2/<task-id>-<name>` (RULES 43). Unimplemented CLI commands exit with code 2 and name their task. `pre-commit install` has not been run yet in this clone. Before P3, start the Ollama server and run `ollama list` |
 
 <!-- CHECKPOINT:END -->
