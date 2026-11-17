@@ -404,3 +404,14 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - Tests: 243 passed; env/ coverage 99%; ruff, mypy strict, pre-commit and devlog verify clean
   - Open issues: LOG-0008 (model list), LOG-0009 (CI runner capacity)
 - **Next:** P3.1 LLMAdapter protocol and OllamaAdapter; start the Ollama server and run 'ollama list' first
+
+---
+
+### LOG-0037 | 2026-11-17 19:04 +11:00 | NOTE | P9.2
+
+**Summary:** Publish to GitHub Packages at release time: Docker image to ghcr.io via a tag-triggered workflow (linked to the repo with the org.opencontainers.image.source label), plus the wheel attached to a GitHub Release
+
+- **Details:**
+  - GitHub Packages does not host PyPI packages, so a container image is how ToolProof appears under the repo's Packages section
+  - Image auth uses the built-in GITHUB_TOKEN (no secrets); new packages start private and must be made public once in package settings
+- **Next:** In P9.2 add .github/workflows/publish.yml alongside the Dockerfile; in P9.6 tag v0.1.0 to trigger it
