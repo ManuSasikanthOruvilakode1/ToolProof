@@ -429,3 +429,15 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - Naming: service and URL use 'toolproof' only; no student field, course code or assignment details (RULES 1-2)
 - **Findings:** Render's free tier is enough because the server only serves the deterministic sandbox and committed results
 - **Next:** Build in P8.6 after results exist; deploy in P9.7. An early version with /tools and /sandbox/call is possible any time after P2
+
+---
+
+### LOG-0039 | 2026-11-17 19:10 +11:00 | DECISION | P8.6
+
+**Summary:** Hosted API (G10, P8.6, P9.7) made optional: not required for v0.1.0; plan version 1.1 -> 1.2
+
+- **Refs:** LOG-0038
+- **Files:** `PLAN.md`
+- **Details:**
+  - The project owner confirmed the hosted API is not needed; it stays in the plan as an optional extra so it cannot block the definition of done
+  - No early API version will be built before P3
