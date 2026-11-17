@@ -1,0 +1,13 @@
+* text=auto
+*.md text eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.toml text eol=lf
+*.jsonl text eol=lf
+*.lock text eol=lf
+.process_log.seal text eol=lf
+*.png binary
+*.gif binary
+*.sqlite binary

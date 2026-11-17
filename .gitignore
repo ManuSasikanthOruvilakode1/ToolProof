@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Environments and secrets
+.venv/
+.env
+.env.*
+
+# Tool caches
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Run outputs (large and regenerable; published summaries go in reports/)
+results/runs/
+
+# Generated world database (rebuilt from data/seed/)
+data/world.sqlite
+*.sqlite-journal
+
+# Model files
+*.gguf
+*.safetensors
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
