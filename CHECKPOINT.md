@@ -210,20 +210,20 @@ The runner design is in [PLAN.md §12](PLAN.md#12-run-level-checkpointing-and-re
 
 | Field | Value |
 |---|---|
-| **Checkpoint ID** | CP-0002 |
-| **Saved at** | 2026-11-17 16:55 +11:00 |
-| **Last log entry** | LOG-0022 |
-| **Phase / task** | P1 (Project setup) complete locally → P2 / P2.1 next |
-| **Phase progress** | P1: 7/7 done · P2: 0/11 |
-| **Last completed** | P1.7: first commit and checkpoint (LOG-0021) |
+| **Checkpoint ID** | CP-0003 |
+| **Saved at** | 2026-11-17 18:58 +11:00 |
+| **Last log entry** | LOG-0036 |
+| **Phase / task** | P2 (Sandbox world) complete → P3 / P3.1 next |
+| **Phase progress** | P2: 11/11 done · P3: 0/8 |
+| **Last completed** | P2.11: tool tests and determinism test (LOG-0034) |
 | **In progress** | none |
-| **Next step** | P2.1: write `scripts/build_sandbox.py` (seed 42) that generates `data/seed/*.csv` with the counts and edge cases listed in PLAN.md P2.1 |
-| **Git state** | Branch `main`; commits `c679cc2` (project setup) + the checkpoint commit tagged `checkpoint/CP-0002`; clean; no stashes; no remote yet |
-| **Tests** | `uv run pytest -q` → 16 passed; ruff, ruff format, mypy strict, `devlog.py verify` and pre-commit all pass |
+| **Next step** | Start the Ollama server and run `ollama list`; then P3.1: write `src/toolproof/agent/llm.py` with the `LLMAdapter` protocol, `LLMResponse` and `OllamaAdapter` (`/api/chat`, `/api/show` digest, `/api/version`), on branch `p3/p3.1-llm-adapter` |
+| **Git state** | Branch `main` pushed to origin; `30ef347` (P2) + the checkpoint commit tagged `checkpoint/CP-0003`; clean; no stashes. Branch `p2/p2.1-p2.11-sandbox-world` merged (fast-forward) |
+| **Tests** | `uv run pytest -q` → 243 passed; env/ coverage 99%; ruff, ruff format, mypy strict, pre-commit and `devlog.py verify` pass |
 | **Environment** | Project Python 3.12.13 (via uv; system Python 3.14.6), uv 0.12.0, git 2.55.0, Ollama client 0.35.1 (server not checked; models unknown) |
 | **Active runs** | none |
-| **Open issues** | LOG-0008 (model list), LOG-0009 (CI runner capacity), LOG-0020 (CI not run yet: no remote) |
-| **Blockers** | none |
-| **Notes for the next session** | Work from P2 onward happens on branches `p2/<task-id>-<name>` (RULES 43). Unimplemented CLI commands exit with code 2 and name their task. `pre-commit install` has not been run yet in this clone. Before P3, start the Ollama server and run `ollama list` |
+| **Open issues** | LOG-0008 (model list, P3.7), LOG-0009 (CI runner capacity, P7.3) |
+| **Blockers** | none for P3.1–P3.6 and P3.8. P3.7 (pilot) needs the Ollama server and 3–4 tool-calling models pulled locally |
+| **Notes for the next session** | Sandbox entry point for the agent loop: `toolproof.env.sandbox.Sandbox.open(workdir, user_replies=..., faults=..., n_distractors=..., description_level=...)`; `sandbox.toolbox.schemas()` gives Ollama tool definitions, `sandbox.toolbox.call(name, args)` returns a `ToolCallRecord` (`content_for_model()` is the tool message), and `sandbox.diff()` gives the world changes. Policy rules enforced by tools vs only in docs: see docs/DESIGN_NOTES.md. `data/world.sqlite` is rebuilt automatically from the seed CSVs |
 
 <!-- CHECKPOINT:END -->

@@ -386,3 +386,21 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 - **Files:** `tests/conftest.py`, `tests/unit/test_build_sandbox.py`, `tests/unit/test_world.py`, `tests/unit/test_tools_read.py`, `tests/unit/test_tools_pure.py`, `tests/unit/test_tools_write.py`, `tests/unit/test_toolbox_and_faults.py`, `tests/unit/test_distractors_and_safety.py`
 - **Details:** Safety tests: no network imports, no eval/exec/compile, no real-clock calls anywhere in env/
 - **Findings:** Tests caught a real bug: schema title-stripping also deleted a property named 'title' (create_calendar_event), hiding a required argument from the model; fixed in base._strip_titles
+
+---
+
+### LOG-0035 | 2026-11-17 18:58 +11:00 | NOTE | P2
+
+**Summary:** P2 used one branch (p2/p2.1-p2.11-sandbox-world) for all eleven tasks instead of one branch per task (RULES 43), because the tasks share modules and tests; merged fast-forward into main as 30ef347
+
+---
+
+### LOG-0036 | 2026-11-17 18:58 +11:00 | CHECKPOINT | P2
+
+**Summary:** CP-0003 saved: P2 sandbox world complete and merged; end of session; next P3.1 LLM adapter
+
+- **Refs:** LOG-0024, LOG-0034, LOG-0035
+- **Details:**
+  - Tests: 243 passed; env/ coverage 99%; ruff, mypy strict, pre-commit and devlog verify clean
+  - Open issues: LOG-0008 (model list), LOG-0009 (CI runner capacity)
+- **Next:** P3.1 LLMAdapter protocol and OllamaAdapter; start the Ollama server and run 'ollama list' first
