@@ -639,3 +639,21 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 - **Refs:** LOG-0008
 - **Details:** 8 GB VRAM: a 14B model (~9 GB at q4) will partly run on CPU; its speed must be measured before fixing the E1 budget
 - **Next:** Owner approves model downloads (suggested qwen2.5:3b ~1.9 GB and qwen2.5:14b ~9 GB, optionally llama3.1:8b as a second family); rerun the pilot with 3 trials per request; then log the model list, temperature and step-limit DECISIONs
+
+---
+
+### LOG-0058 | 2026-11-25 05:14 +11:00 | NOTE | P3
+
+**Summary:** P3 used one branch (p3/p3.1-p3.8-agent-loop) for all tasks, as in P2 (LOG-0035); merged fast-forward into main as 9b66bf7
+
+---
+
+### LOG-0059 | 2026-11-25 05:14 +11:00 | CHECKPOINT | P3
+
+**Summary:** CP-0005 saved: P3 6/8 done and merged; P3.7 blocked on model downloads; P3.2 deferred
+
+- **Refs:** LOG-0046, LOG-0054, LOG-0055, LOG-0056, LOG-0057, LOG-0058
+- **Details:**
+  - Tests: 312 passed; coverage 99%; ruff, mypy strict, pre-commit and devlog verify clean
+  - Open issues: LOG-0008, LOG-0009, LOG-0043, LOG-0057
+- **Next:** Owner approves model downloads; then 'ollama pull qwen2.5:3b' and 'ollama pull qwen2.5:14b', rerun 'toolproof pilot' with 3 trials, and log the P3.7 decisions

@@ -210,20 +210,20 @@ The runner design is in [PLAN.md §12](PLAN.md#12-run-level-checkpointing-and-re
 
 | Field | Value |
 |---|---|
-| **Checkpoint ID** | CP-0004 |
-| **Saved at** | 2026-11-17 19:18 +11:00 |
-| **Last log entry** | LOG-0045 |
-| **Phase / task** | P2 (Sandbox world) complete and audited → P3 / P3.1 next (**not started; wait for the owner's go-ahead**) |
-| **Phase progress** | P2: 11/11 done · P3: 0/8 |
-| **Last completed** | Post-P2 audit and fixes (LOG-0040 to LOG-0044); last task ID completed: P2.11 (LOG-0034) |
-| **In progress** | none |
-| **Next step** | Get the owner's decision on LOG-0043 (rewrite pushed history to remove the institutional email, or accept). Then start the Ollama server, run `ollama list`, and begin P3.1 (`src/toolproof/agent/llm.py`: `LLMAdapter`, `LLMResponse`, `OllamaAdapter`) on branch `p3/p3.1-llm-adapter` |
-| **Git state** | Branch `main` pushed to origin; audit commit + this checkpoint commit tagged `checkpoint/CP-0004`; clean; no stashes. Local merged branch `p2/p2.1-p2.11-sandbox-world` still exists (safe to delete). Repo-local git email is the GitHub noreply address |
-| **Tests** | `uv run pytest -q` → 244 passed; env/ coverage 99%; ruff, ruff format, mypy strict, pre-commit (installed) and `devlog.py verify` pass |
-| **Environment** | Project Python 3.12.13 (via uv; system Python 3.14.6), uv 0.12.0, git 2.55.0, Ollama client 0.35.1 (server not checked; models unknown) |
+| **Checkpoint ID** | CP-0005 |
+| **Saved at** | 2026-11-25 05:14 +11:00 |
+| **Last log entry** | LOG-0059 |
+| **Phase / task** | P3 (Agent loop) / P3.7 pilot, **blocked** on model downloads |
+| **Phase progress** | P3: 6/8 done (P3.1, P3.3–P3.6, P3.8); P3.2 deferred (LOG-0049); P3.7 first pilot run done on qwen2.5:7b, decisions pending |
+| **Last completed** | P3.8: loop and adapter tests (LOG-0054); pilot run pilot_20261125-0511 (LOG-0055) |
+| **In progress** | none (all work committed and merged) |
+| **Next step** | With the owner's approval: `ollama pull qwen2.5:3b` and `ollama pull qwen2.5:14b`; then `uv run toolproof pilot --model qwen2.5:3b --model qwen2.5:7b --model qwen2.5:14b --trials 3 --record`; then log DECISIONs for the model list, default temperature and step limit, resolve LOG-0057 and LOG-0008, tick P3.7 |
+| **Git state** | Branch `main` pushed to origin; `9b66bf7` (P3) + this checkpoint commit tagged `checkpoint/CP-0005`; clean; no stashes. Merged local branches `p2/...` and `p3/p3.1-p3.8-agent-loop` still exist (safe to delete). Repo-local git email is the GitHub noreply address |
+| **Tests** | `uv run pytest -q` → 312 passed; coverage 99%; ruff, ruff format, mypy strict, pre-commit and `devlog.py verify` pass |
+| **Environment** | Python 3.12.13 (uv), uv 0.12.0, git 2.55.0, Ollama 0.35.1 (server started this session with `ollama serve`). Tool-calling models: qwen2.5:7b (digest 845dbda0ea48). GPU RTX 4060 Laptop 8 GB, RAM 15 GB, 165 GB free disk |
 | **Active runs** | none |
-| **Open issues** | LOG-0008 (model list, P3.7), LOG-0009 (CI runner capacity, P7.3), LOG-0043 (institutional email in pushed commits) |
-| **Blockers** | none for P3.1–P3.6 and P3.8. P3.7 (pilot) needs the Ollama server and 3–4 tool-calling models pulled locally |
-| **Notes for the next session** | P4 late-delivery tasks: 10% of a total can fall on exactly half a cent, so use a 0.01 tolerance (LOG-0041). P9 packaging: data/ is outside the wheel; set `TOOLPROOF_DATA_DIR` (LOG-0044). Sandbox entry point for the agent loop: `toolproof.env.sandbox.Sandbox.open(workdir, user_replies=..., faults=..., n_distractors=..., description_level=...)`; `sandbox.toolbox.schemas()` gives Ollama tool definitions, `sandbox.toolbox.call(name, args)` returns a `ToolCallRecord` (`content_for_model()` is the tool message), and `sandbox.diff()` gives the world changes. Policy rules enforced by tools vs only in docs: see docs/DESIGN_NOTES.md. `data/world.sqlite` is rebuilt automatically from the seed CSVs |
+| **Open issues** | LOG-0008 (model list), LOG-0009 (CI runner capacity, P7.3), LOG-0043 (institutional email in pushed commits), LOG-0057 (P3.7 needs more models) |
+| **Blockers** | P3.7 needs the owner's approval to download about 11 GB of models. P4 can start without it |
+| **Notes for the next session** | Pilot failures were genuine (ignored_error, wrong_tool + premature_answer, hallucinated_fact; LOG-0056); the loop treats a narrated-but-unexecuted next step as the final answer by design. Pilot summaries are committed under reports/pilot/. `toolproof models` lists local models with tool support; `toolproof trace show <run> <task> <trial>` prints a trace (pilot run IDs look like `pilot_20261125-0511/qwen2.5-7b`). P4 late-delivery tasks: 10% of a total can fall on exactly half a cent, so use a 0.01 tolerance (LOG-0041). P9 packaging: data/ is outside the wheel; set `TOOLPROOF_DATA_DIR` (LOG-0044). Sandbox entry point for the agent loop: `toolproof.env.sandbox.Sandbox.open(workdir, user_replies=..., faults=..., n_distractors=..., description_level=...)`; `sandbox.toolbox.schemas()` gives Ollama tool definitions, `sandbox.toolbox.call(name, args)` returns a `ToolCallRecord` (`content_for_model()` is the tool message), and `sandbox.diff()` gives the world changes. Policy rules enforced by tools vs only in docs: see docs/DESIGN_NOTES.md. `data/world.sqlite` is rebuilt automatically from the seed CSVs |
 
 <!-- CHECKPOINT:END -->
