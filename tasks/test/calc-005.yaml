@@ -1,0 +1,20 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-005
+version: 1
+split: test
+category: calc
+difficulty: easy
+prompt: How many days was order 9289 in transit between shipping and delivery?
+checks:
+  answer:
+    numeric:
+      value: 3.0
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9289
+  - tool: sql_query
+    args:
+      query: SELECT julianday(delivery_date) - julianday(ship_date) FROM orders WHERE order_id = 9289
+  final_answer: 'Order 9289 shipped on 2025-12-04 and was delivered on 2025-12-07: 3 days in transit.'

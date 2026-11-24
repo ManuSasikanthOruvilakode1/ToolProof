@@ -1,0 +1,23 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-018
+version: 1
+split: dev
+category: calc
+difficulty: easy
+prompt: If we offered a 12.5% goodwill credit on order 9120, how much would that be? Don't issue anything
+  yet, I just need the number.
+checks:
+  answer:
+    numeric:
+      value: 18.37
+      tolerance: 0.011
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9120
+  - tool: calculator
+    args:
+      expression: round(146.99 * 12.5 / 100, 2)
+  final_answer: A 12.5% credit on order 9120 (total $146.99) would be $18.37.

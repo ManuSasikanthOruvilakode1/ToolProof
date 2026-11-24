@@ -1,0 +1,22 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-006
+version: 1
+split: dev
+category: chain
+difficulty: easy
+prompt: Which customer has placed the most orders with us, and what's their email address?
+checks:
+  answer:
+    contains_all:
+    - henry.wang.1039@mail.example
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT customer_id, COUNT(*) AS n FROM orders GROUP BY customer_id ORDER BY n DESC LIMIT
+        1
+  - tool: sql_query
+    args:
+      query: SELECT first_name, last_name, email FROM customers WHERE customer_id = 1039
+  final_answer: Henry Wang (customer 1039) has placed the most orders (19); their email is henry.wang.1039@mail.example.

@@ -1,0 +1,17 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-007
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: How many days does a customer have to report an item that arrived damaged?
+checks:
+  answer:
+    regex: \b60\b
+    grounded: true
+oracle:
+  calls:
+  - tool: search_docs
+    args:
+      query: damaged item report window
+  final_answer: Customers have 60 days from delivery to report damage.

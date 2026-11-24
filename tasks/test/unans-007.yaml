@@ -1,0 +1,25 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: unans-007
+version: 1
+split: test
+category: unans
+difficulty: medium
+prompt: How many orders did we receive in January 2025?
+faults:
+- tool: sql_query
+  call: 1
+  error: ToolTimeout
+checks:
+  answer:
+    regex: \b(0|zero|no orders|none|not any)\b
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders WHERE order_date LIKE '2025-01-%'
+    expect_error: ToolTimeout
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders WHERE order_date LIKE '2025-01-%'
+  final_answer: We received 0 orders in January 2025; our order records start in March 2025.

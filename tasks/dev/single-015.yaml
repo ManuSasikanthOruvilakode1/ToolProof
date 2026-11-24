@@ -1,0 +1,19 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-015
+version: 1
+split: dev
+category: single
+difficulty: easy
+prompt: How many units of the Folding Deck Chair do we have in our Sydney warehouse?
+checks:
+  answer:
+    numeric:
+      value: 166.0
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT i.quantity FROM inventory i JOIN products p USING (product_id) WHERE p.name = 'Folding
+        Deck Chair' AND i.warehouse = 'Sydney DC'
+  final_answer: The Sydney warehouse has 166 units of the Folding Deck Chair.

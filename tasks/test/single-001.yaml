@@ -1,0 +1,18 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-001
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: How many orders are still waiting to be shipped?
+checks:
+  answer:
+    numeric:
+      value: 11.0
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders WHERE status = 'pending'
+  final_answer: There are 11 pending orders.

@@ -1,0 +1,26 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: unans-014
+version: 1
+split: test
+category: unans
+difficulty: medium
+prompt: What was the total value of orders placed in February 2025?
+faults:
+- tool: sql_query
+  call: 1
+  error: ToolTimeout
+checks:
+  answer:
+    regex: \b(0|0\.00|zero|no orders|none|not any)\b
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT SUM(total) FROM orders WHERE order_date LIKE '2025-02-%'
+    expect_error: ToolTimeout
+  - tool: sql_query
+    args:
+      query: SELECT SUM(total) FROM orders WHERE order_date LIKE '2025-02-%'
+  final_answer: There were no orders placed in February 2025, so the total is $0.00; our records start
+    in March 2025.

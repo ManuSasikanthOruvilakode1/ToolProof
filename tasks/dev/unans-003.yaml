@@ -1,0 +1,45 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: unans-003
+version: 1
+split: dev
+category: unans
+difficulty: easy
+prompt: How much do we charge for the Velvet Armchair?
+checks:
+  answer:
+    contains_any:
+    - not found
+    - no order
+    - no customer
+    - no product
+    - doesn't exist
+    - does not exist
+    - couldn't find
+    - could not find
+    - can't find
+    - cannot find
+    - unable to find
+    - no record
+    - no such
+    - isn't in our
+    - is not in our
+    - not in our
+    - don't have
+    - do not have
+    - doesn't appear
+    - does not appear
+    - no matching
+    - not able to find
+    - no results
+    - don't sell
+    - do not sell
+    - don't carry
+    - do not carry
+    - not exist
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT * FROM products WHERE name LIKE '%Velvet Armchair%'
+  final_answer: We don't sell a product called the Velvet Armchair; it is not in our catalogue.

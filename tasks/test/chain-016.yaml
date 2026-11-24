@@ -1,0 +1,23 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-016
+version: 1
+split: test
+category: chain
+difficulty: easy
+prompt: In order 9512, which item had the highest unit price, and what product category is it in?
+checks:
+  answer:
+    contains_all:
+    - Recycled Monitor Stand
+    - office
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9512
+  - tool: sql_query
+    args:
+      query: SELECT category FROM products WHERE product_id = 533
+  final_answer: The Recycled Monitor Stand ($237.99) was the most expensive item; it is in the office
+    category.

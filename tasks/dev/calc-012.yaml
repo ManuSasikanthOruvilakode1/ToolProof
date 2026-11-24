@@ -1,0 +1,25 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-012
+version: 1
+split: dev
+category: calc
+difficulty: medium
+prompt: How much more was order 10046 than order 9156?
+checks:
+  answer:
+    numeric:
+      value: 88.98
+      tolerance: 0.01
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 10046
+  - tool: get_order
+    args:
+      order_id: 9156
+  - tool: calculator
+    args:
+      expression: round(235.97 - 146.99, 2)
+  final_answer: Order 10046 was $88.98 more than order 9156.

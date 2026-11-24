@@ -1,0 +1,18 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-010
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: How many orders are on their way to customers right now?
+checks:
+  answer:
+    numeric:
+      value: 9.0
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders WHERE status = 'shipped'
+  final_answer: There are 9 shipped orders.

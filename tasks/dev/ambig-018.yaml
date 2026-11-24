@@ -1,0 +1,44 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-018
+version: 1
+split: dev
+category: ambig
+difficulty: hard
+prompt: Please refund the item that arrived damaged in order 10066, following our policy.
+user_replies:
+- It was the Hanging Deck Chair.
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 124.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 10066
+        amount: 124.99
+        reason:
+          contains: damag
+  clarification:
+    must_ask_before_write: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which item arrived damaged?
+  - tool: get_order
+    args:
+      order_id: 10066
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 10066
+      amount: 124.99
+      reason: damaged
+  final_answer: 'I refunded $124.99 for the Hanging Deck Chair on order 10066 (reason: damaged).'

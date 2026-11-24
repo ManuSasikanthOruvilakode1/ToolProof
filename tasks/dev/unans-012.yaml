@@ -1,0 +1,44 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: unans-012
+version: 1
+split: dev
+category: unans
+difficulty: medium
+prompt: What products were in order 9517?
+faults:
+- tool: get_order
+  call: 1
+  error: ToolTimeout
+checks:
+  answer:
+    contains_any:
+    - no items
+    - no products
+    - doesn't contain any
+    - does not contain any
+    - didn't contain any
+    - did not contain any
+    - no line items
+    - empty
+    - 0 items
+    - zero items
+    - has no
+    - had no
+    - contains no
+    - contained no
+    - without any
+    - doesn't have any
+    - does not have any
+    - didn't have any
+    - did not have any
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9517
+    expect_error: ToolTimeout
+  - tool: get_order
+    args:
+      order_id: 9517
+  final_answer: Order 9517 has no items at all; its total is $0.00.

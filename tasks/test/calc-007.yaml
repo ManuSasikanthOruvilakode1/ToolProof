@@ -1,0 +1,19 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-007
+version: 1
+split: test
+category: calc
+difficulty: easy
+prompt: What was the combined value of the delivered orders that were placed in October 2025?
+checks:
+  answer:
+    numeric:
+      value: 20520.29
+      tolerance: 0.01
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT SUM(total) FROM orders WHERE status = 'delivered' AND order_date LIKE '2025-10-%'
+  final_answer: Delivered orders placed in October 2025 were worth $20520.29 in total.

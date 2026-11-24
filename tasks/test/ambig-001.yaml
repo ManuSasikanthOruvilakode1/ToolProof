@@ -1,0 +1,45 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-001
+version: 1
+split: test
+category: ambig
+difficulty: hard
+prompt: John got in touch to say an item in his most recent order arrived damaged. Please refund it in
+  line with our policy.
+user_replies:
+- It's John Moore, customer 1218. The Wool Throw Blanket in his most recent order, 9711, arrived damaged.
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 15.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9711
+        amount: 15.99
+        reason:
+          contains: damag
+  clarification:
+    must_ask_before_write: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which customer do you mean?
+  - tool: get_order
+    args:
+      order_id: 9711
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 9711
+      amount: 15.99
+      reason: damaged
+  final_answer: 'I refunded $15.99 for the Wool Throw Blanket on order 9711 (reason: damaged).'

@@ -30,8 +30,6 @@ def test_version_flag() -> None:
         (["run"], "P3/P6"),
         (["report", "some-run"], "P5.6"),
         (["compare", "a", "b"], "P5.7"),
-        (["bench", "validate"], "P4.1"),
-        (["bench", "oracle"], "P4.3"),
         (["runs", "list"], "P3/P6"),
     ],
 )

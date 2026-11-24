@@ -1,0 +1,44 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-007
+version: 1
+split: test
+category: ambig
+difficulty: hard
+prompt: Customer 1238 says their order arrived damaged and wants a refund.
+user_replies:
+- 'It''s order 9590: the Copper Kettle arrived broken.'
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 37.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9590
+        amount: 37.99
+        reason:
+          contains: damag
+  clarification:
+    must_ask_before_write: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which order and item were damaged?
+  - tool: get_order
+    args:
+      order_id: 9590
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 9590
+      amount: 37.99
+      reason: damaged
+  final_answer: 'I refunded $37.99 for the Copper Kettle on order 9590 (reason: damaged).'

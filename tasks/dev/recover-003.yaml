@@ -1,0 +1,26 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: recover-003
+version: 1
+split: dev
+category: recover
+difficulty: medium
+prompt: How many of our customers live in Brisbane?
+faults:
+- tool: sql_query
+  call: 1
+  error: RateLimited
+checks:
+  answer:
+    numeric:
+      value: 36.0
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM customers WHERE city = 'Brisbane'
+    expect_error: RateLimited
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM customers WHERE city = 'Brisbane'
+  final_answer: 36 customers live in Brisbane.

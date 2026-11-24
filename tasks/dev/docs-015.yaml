@@ -1,0 +1,38 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: docs-015
+version: 1
+split: dev
+category: docs
+difficulty: medium
+prompt: We sent the wrong product instead of the Velvet Floor Rug on order 9406. Please refund the customer
+  per policy.
+policy:
+- wrong-item
+checks:
+  answer:
+    numeric:
+      value: 154.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9406
+        amount: 154.99
+        reason:
+          contains: wrong
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9406
+  - tool: search_docs
+    args:
+      query: wrong item sent refund
+  - tool: issue_refund
+    args:
+      order_id: 9406
+      amount: 154.99
+      reason: wrong_item
+  final_answer: 'I refunded $154.99 for the Velvet Floor Rug on order 9406 (reason: wrong_item).'

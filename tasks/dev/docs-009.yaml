@@ -1,0 +1,37 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: docs-009
+version: 1
+split: dev
+category: docs
+difficulty: medium
+prompt: Order 9953 came with the wrong item in place of the Ceramic Kettle. Sort out the refund, please.
+policy:
+- wrong-item
+checks:
+  answer:
+    numeric:
+      value: 141.98
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9953
+        amount: 141.98
+        reason:
+          contains: wrong
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9953
+  - tool: search_docs
+    args:
+      query: wrong item sent refund
+  - tool: issue_refund
+    args:
+      order_id: 9953
+      amount: 141.98
+      reason: wrong_item
+  final_answer: 'I refunded $141.98 for the Ceramic Kettle on order 9953 (reason: wrong_item).'

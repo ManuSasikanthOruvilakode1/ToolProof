@@ -1,0 +1,31 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: recover-008
+version: 1
+split: test
+category: recover
+difficulty: medium
+prompt: What date is 90 days after order 10149 was delivered?
+faults:
+- tool: add_days
+  call: 1
+  error: ToolTimeout
+checks:
+  answer:
+    contains_all:
+    - '2025-07-27'
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 10149
+  - tool: add_days
+    args:
+      date: '2025-04-28'
+      days: 90
+    expect_error: ToolTimeout
+  - tool: add_days
+    args:
+      date: '2025-04-28'
+      days: 90
+  final_answer: Order 10149 was delivered on 2025-04-28; 90 days later is 2025-07-27.

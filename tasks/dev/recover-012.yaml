@@ -1,0 +1,32 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: recover-012
+version: 1
+split: dev
+category: recover
+difficulty: medium
+prompt: How long should a delivery to a remote area normally take?
+faults:
+- tool: search_docs
+  call: 1
+  error: ToolTimeout
+- tool: search_docs
+  call: 2
+  error: RateLimited
+checks:
+  answer:
+    regex: \b10\b
+    grounded: true
+oracle:
+  calls:
+  - tool: search_docs
+    args:
+      query: shipping zones remote transit
+    expect_error: ToolTimeout
+  - tool: search_docs
+    args:
+      query: shipping zones remote transit
+    expect_error: RateLimited
+  - tool: search_docs
+    args:
+      query: shipping zones remote transit
+  final_answer: Deliveries to the remote zone are expected within 10 days.

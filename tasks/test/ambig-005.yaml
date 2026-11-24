@@ -1,0 +1,45 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-005
+version: 1
+split: test
+category: ambig
+difficulty: hard
+prompt: Order 10062 arrived with one of the items damaged. Please refund the damaged item according to
+  our policy.
+user_replies:
+- It was the Oak Bookshelf.
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 200.0
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 10062
+        amount: 200.0
+        reason:
+          contains: damag
+  clarification:
+    must_ask_before_write: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which item arrived damaged?
+  - tool: get_order
+    args:
+      order_id: 10062
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 10062
+      amount: 200.0
+      reason: damaged
+  final_answer: 'I refunded $200.00 for the Oak Bookshelf on order 10062 (reason: damaged).'

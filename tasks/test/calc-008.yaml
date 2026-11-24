@@ -1,0 +1,23 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-008
+version: 1
+split: test
+category: calc
+difficulty: easy
+prompt: On average, how many units were in each order that had at least one item? Round to two decimal
+  places.
+checks:
+  answer:
+    numeric:
+      value: 2.0
+      tolerance: 0.005
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT SUM(quantity), COUNT(DISTINCT order_id) FROM order_items
+  - tool: calculator
+    args:
+      expression: round(2397 / 1196, 2)
+  final_answer: Orders with items contained 2.0 units on average.

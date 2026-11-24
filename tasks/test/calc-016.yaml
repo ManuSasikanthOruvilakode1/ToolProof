@@ -1,0 +1,34 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-016
+version: 1
+split: test
+category: calc
+difficulty: medium
+prompt: What percentage of delivered orders to remote customers arrived later than the expected delivery
+  time for their zone? Round to one decimal place.
+policy:
+- shipping-zones
+checks:
+  answer:
+    numeric:
+      value: 11.1
+      tolerance: 0.05
+    grounded: true
+oracle:
+  calls:
+  - tool: search_docs
+    args:
+      query: shipping zones expected delivery time
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders o JOIN customers c ON c.customer_id = o.customer_id WHERE o.status
+        = 'delivered' AND c.shipping_zone = 'remote' AND julianday(o.delivery_date) - julianday(o.ship_date)
+        > 10
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders o JOIN customers c ON c.customer_id = o.customer_id WHERE o.status
+        = 'delivered' AND c.shipping_zone = 'remote'
+  - tool: calculator
+    args:
+      expression: round(11 / 99 * 100, 1)
+  final_answer: 11 of 99 delivered remote orders took longer than 10 days, which is 11.1%.

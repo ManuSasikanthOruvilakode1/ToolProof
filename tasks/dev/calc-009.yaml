@@ -1,0 +1,34 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-009
+version: 1
+split: dev
+category: calc
+difficulty: medium
+prompt: What percentage of delivered orders to regional customers arrived later than the expected delivery
+  time for their zone? Round to one decimal place.
+policy:
+- shipping-zones
+checks:
+  answer:
+    numeric:
+      value: 10.1
+      tolerance: 0.05
+    grounded: true
+oracle:
+  calls:
+  - tool: search_docs
+    args:
+      query: shipping zones expected delivery time
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders o JOIN customers c ON c.customer_id = o.customer_id WHERE o.status
+        = 'delivered' AND c.shipping_zone = 'regional' AND julianday(o.delivery_date) - julianday(o.ship_date)
+        > 6
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders o JOIN customers c ON c.customer_id = o.customer_id WHERE o.status
+        = 'delivered' AND c.shipping_zone = 'regional'
+  - tool: calculator
+    args:
+      expression: round(31 / 307 * 100, 1)
+  final_answer: 31 of 307 delivered regional orders took longer than 6 days, which is 10.1%.

@@ -1,0 +1,44 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-017
+version: 1
+split: test
+category: ambig
+difficulty: hard
+prompt: Order 9001 had a damaged item in it. Please process the refund the customer is owed.
+user_replies:
+- It was the Wool Wall Mirror.
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 191.98
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9001
+        amount: 191.98
+        reason:
+          contains: damag
+  clarification:
+    must_ask_before_write: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which item arrived damaged?
+  - tool: get_order
+    args:
+      order_id: 9001
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 9001
+      amount: 191.98
+      reason: damaged
+  final_answer: 'I refunded $191.98 for the Wool Wall Mirror on order 9001 (reason: damaged).'

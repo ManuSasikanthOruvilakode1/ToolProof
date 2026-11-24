@@ -1,0 +1,31 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-001
+version: 1
+split: test
+category: calc
+difficulty: hard
+prompt: What is the combined total of orders 9043, 9680, 9929 and 9824?
+checks:
+  answer:
+    numeric:
+      value: 628.93
+      tolerance: 0.01
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9043
+  - tool: get_order
+    args:
+      order_id: 9680
+  - tool: get_order
+    args:
+      order_id: 9929
+  - tool: get_order
+    args:
+      order_id: 9824
+  - tool: calculator
+    args:
+      expression: 99.98 + 35.99 + 49.99 + 442.97
+  final_answer: The combined total is $628.93.

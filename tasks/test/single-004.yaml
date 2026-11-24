@@ -1,0 +1,18 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-004
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: What email address do we have on file for customer 1079?
+checks:
+  answer:
+    contains_all:
+    - sakura.walker.1079@mail.example
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT email FROM customers WHERE customer_id = 1079
+  final_answer: Customer 1079's email address is sakura.walker.1079@mail.example.

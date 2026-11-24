@@ -1,0 +1,19 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-012
+version: 1
+split: dev
+category: single
+difficulty: easy
+prompt: What was the total for order 9083?
+checks:
+  answer:
+    numeric:
+      value: 172.99
+      tolerance: 0.01
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9083
+  final_answer: The total for order 9083 was $172.99.

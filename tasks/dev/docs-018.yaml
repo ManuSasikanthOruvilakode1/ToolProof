@@ -1,0 +1,42 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: docs-018
+version: 1
+split: dev
+category: docs
+difficulty: medium
+prompt: Customer says order 9566 took far too long to arrive. Check whether it really was late and, if
+  so, give them the compensation our policy allows.
+policy:
+- late-delivery
+- shipping-zones
+checks:
+  answer:
+    numeric:
+      value: 5.4
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9566
+        amount: 5.4
+        reason:
+          contains: late
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9566
+  - tool: search_docs
+    args:
+      query: late delivery compensation
+  - tool: search_docs
+    args:
+      query: shipping zone expected transit days
+  - tool: issue_refund
+    args:
+      order_id: 9566
+      amount: 5.4
+      reason: late_delivery
+  final_answer: 'Order 9566 was late, so I refunded 10% of its $53.99 total: $5.40.'

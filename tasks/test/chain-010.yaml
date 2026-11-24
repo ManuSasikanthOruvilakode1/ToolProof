@@ -1,0 +1,23 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-010
+version: 1
+split: test
+category: chain
+difficulty: easy
+prompt: Order 9692 included the Gift Card $50. Which of our warehouses has more of it in stock right now?
+checks:
+  answer:
+    numeric:
+      value: 160.0
+    contains_all:
+    - Melbourne
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9692
+  - tool: sql_query
+    args:
+      query: SELECT warehouse, quantity FROM inventory WHERE product_id = 502
+  final_answer: 'Melbourne DC has more: 160 units, against 72 in Sydney DC.'

@@ -1,0 +1,49 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: recover-011
+version: 1
+split: test
+category: recover
+difficulty: hard
+prompt: The Brass Desk Lamp from order 9873 was broken on arrival. Process the refund the customer is
+  entitled to.
+faults:
+- tool: issue_refund
+  call: 1
+  error: ToolTimeout
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 100.0
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9873
+        amount: 100.0
+        reason:
+          contains: damag
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9873
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 9873
+      amount: 100.0
+      reason: damaged
+    expect_error: ToolTimeout
+  - tool: issue_refund
+    args:
+      order_id: 9873
+      amount: 100.0
+      reason: damaged
+  final_answer: 'I refunded $100.00 for the Brass Desk Lamp on order 9873 (reason: damaged).'
+notes: The first refund call times out and has no effect; exactly one refund must exist at the end.

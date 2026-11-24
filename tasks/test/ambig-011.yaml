@@ -1,0 +1,44 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-011
+version: 1
+split: test
+category: ambig
+difficulty: hard
+prompt: Something in order 9049 was broken when it arrived. Refund it as our policy allows.
+user_replies:
+- It was the Enamel Teapot.
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 32.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9049
+        amount: 32.99
+        reason:
+          contains: damag
+  clarification:
+    must_ask_before_write: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which item arrived damaged?
+  - tool: get_order
+    args:
+      order_id: 9049
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 9049
+      amount: 32.99
+      reason: damaged
+  final_answer: 'I refunded $32.99 for the Enamel Teapot on order 9049 (reason: damaged).'

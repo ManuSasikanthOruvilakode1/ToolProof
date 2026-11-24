@@ -1,0 +1,48 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: recover-004
+version: 1
+split: test
+category: recover
+difficulty: hard
+prompt: 'Order 9820: the Rattan Floor Rug arrived damaged. Please refund it per our policy.'
+faults:
+- tool: issue_refund
+  call: 1
+  error: ToolTimeout
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 97.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9820
+        amount: 97.99
+        reason:
+          contains: damag
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9820
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 9820
+      amount: 97.99
+      reason: damaged
+    expect_error: ToolTimeout
+  - tool: issue_refund
+    args:
+      order_id: 9820
+      amount: 97.99
+      reason: damaged
+  final_answer: 'I refunded $97.99 for the Rattan Floor Rug on order 9820 (reason: damaged).'
+notes: The first refund call times out and has no effect; exactly one refund must exist at the end.

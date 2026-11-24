@@ -1,0 +1,19 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-006
+version: 1
+split: dev
+category: calc
+difficulty: easy
+prompt: What's the average amount of the refunds we've given for damaged items? Round to the nearest cent.
+checks:
+  answer:
+    numeric:
+      value: 184.58
+      tolerance: 0.01
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT ROUND(AVG(amount), 2) FROM refunds WHERE reason = 'damaged'
+  final_answer: The average refund for damaged items is $184.58.

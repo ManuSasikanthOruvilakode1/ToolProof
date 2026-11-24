@@ -1,0 +1,23 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-003
+version: 1
+split: dev
+category: calc
+difficulty: easy
+prompt: If we offered a 15% goodwill credit on order 9465, how much would that be? Don't issue anything
+  yet, I just need the number.
+checks:
+  answer:
+    numeric:
+      value: 19.35
+      tolerance: 0.011
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9465
+  - tool: calculator
+    args:
+      expression: round(128.99 * 15 / 100, 2)
+  final_answer: A 15% credit on order 9465 (total $128.99) would be $19.35.

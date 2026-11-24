@@ -1,0 +1,36 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: recover-007
+version: 1
+split: test
+category: recover
+difficulty: medium
+prompt: What was the total of order 9361, and which customer placed it?
+faults:
+- tool: get_order
+  call: 1
+  error: ToolTimeout
+- tool: get_order
+  call: 2
+  error: RateLimited
+checks:
+  answer:
+    numeric:
+      value: 355.98
+      tolerance: 0.01
+    contains_all:
+    - Sakura Wilson
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9361
+    expect_error: ToolTimeout
+  - tool: get_order
+    args:
+      order_id: 9361
+    expect_error: RateLimited
+  - tool: get_order
+    args:
+      order_id: 9361
+  final_answer: Order 9361 totalled $355.98 and was placed by Sakura Wilson.

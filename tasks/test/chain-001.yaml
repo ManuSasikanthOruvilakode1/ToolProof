@@ -1,0 +1,21 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-001
+version: 1
+split: test
+category: chain
+difficulty: easy
+prompt: What's the email address of the customer who placed order 9125?
+checks:
+  answer:
+    contains_all:
+    - benjamin.hall.1104@mail.example
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9125
+  - tool: sql_query
+    args:
+      query: SELECT email FROM customers WHERE customer_id = 1104
+  final_answer: Order 9125 was placed by Benjamin Hall, whose email is benjamin.hall.1104@mail.example.

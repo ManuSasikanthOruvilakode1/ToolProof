@@ -1,0 +1,25 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-005
+version: 1
+split: test
+category: chain
+difficulty: easy
+prompt: Has Samuel Hughes ever been given a refund? If so, which order was it for and how much was it?
+checks:
+  answer:
+    numeric:
+      value: 18.99
+      tolerance: 0.01
+    contains_all:
+    - '10170'
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT customer_id FROM customers WHERE first_name = 'Samuel' AND last_name = 'Hughes'
+  - tool: sql_query
+    args:
+      query: SELECT r.order_id, r.amount FROM refunds r JOIN orders o ON o.order_id = r.order_id WHERE
+        o.customer_id = 1043
+  final_answer: Yes. Samuel Hughes received a refund of $18.99 for order 10170.

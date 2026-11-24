@@ -1,0 +1,60 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: unans-013
+version: 1
+split: test
+category: unans
+difficulty: easy
+prompt: How many loyalty points does customer 1152 have?
+checks:
+  answer:
+    contains_any:
+    - don't have
+    - do not have
+    - not available
+    - isn't available
+    - is not available
+    - not stored
+    - isn't stored
+    - not recorded
+    - isn't recorded
+    - not tracked
+    - don't track
+    - do not track
+    - doesn't include
+    - does not include
+    - not included
+    - no record
+    - unable to
+    - not able to
+    - can't provide
+    - cannot provide
+    - no information
+    - doesn't store
+    - does not store
+    - don't store
+    - do not store
+    - not part of
+    - no tracking
+    - no phone
+    - no payment
+    - no loyalty
+    - not have
+    - doesn't have
+    - does not have
+    - isn't something
+    - is not something
+    - no loyalty
+    - loyalty program
+    - loyalty scheme
+    - doesn't have a loyalty
+    - don't have a loyalty
+    grounded: true
+oracle:
+  calls:
+  - tool: search_docs
+    args:
+      query: loyalty points program
+  - tool: sql_query
+    args:
+      query: SELECT * FROM customers WHERE customer_id = 1152
+  final_answer: We don't have a loyalty points program, so there is no points balance to report.

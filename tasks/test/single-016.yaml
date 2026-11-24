@@ -1,0 +1,17 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-016
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: How long does a refund usually take to show up in the customer's account?
+checks:
+  answer:
+    regex: 3 ?(-|to) ?5 business day
+    grounded: true
+oracle:
+  calls:
+  - tool: search_docs
+    args:
+      query: refund processing time
+  final_answer: Refunds usually appear within 3 to 5 business days.

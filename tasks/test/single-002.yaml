@@ -1,0 +1,18 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-002
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: Can you check the current status of order 9025?
+checks:
+  answer:
+    contains_all:
+    - delivered
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9025
+  final_answer: Order 9025 is delivered.

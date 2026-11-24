@@ -1,0 +1,24 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-012
+version: 1
+split: dev
+category: chain
+difficulty: easy
+prompt: For order 9981, list each product and how many units we currently have in stock across both warehouses.
+checks:
+  answer:
+    contains_all:
+    - Mini Alarm Clock
+    - Weatherproof Garden Lantern
+    - '241'
+    - '358'
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9981
+  - tool: sql_query
+    args:
+      query: SELECT product_id, SUM(quantity) FROM inventory WHERE product_id IN (550, 564) GROUP BY product_id
+  final_answer: 'Mini Alarm Clock: 241 units in stock; Weatherproof Garden Lantern: 358 units in stock'

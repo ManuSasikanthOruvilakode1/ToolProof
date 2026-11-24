@@ -1,0 +1,49 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: recover-009
+version: 1
+split: dev
+category: recover
+difficulty: hard
+prompt: When was order 9542 delivered, and did it arrive within the expected delivery time for the customer's
+  shipping zone?
+faults:
+- tool: get_order
+  call: 1
+  error: ToolTimeout
+policy:
+- shipping-zones
+checks:
+  answer:
+    contains_any:
+    - on time
+    - not late
+    - wasn't late
+    - was not late
+    - within the expected
+    - within its expected
+    - within the zone
+    - within the 3
+    - within the 6
+    - within the 10
+    - no delay
+    - not delayed
+    - wasn't delayed
+    - was not delayed
+    - within expected
+    contains_all:
+    - '2025-11-16'
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9542
+    expect_error: ToolTimeout
+  - tool: get_order
+    args:
+      order_id: 9542
+  - tool: search_docs
+    args:
+      query: shipping zones expected transit
+  final_answer: Order 9542 was delivered on 2025-11-16, within the expected 3 days for the metro zone,
+    so it was on time.

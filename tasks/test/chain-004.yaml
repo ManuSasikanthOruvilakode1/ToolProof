@@ -1,0 +1,28 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-004
+version: 1
+split: test
+category: chain
+difficulty: medium
+prompt: How much has customer 1128 spent with us on delivered orders, after subtracting any refunds they
+  received?
+checks:
+  answer:
+    numeric:
+      value: 2293.72
+      tolerance: 0.01
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT SUM(total) FROM orders WHERE customer_id = 1128 AND status = 'delivered'
+  - tool: sql_query
+    args:
+      query: SELECT SUM(r.amount) FROM refunds r JOIN orders o ON o.order_id = r.order_id WHERE o.customer_id
+        = 1128
+  - tool: calculator
+    args:
+      expression: round(2354.71 - 60.99, 2)
+  final_answer: Customer 1128 spent $2354.71 on delivered orders and received $60.99 in refunds, so $2293.72
+    net.

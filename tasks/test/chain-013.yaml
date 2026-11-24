@@ -1,0 +1,37 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-013
+version: 1
+split: test
+category: chain
+difficulty: hard
+prompt: Between customers 1227 and 1066, who has spent more with us on delivered orders after refunds,
+  and by how much?
+checks:
+  answer:
+    numeric:
+      value: 1181.94
+      tolerance: 0.01
+    contains_all:
+    - '1227'
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT SUM(total) FROM orders WHERE customer_id = 1227 AND status = 'delivered'
+  - tool: sql_query
+    args:
+      query: SELECT SUM(r.amount) FROM refunds r JOIN orders o ON o.order_id = r.order_id WHERE o.customer_id
+        = 1227
+  - tool: sql_query
+    args:
+      query: SELECT SUM(total) FROM orders WHERE customer_id = 1066 AND status = 'delivered'
+  - tool: sql_query
+    args:
+      query: SELECT SUM(r.amount) FROM refunds r JOIN orders o ON o.order_id = r.order_id WHERE o.customer_id
+        = 1066
+  - tool: calculator
+    args:
+      expression: round((1523.89 - 15.99) - (374.95 - 48.99), 2)
+  final_answer: Customer 1227 spent $1507.90 net and customer 1066 $325.96, so customer 1227 spent $1181.94
+    more.

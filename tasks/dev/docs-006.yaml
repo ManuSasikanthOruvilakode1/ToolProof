@@ -1,0 +1,43 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: docs-006
+version: 1
+split: dev
+category: docs
+difficulty: medium
+prompt: Order 9493 was delivered on 2026-02-04. The customer has returned the unused Rattan Floor Rug
+  after changing their mind. Can they still get a refund? If so, process it.
+policy:
+- refund-policy
+- customer-tiers
+checks:
+  answer:
+    numeric:
+      value: 97.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9493
+        amount: 97.99
+        reason:
+          contains: mind
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT tier FROM customers WHERE customer_id = 1132
+  - tool: get_order
+    args:
+      order_id: 9493
+  - tool: search_docs
+    args:
+      query: change of mind return window gold tier
+  - tool: issue_refund
+    args:
+      order_id: 9493
+      amount: 97.99
+      reason: change_of_mind
+  final_answer: 'I refunded $97.99 for the Rattan Floor Rug on order 9493 (reason: change_of_mind).'
+notes: 'Delivered 31-60 days ago: only allowed because the customer is gold tier.'

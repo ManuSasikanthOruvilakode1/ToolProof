@@ -1,0 +1,37 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: docs-010
+version: 1
+split: test
+category: docs
+difficulty: medium
+prompt: Order 9071 arrived without the Linen Curtains. Can you refund the customer for it?
+policy:
+- missing-items
+checks:
+  answer:
+    numeric:
+      value: 67.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9071
+        amount: 67.99
+        reason:
+          contains: missing
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9071
+  - tool: search_docs
+    args:
+      query: missing items refund
+  - tool: issue_refund
+    args:
+      order_id: 9071
+      amount: 67.99
+      reason: missing_item
+  final_answer: 'I refunded $67.99 for the Linen Curtains on order 9071 (reason: missing_item).'

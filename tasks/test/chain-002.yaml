@@ -1,0 +1,24 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-002
+version: 1
+split: test
+category: chain
+difficulty: easy
+prompt: For order 9039, list each product and how many units we currently have in stock across both warehouses.
+checks:
+  answer:
+    contains_all:
+    - Linen Throw Blanket
+    - Rechargeable Headphones
+    - '56'
+    - '157'
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9039
+  - tool: sql_query
+    args:
+      query: SELECT product_id, SUM(quantity) FROM inventory WHERE product_id IN (547, 570) GROUP BY product_id
+  final_answer: 'Linen Throw Blanket: 56 units in stock; Rechargeable Headphones: 157 units in stock'

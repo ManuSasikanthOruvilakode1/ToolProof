@@ -1,0 +1,33 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: recover-005
+version: 1
+split: test
+category: recover
+difficulty: medium
+prompt: What's our return shipping policy for gold-tier customers?
+faults:
+- tool: search_docs
+  call: 1
+  error: ToolTimeout
+- tool: search_docs
+  call: 2
+  error: RateLimited
+checks:
+  answer:
+    contains_all:
+    - free
+    grounded: true
+oracle:
+  calls:
+  - tool: search_docs
+    args:
+      query: return shipping gold tier
+    expect_error: ToolTimeout
+  - tool: search_docs
+    args:
+      query: return shipping gold tier
+    expect_error: RateLimited
+  - tool: search_docs
+    args:
+      query: return shipping gold tier
+  final_answer: Gold-tier customers get free return shipping on change-of-mind returns.

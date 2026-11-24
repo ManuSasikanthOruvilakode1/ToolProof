@@ -33,5 +33,11 @@ jobs:
       - name: Type check
         run: uv run mypy
 
+      - name: Benchmark validation (schema, counts, difficulty rules)
+        run: uv run toolproof bench validate --strict-counts
+
+      - name: Benchmark oracle (every task's reference solution passes)
+        run: uv run toolproof bench oracle
+
       - name: Tests
         run: uv run pytest -q

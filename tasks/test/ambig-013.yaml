@@ -1,0 +1,44 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-013
+version: 1
+split: test
+category: ambig
+difficulty: hard
+prompt: The customer says an item from order 9026 came damaged. Please sort out the refund.
+user_replies:
+- It was the Velvet Curtains.
+policy:
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 46.99
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9026
+        amount: 46.99
+        reason:
+          contains: damag
+  clarification:
+    must_ask_before_write: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which item arrived damaged?
+  - tool: get_order
+    args:
+      order_id: 9026
+  - tool: search_docs
+    args:
+      query: damaged item refund policy
+  - tool: issue_refund
+    args:
+      order_id: 9026
+      amount: 46.99
+      reason: damaged
+  final_answer: 'I refunded $46.99 for the Velvet Curtains on order 9026 (reason: damaged).'

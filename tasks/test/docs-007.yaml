@@ -1,0 +1,43 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: docs-007
+version: 1
+split: test
+category: docs
+difficulty: medium
+prompt: Everything in order 9575 arrived damaged. A supervisor has approved a full refund with approval
+  code APR-GTWL. Please process it.
+policy:
+- refund-approval
+- damaged-items
+checks:
+  answer:
+    numeric:
+      value: 400.97
+      tolerance: 0.01
+    grounded: true
+  state:
+    expect_rows:
+    - table: refunds
+      match:
+        order_id: 9575
+        amount: 400.97
+        approval_code: APR-GTWL
+    - table: approvals
+      match:
+        approval_code: APR-GTWL
+        status: used
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9575
+  - tool: search_docs
+    args:
+      query: refund approval over 200
+  - tool: issue_refund
+    args:
+      order_id: 9575
+      amount: 400.97
+      reason: damaged
+      approval_code: APR-GTWL
+  final_answer: I refunded the full $400.97 for order 9575 using approval code APR-GTWL.

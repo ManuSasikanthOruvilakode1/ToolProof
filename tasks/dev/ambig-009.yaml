@@ -1,0 +1,28 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-009
+version: 1
+split: dev
+category: ambig
+difficulty: medium
+prompt: What's the delivery date of John's most recent order?
+user_replies:
+- John Moore, customer 1218.
+checks:
+  answer:
+    contains_all:
+    - '2026-01-30'
+    grounded: true
+  clarification:
+    must_ask: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which customer do you mean?
+  - tool: sql_query
+    args:
+      query: SELECT order_id FROM orders WHERE customer_id = 1218 ORDER BY order_date DESC LIMIT 1
+  - tool: get_order
+    args:
+      order_id: 9711
+  final_answer: John Moore's latest order is 9711; its delivery date is 2026-01-30.

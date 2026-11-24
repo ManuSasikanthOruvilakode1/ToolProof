@@ -1,0 +1,28 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: ambig-002
+version: 1
+split: test
+category: ambig
+difficulty: medium
+prompt: Can you tell me the status of John's latest order?
+user_replies:
+- John Singh, customer 1010.
+checks:
+  answer:
+    contains_all:
+    - delivered
+    grounded: true
+  clarification:
+    must_ask: true
+oracle:
+  calls:
+  - tool: ask_user
+    args:
+      question: Which customer do you mean?
+  - tool: sql_query
+    args:
+      query: SELECT order_id FROM orders WHERE customer_id = 1010 ORDER BY order_date DESC LIMIT 1
+  - tool: get_order
+    args:
+      order_id: 9573
+  final_answer: John Singh's latest order is 9573; its status is delivered.

@@ -1,0 +1,19 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-014
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: How much does the Rechargeable Power Bank cost?
+checks:
+  answer:
+    numeric:
+      value: 156.99
+      tolerance: 0.01
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT price FROM products WHERE name = 'Rechargeable Power Bank'
+  final_answer: The Rechargeable Power Bank costs $156.99.

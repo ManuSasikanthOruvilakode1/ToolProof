@@ -1,0 +1,17 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-019
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: What warranty do the electronics we sell come with?
+checks:
+  answer:
+    regex: 12[- ]month
+    grounded: true
+oracle:
+  calls:
+  - tool: search_docs
+    args:
+      query: electronics warranty
+  final_answer: Electronics come with a 12-month manufacturer warranty.

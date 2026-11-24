@@ -817,3 +817,69 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 - **Details:** Verified: 0 institutional addresses in main or tags locally and through the GitHub API; commits still link to the owner's GitHub account via the noreply address; local backup refs and reflog purged
 - **Issues:** GitHub still serves the old, now-unreferenced commits if someone requests them by their old hash (e.g. links from old Actions run pages) until GitHub garbage-collects them; removal needs GitHub Support or recreating the repository
 - **Next:** Owner decides whether to ask GitHub Support to purge unreferenced commits
+
+---
+
+### LOG-0075 | 2026-11-25 06:15 +11:00 | DECISION | P4.2
+
+**Summary:** Checker semantics: no state check = world must be unchanged; state diffs must match exactly; safety counts attempted forbidden actions; answers must be grounded in tool results
+
+- **Files:** `PLAN.md`, `src/toolproof/bench/checkers.py`, `src/toolproof/bench/schema.py`
+- **Details:**
+  - Exact state matching: every added or changed row in every table must be expected, so an extra email or second refund fails (needed for the 'extra email' mutation)
+  - Safety: an attempted forbidden call counts even if the tool refused it (e.g. a refund over 200 without a code); violations are reported separately from success
+  - Grounding (new, answer.grounded, default on): the numeric value and contains_all items not present in the prompt must appear in a successful tool result; turned off only for transit-day counts, where working out the days by hand is legitimate
+  - set_equals from PLAN 8.4 is not implemented: list answers use contains_all plus not_contains
+- **Findings:** Without grounding, an answer made up without any tool call but matching the expected value would pass; found while writing the 'answer without tool use' mutation test
+
+---
+
+### LOG-0076 | 2026-11-25 06:15 +11:00 | DONE | P4.1
+
+**Summary:** Task schema (pydantic, strict), YAML loader and 'toolproof bench validate': unique IDs, file/split match, known tables/tools/docs, no tool names in prompts, no distractors in oracles, difficulty rule check, --strict-counts
+
+- **Files:** `src/toolproof/bench/schema.py`, `src/toolproof/cli.py`, `tests/unit/test_checkers.py`
+
+---
+
+### LOG-0077 | 2026-11-25 06:15 +11:00 | DONE | P4.2
+
+**Summary:** Checkers: answer (numeric, contains_all/any, regex, exact, not_contains; dates, money and thousands separators normalised), state, safety (incl. cross-customer data in emails), clarification
+
+- **Files:** `src/toolproof/bench/checkers.py`
+
+---
+
+### LOG-0078 | 2026-11-25 06:15 +11:00 | DONE | P4.3
+
+**Summary:** Oracle runner and 'toolproof bench oracle'; runs with scheduled faults (expect_error on failing calls); validate and oracle added to CI
+
+- **Files:** `src/toolproof/bench/oracle.py`, `.github/workflows/ci.yml`
+
+---
+
+### LOG-0079 | 2026-11-25 06:15 +11:00 | DONE | P4.4
+
+**Summary:** 150 tasks written: 50 dev, 100 test, counts per category exactly as PLAN 8.2; tasks/BENCHMARK_VERSION 0.1.0 (1.0.0 at the lock)
+
+- **Files:** `scripts/author_tasks.py`, `tasks/dev`, `tasks/test`, `tasks/BENCHMARK_VERSION`
+- **Details:**
+  - About 50 hand-designed task types (prompt wording, checks, reference calls); scripts/author_tasks.py looks up records and computes expected values from the seed DB, so no value is mistyped; regenerating gives byte-identical files
+  - Splits are stratified by task type (interleaved, evenly spaced dev picks); the script refuses to run once tasks/test.lock exists (RULES 12)
+
+---
+
+### LOG-0080 | 2026-11-25 06:15 +11:00 | DONE | P4.5
+
+**Summary:** Difficulty is computed from the oracle by the PLAN 8.3 rules and enforced by bench validate; final mix 55 easy / 58 medium / 37 hard (37% / 39% / 25%)
+
+- **Findings:** First draft was 62/72/16 (41/48/11%). Raised difficulty by making tasks genuinely harder, never by relabelling: 10 refunds also email a confirmation, 6 refusals get a transient fault, 2 lookups add a shipping-zone check, 2 comparisons of net spend, 4-order totals, timeouts before 4 'nothing there' answers
+
+---
+
+### LOG-0081 | 2026-11-25 06:15 +11:00 | DONE | P4.6
+
+**Summary:** Checker mutation tests over every applicable task: extra email, wrong amount, wrong order, missing action, wrong recipient, unrequested refund, forbidden attempt, skipped clarification, answer without tool use, wrong answer: all fail as required
+
+- **Files:** `tests/unit/test_benchmark_tasks.py`
+- **Findings:** Full suite 1,180 tests pass (821 benchmark oracle and mutation tests); coverage 96%

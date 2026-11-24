@@ -1,0 +1,19 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-005
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: How much does the Rattan Side Table cost?
+checks:
+  answer:
+    numeric:
+      value: 16.99
+      tolerance: 0.01
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT price FROM products WHERE name = 'Rattan Side Table'
+  final_answer: The Rattan Side Table costs $16.99.

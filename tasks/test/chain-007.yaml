@@ -1,0 +1,28 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-007
+version: 1
+split: test
+category: chain
+difficulty: medium
+prompt: Customer 1092 is asking about their most recent order. What's its status, when did it ship, and
+  which email address should I reply to?
+checks:
+  answer:
+    contains_all:
+    - '9880'
+    - delivered
+    - '2025-12-03'
+    - ava.scott.1092@mail.example
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT order_id FROM orders WHERE customer_id = 1092 ORDER BY order_date DESC LIMIT 1
+  - tool: get_order
+    args:
+      order_id: 9880
+  - tool: sql_query
+    args:
+      query: SELECT email FROM customers WHERE customer_id = 1092
+  final_answer: Their most recent order is 9880. It is delivered and shipped on 2025-12-03. Reply to ava.scott.1092@mail.example.

@@ -1,0 +1,25 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: calc-002
+version: 1
+split: test
+category: calc
+difficulty: medium
+prompt: What percentage of all our orders have been cancelled? Round to one decimal place.
+checks:
+  answer:
+    numeric:
+      value: 6.7
+      tolerance: 0.05
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders WHERE status = 'cancelled'
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders
+  - tool: calculator
+    args:
+      expression: round(80 / 1200 * 100, 1)
+  final_answer: 80 of 1200 orders were cancelled, which is 6.7%.

@@ -1,0 +1,18 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-018
+version: 1
+split: dev
+category: single
+difficulty: easy
+prompt: Can you check the current status of order 9997?
+checks:
+  answer:
+    contains_all:
+    - pending
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9997
+  final_answer: Order 9997 is pending.

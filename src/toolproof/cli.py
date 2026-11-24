@@ -193,17 +193,62 @@ def pilot(
 
 
 @bench_app.command("validate")
-def bench_validate() -> None:
-    """Check every task file against the schema."""
-    not_implemented("bench validate", "P4.1")
+def bench_validate(
+    strict_counts: Annotated[
+        bool, typer.Option(help="Also require the per-category counts from PLAN.md section 8.2.")
+    ] = False,
+) -> None:
+    """Check every task file: schema, unique IDs, tools, tables, docs and difficulty rules."""
+    from collections import Counter
+
+    from toolproof.bench.schema import validate_all
+
+    tasks, problems = validate_all(strict_counts=strict_counts)
+    for name, items in sorted(problems.items()):
+        for item in items:
+            err_console.print(f"[red]{name}[/red]: {item}", markup=True, highlight=False)
+    table = Table("category", "dev", "test", "easy", "medium", "hard")
+    by_category: dict[str, Counter[str]] = {}
+    for task in tasks:
+        counter = by_category.setdefault(task.category, Counter())
+        counter[task.split] += 1
+        counter[task.difficulty] += 1
+    for category, counter in sorted(by_category.items()):
+        table.add_row(
+            category, *(str(counter[key]) for key in ("dev", "test", "easy", "medium", "hard"))
+        )
+    console.print(table)
+    console.print(f"{len(tasks)} tasks, {sum(len(v) for v in problems.values())} problem(s)")
+    if problems:
+        raise typer.Exit(code=1)
 
 
 @bench_app.command("oracle")
 def bench_oracle(
     task: Annotated[str | None, typer.Option(help="Only this task ID.")] = None,
 ) -> None:
-    """Run each task's reference solution through its checkers."""
-    not_implemented("bench oracle", "P4.3")
+    """Run each task's reference solution through its checkers. Every task must pass."""
+    from toolproof.bench.oracle import run_oracle
+    from toolproof.bench.schema import load_tasks
+    from toolproof.env.docs_index import load_docs_index
+    from toolproof.env.world import ensure_base_db
+
+    tasks = [item for item in load_tasks() if task is None or item.id == task]
+    if not tasks:
+        err_console.print(f"[red]No task {task!r}[/red]" if task else "[red]No tasks found[/red]")
+        raise typer.Exit(code=1)
+    base_db, docs = ensure_base_db(), load_docs_index()
+    failed = 0
+    for item in tasks:
+        result = run_oracle(item, base_db=base_db, docs=docs)
+        if not result.passed:
+            failed += 1
+            err_console.print(f"[red]FAIL {item.id}[/red]")
+            for problem in result.problems():
+                err_console.print(f"    {problem}", markup=False, highlight=False)
+    console.print(f"oracle: {len(tasks) - failed}/{len(tasks)} tasks pass")
+    if failed:
+        raise typer.Exit(code=1)
 
 
 # ------------------------------------------------------------------ trace

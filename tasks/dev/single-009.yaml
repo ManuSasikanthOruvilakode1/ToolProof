@@ -1,0 +1,18 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-009
+version: 1
+split: dev
+category: single
+difficulty: easy
+prompt: Which city does customer 1233 live in?
+checks:
+  answer:
+    contains_all:
+    - Sydney
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT city FROM customers WHERE customer_id = 1233
+  final_answer: Customer 1233 lives in Sydney.

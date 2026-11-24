@@ -1,0 +1,22 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-008
+version: 1
+split: test
+category: chain
+difficulty: easy
+prompt: In order 9679, which item had the highest unit price, and what product category is it in?
+checks:
+  answer:
+    contains_all:
+    - Mini Alarm Clock
+    - electronics
+    grounded: true
+oracle:
+  calls:
+  - tool: get_order
+    args:
+      order_id: 9679
+  - tool: sql_query
+    args:
+      query: SELECT category FROM products WHERE product_id = 550
+  final_answer: The Mini Alarm Clock ($119.99) was the most expensive item; it is in the electronics category.

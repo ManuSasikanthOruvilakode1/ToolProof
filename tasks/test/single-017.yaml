@@ -1,0 +1,18 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: single-017
+version: 1
+split: test
+category: single
+difficulty: easy
+prompt: What's the total number of orders that have been cancelled?
+checks:
+  answer:
+    numeric:
+      value: 80.0
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT COUNT(*) FROM orders WHERE status = 'cancelled'
+  final_answer: There are 80 cancelled orders.

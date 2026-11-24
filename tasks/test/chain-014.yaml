@@ -1,0 +1,25 @@
+# Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
+id: chain-014
+version: 1
+split: test
+category: chain
+difficulty: easy
+prompt: Has Fatima Smith ever been given a refund? If so, which order was it for and how much was it?
+checks:
+  answer:
+    numeric:
+      value: 16.99
+      tolerance: 0.01
+    contains_all:
+    - '9252'
+    grounded: true
+oracle:
+  calls:
+  - tool: sql_query
+    args:
+      query: SELECT customer_id FROM customers WHERE first_name = 'Fatima' AND last_name = 'Smith'
+  - tool: sql_query
+    args:
+      query: SELECT r.order_id, r.amount FROM refunds r JOIN orders o ON o.order_id = r.order_id WHERE
+        o.customer_id = 1138
+  final_answer: Yes. Fatima Smith received a refund of $16.99 for order 9252.
