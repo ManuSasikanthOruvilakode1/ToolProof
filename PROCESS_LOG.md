@@ -770,3 +770,15 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 **Summary:** Pilot complete: 3 models piloted (60 trials over three runs); model list, temperature, step/wall limits and num_ctx decided; reports in reports/pilot/
 
 - **Files:** `configs/models.yaml`, `reports/pilot`
+
+---
+
+### LOG-0071 | 2026-11-25 05:35 +11:00 | CHECKPOINT | P3
+
+**Summary:** CP-0006 saved: P3 complete (7/8; P3.2 not built by decision); P4 next, not started
+
+- **Refs:** LOG-0060, LOG-0065, LOG-0066, LOG-0067, LOG-0070
+- **Details:**
+  - Tests: 320 passed; ruff, mypy strict, pre-commit and devlog verify clean
+  - Open issues: LOG-0009 (P7.3), LOG-0043 (email in early commits)
+- **Next:** Wait for the owner's go-ahead; then P4.1 task schema and 'toolproof bench validate'
