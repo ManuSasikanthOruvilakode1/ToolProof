@@ -251,6 +251,109 @@ def bench_oracle(
         raise typer.Exit(code=1)
 
 
+@bench_app.command("calibrate")
+def bench_calibrate(
+    model: Annotated[
+        list[str], typer.Option(help="Model role (small/medium/large) or name; repeat.")
+    ],
+    trials: Annotated[int, typer.Option(min=1, help="Trials per task.")] = 1,
+    strategy: Annotated[str, typer.Option(help=f"One of {sorted(STRATEGIES)}.")] = "plain",
+    task: Annotated[list[str] | None, typer.Option(help="Only these dev task IDs.")] = None,
+) -> None:
+    """P4.8: run dev tasks on the pilot models; list tasks every model or no model solves."""
+    from toolproof.bench.calibrate import run_calibration
+    from toolproof.bench.schema import load_tasks
+    from toolproof.models_config import load_models_config
+
+    config = load_models_config()
+    tasks = [t for t in load_tasks(split="dev") if not task or t.id in task]
+    out_dir = runs_dir() / f"calibrate_{datetime.now():%Y%m%d-%H%M}"
+    summary = run_calibration(
+        tasks,
+        {config.resolve(m).name: functools.partial(config.adapter, m) for m in model},
+        out_dir=out_dir,
+        strategy_name=strategy,
+        trials=trials,
+        temperature=config.defaults.temperature,
+        limits=config.defaults.limits(),
+        progress=lambda message: console.print(message, markup=False, highlight=False),
+    )
+    table = Table("model", "success", "safety-violation trials", "context hits")
+    for name, stats in summary["by_model"].items():
+        table.add_row(
+            name,
+            f"{stats['success_rate']:.0%}",
+            str(stats["safety_violation_trials"]),
+            str(stats["context_limit_hits"]),
+        )
+    console.print(table)
+    console.print(f"solved by every model: {summary['solved_by_every_model']}")
+    console.print(f"solved by no model: {summary['solved_by_no_model']}")
+    console.print(f"Rows, traces and summary: {out_dir}")
+
+
+@bench_app.command("try")
+def bench_try(
+    rater: Annotated[
+        str, typer.Option(help="Your rater ID: rater_a, rater_b, ... (never a name).")
+    ],
+    task: Annotated[
+        str | None, typer.Argument(help="Task ID; default: your next validation task.")
+    ] = None,
+) -> None:
+    """P4.7: solve a task yourself with the agent's tools, then judge the checker's verdict."""
+    from toolproof.bench.human import (
+        RATER_RE,
+        agreement_report,
+        labels_path,
+        record_attempt,
+        run_attempt,
+        validation_set,
+    )
+    from toolproof.bench.schema import load_tasks
+
+    if not RATER_RE.match(rater):
+        err_console.print("[red]Use a rater ID such as rater_a (no names; RULES 1).[/red]")
+        raise typer.Exit(code=1)
+    tasks = {t.id: t for t in load_tasks()}
+    if task is None:
+        done = set()
+        if labels_path().exists():
+            import csv
+
+            with labels_path().open(newline="", encoding="utf-8") as handle:
+                done = {r["task_id"] for r in csv.DictReader(handle) if r["rater"] == rater}
+        remaining = [tid for tid in validation_set(list(tasks.values())) if tid not in done]
+        if not remaining:
+            console.print(f"{rater} has finished all validation tasks.")
+            console.print(agreement_report())
+            return
+        task = remaining[0]
+        console.print(f"{len(remaining)} validation task(s) left for {rater}.")
+    if task not in tasks:
+        err_console.print(f"[red]No task {task!r}[/red]")
+        raise typer.Exit(code=1)
+    attempt = run_attempt(
+        tasks[task], input, lambda text: console.print(text, markup=False, highlight=False)
+    )
+    if attempt is None:
+        console.print("Stopped; nothing recorded.")
+        return
+    record_attempt(
+        attempt, rater, input, lambda text: console.print(text, markup=False, highlight=False)
+    )
+    console.print(f"Recorded in {labels_path()}")
+
+
+@bench_app.command("agreement")
+def bench_agreement() -> None:
+    """P4.7: agreement between raters and the checkers, and tasks flagged for fixing."""
+    from toolproof.bench.human import agreement_report
+
+    report = agreement_report()
+    console.print_json(data=report)
+
+
 # ------------------------------------------------------------------ trace
 
 

@@ -883,3 +883,31 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 
 - **Files:** `tests/unit/test_benchmark_tasks.py`
 - **Findings:** Full suite 1,180 tests pass (821 benchmark oracle and mutation tests); coverage 96%
+
+---
+
+### LOG-0082 | 2026-11-25 06:19 +11:00 | EDIT | P4.7
+
+**Summary:** Human validation kit: 'toolproof bench try --rater rater_x' (solve a task with the agent's tools, then judge the checker) and 'toolproof bench agreement'
+
+- **Files:** `src/toolproof/bench/human.py`, `src/toolproof/cli.py`, `docs/HUMAN_VALIDATION.md`, `tests/unit/test_human_validation.py`
+- **Details:**
+  - Fixed, stratified validation set of 20 tasks (2 per category, 3 in policy/ambig/docs/recover); answers in data/labels/human_validation.csv under rater IDs only; rater IDs are checked against rater_[a-z] (RULES 1)
+  - Flags every task where a rater disagrees with the checker or finds the request unclear; those are fixed or removed before the P4.9 lock
+- **Issues:** P4.7 itself needs 2-3 people to do the 20 tasks; logged as a separate ISSUE
+
+---
+
+### LOG-0083 | 2026-11-25 06:19 +11:00 | ISSUE | P4.7
+
+**Summary:** Human validation needs 2-3 people (rater_a, rater_b, ...) to attempt the 20 validation tasks; the test-set lock (P4.9) waits for it
+
+- **Next:** Owner finds 2-3 helpers and gives them docs/HUMAN_VALIDATION.md; then run 'toolproof bench agreement' and fix flagged tasks
+
+---
+
+### LOG-0084 | 2026-11-25 06:19 +11:00 | EDIT | P4.8
+
+**Summary:** Calibration runner 'toolproof bench calibrate': dev tasks only (refuses test tasks, RULES 11); per-task success per model; lists tasks solved by every model or by none
+
+- **Files:** `src/toolproof/bench/calibrate.py`, `src/toolproof/cli.py`, `tests/unit/test_calibrate.py`
