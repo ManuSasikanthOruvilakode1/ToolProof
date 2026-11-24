@@ -1,0 +1,103 @@
+{
+  "strategy": "plain",
+  "prompt_versions": {
+    "base": {
+      "version": "1",
+      "sha256": "5386aa6abd3e0a7a0d40337dc45e51a32e9146743278cf23ed2e5b9c74b870b7"
+    },
+    "plain": {
+      "version": "1",
+      "sha256": "256f2adaa698477f274743edaa36afd91d4ca210b0e0fceecf3161296214b3c9"
+    }
+  },
+  "temperature": 0.7,
+  "trials_per_task": 1,
+  "limits": {
+    "max_steps": 15,
+    "max_wall_seconds": 600.0,
+    "max_output_tokens": 1024
+  },
+  "models": {
+    "qwen2.5:3b": {
+      "describe": {
+        "backend": "ollama",
+        "model": "qwen2.5:3b",
+        "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+        "server_version": "0.35.1",
+        "capabilities": [
+          "completion",
+          "tools"
+        ],
+        "parameter_size": "3.1B",
+        "options": {
+          "num_ctx": 8192
+        }
+      },
+      "trials": 5,
+      "median_seconds_per_trial": 1.03,
+      "mean_tokens_per_trial": 2032,
+      "share_trials_with_tool_calls": 0.8,
+      "malformed_call_rate": 0.0,
+      "median_steps": 2,
+      "terminations": {
+        "final_answer": 5
+      },
+      "sanity_pass_rate": 0.2,
+      "context_limit_hits": 0
+    },
+    "qwen2.5:7b": {
+      "describe": {
+        "backend": "ollama",
+        "model": "qwen2.5:7b",
+        "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+        "server_version": "0.35.1",
+        "capabilities": [
+          "completion",
+          "tools"
+        ],
+        "parameter_size": "7.6B",
+        "options": {
+          "num_ctx": 8192
+        }
+      },
+      "trials": 5,
+      "median_seconds_per_trial": 2.91,
+      "mean_tokens_per_trial": 3642.4,
+      "share_trials_with_tool_calls": 1.0,
+      "malformed_call_rate": 0.111,
+      "median_steps": 2,
+      "terminations": {
+        "final_answer": 5
+      },
+      "sanity_pass_rate": 0.4,
+      "context_limit_hits": 0
+    },
+    "qwen2.5:14b": {
+      "describe": {
+        "backend": "ollama",
+        "model": "qwen2.5:14b",
+        "digest": "7cdf5a0187d5c58cc5d369b255592f7841d1c4696d45a8c8a9489440385b22f6",
+        "server_version": "0.35.1",
+        "capabilities": [
+          "completion",
+          "tools"
+        ],
+        "parameter_size": "14.8B",
+        "options": {
+          "num_ctx": 8192
+        }
+      },
+      "trials": 5,
+      "median_seconds_per_trial": 21.45,
+      "mean_tokens_per_trial": 3348.8,
+      "share_trials_with_tool_calls": 1.0,
+      "malformed_call_rate": 0.0,
+      "median_steps": 2,
+      "terminations": {
+        "final_answer": 5
+      },
+      "sanity_pass_rate": 0.8,
+      "context_limit_hits": 0
+    }
+  }
+}

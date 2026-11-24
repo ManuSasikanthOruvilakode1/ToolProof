@@ -93,6 +93,7 @@ def summarise(rows: list[dict[str, Any]]) -> dict[str, Any]:
         "median_steps": statistics.median(r["steps"] for r in rows),
         "terminations": dict(Counter(r["termination"] for r in rows)),
         "sanity_pass_rate": round(sum(r["sanity_pass"] for r in rows) / len(rows), 3),
+        "context_limit_hits": sum(r.get("context_limit_hits", 0) for r in rows),
     }
 
 

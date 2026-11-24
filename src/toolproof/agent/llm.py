@@ -26,6 +26,7 @@ Message = dict[str, Any]
 ToolSchema = dict[str, Any]
 
 DEFAULT_OLLAMA_URL = "http://localhost:11434"
+OLLAMA_DEFAULT_NUM_CTX = 4096  # Ollama's default context window when num_ctx is not set
 
 
 class LLMError(Exception):
@@ -65,6 +66,8 @@ class LLMResponse:
     latency_seconds: float = 0.0
     finish_reason: str | None = None
     raw: dict[str, Any] = field(default_factory=dict)
+    # True when the prompt filled the context window, so the backend may have cut part of it.
+    context_limit_hit: bool = False
 
     def assistant_message(self) -> Message:
         message: Message = {"role": "assistant", "content": self.text}
@@ -84,6 +87,7 @@ class LLMResponse:
             latency_seconds=data.get("latency_seconds", 0.0),
             finish_reason=data.get("finish_reason"),
             raw=data.get("raw", {}),
+            context_limit_hit=data.get("context_limit_hit", False),
         )
 
 
@@ -229,16 +233,19 @@ class OllamaAdapter:
                 error = error or "tool call has no name"
                 name = ""
             calls.append(ToolCall(raw_call.get("id") or f"call_{index}", name, arguments, error))
+        input_tokens = int(data.get("prompt_eval_count") or 0)
+        num_ctx = payload["options"].get("num_ctx", OLLAMA_DEFAULT_NUM_CTX)
         return LLMResponse(
             text=message.get("content") or "",
             tool_calls=tuple(calls),
             usage=TokenUsage(
-                input_tokens=int(data.get("prompt_eval_count") or 0),
-                output_tokens=int(data.get("eval_count") or 0),
+                input_tokens=input_tokens, output_tokens=int(data.get("eval_count") or 0)
             ),
             latency_seconds=round(latency, 4),
             finish_reason=data.get("done_reason"),
             raw=data,
+            # Ollama silently drops the start of a prompt that does not fit; flag it.
+            context_limit_hit=input_tokens + max_tokens >= num_ctx,
         )
 
     def describe(self) -> dict[str, Any]:

@@ -1,6 +1,6 @@
 # ToolProof: Project Plan
 
-> **Plan version:** 1.2 · **Created:** 2026-11-17 · **Updated:** 2026-11-17 (hosted read-only API added as optional, LOG-0038, LOG-0039) · **Status:** P0–P2 complete; P3 6/8 (P3.7 pilot waiting on model downloads, P3.2 deferred).
+> **Plan version:** 1.3 · **Created:** 2026-11-17 · **Updated:** 2026-11-25 (P3.7 decisions: models, limits, num_ctx; LOG-0065 to LOG-0067) · **Status:** P0–P3 complete (P3.2 not built: no API model); P4 next.
 >
 > This file describes **what** to build and **how to judge it**. It changes only through a logged
 > decision (`DECISION` entry in [PROCESS_LOG.md](PROCESS_LOG.md)). Current progress is in
@@ -111,14 +111,14 @@ number has a confidence interval, and every failure is assigned a type from a fi
 | Decision | Choice | Reason |
 |---|---|---|
 | LLM runtime | **Ollama** (local), client 0.35.1 installed | Free and private; same approach as CiteSure |
-| Models | 3–4 open-weight models with native tool calling: small (~3–4B), medium (~7–8B), large (~14B); optional 1 API model | Model size becomes a variable. Exact models are chosen in P3.7 from what supports tool calling at the time |
+| Models | **Decided (LOG-0065):** qwen2.5:3b (small), qwen2.5:7b (medium, base), qwen2.5:14b (large); digests pinned in `configs/models.yaml`; no API model | One family at three sizes, so model size is the only variable in E1 |
 | Model pinning | Record each model's **digest** and the Ollama version in every run manifest | Model tags can change silently |
 | Python | **3.12**, pinned with `.python-version` | System Python is 3.14; ML/tooling dependencies are safest on 3.12 |
 | Packaging | `uv`, `hatchling`, `src/` layout, `pyproject.toml` + `uv.lock` | Same as the other portfolio projects |
 | Environment | Fully offline and deterministic; all tools local or mocked | Results must be reproducible and checkable |
 | Benchmark size | 150 tasks: 50 dev, 100 test | Large enough for useful intervals, small enough to write by hand |
 | Trials per task | k = 3 on dev, k = 5 on test | LLM output is stochastic; one run per task is misleading |
-| Default sampling | Temperature 0.7, seed = trial index (confirmed in P3.7) | Makes pass^k meaningful; E5 tests temperature 0 |
+| Default sampling | Temperature 0.7, seed = trial index (**confirmed in P3.7, LOG-0066**); `num_ctx` 8192 for every model (LOG-0067) | Makes pass^k meaningful; E5 tests temperature 0. Ollama's default 4096 context silently drops the start of long prompts |
 | Agent framework | Written from scratch (~200–300 lines) | Full control over steps and logging; shows understanding |
 | Primary scoring | Rule-based checkers only (answer, final state, safety) | No LLM-judge noise in the main metric |
 | Experiment tracking | Run manifests + JSONL; MLflow optional (as in RegLens) | Plain files are easy to diff, resume and publish |
@@ -266,10 +266,10 @@ task is complete **and** a matching `DONE` entry exists in the log.
 ### P3: Agent loop (≈ 4–5 days)
 
 - [x] **P3.1** `LLMAdapter` protocol: `chat(messages, tools, temperature, seed, max_tokens) -> LLMResponse`, where the response holds text, tool calls, token usage, latency and raw output. `OllamaAdapter` uses `/api/chat` with native tool calling and records the model digest (`/api/show`) and server version (`/api/version`).
-- [ ] **P3.2** *(Deferred, LOG-0049: only if P3.7 includes an API model)* Optional `ApiAdapter`, installed as an extra. The key is read from an environment variable and is **never** committed or logged.
+- [ ] **P3.2** *(Not built: P3.7 decided against an API model, LOG-0065)* Optional `ApiAdapter`, installed as an extra. The key is read from an environment variable and is **never** committed or logged.
 - [x] **P3.3** `RecordingAdapter` (wraps any adapter and saves request/response pairs) and `ReplayAdapter` (serves them back by request hash). These are needed for CI (P7).
 - [x] **P3.4** Agent loop:
-  - limits: `max_steps = 15`, `max_wall_seconds = 180`, `max_output_tokens` per step;
+  - limits: `max_steps = 15`, `max_wall_seconds = 600` (raised from 180 in P3.7, LOG-0067: a safety net, not a cap), `max_output_tokens = 1024` per step;
   - malformed tool calls (invalid JSON, unknown tool, missing fields) are returned to the model as errors and **counted**;
   - the final answer is the first assistant message with no tool call;
   - termination reason recorded: `final_answer | step_limit | time_limit | llm_error`.
@@ -279,7 +279,7 @@ task is complete **and** a matching `DONE` entry exists in the log.
   3. `plan_execute`: a numbered plan first, then execution, with re-planning allowed once;
   4. `reflect`: before answering, the model checks its result against the task and may continue.
 - [x] **P3.6** Tracing: one JSONL line per event (`llm_request`, `llm_response`, `tool_call`, `tool_result`, `tool_error`, `final`). Fields: run ID, task ID, trial, step, timestamp, payload, tokens and latency. `toolproof trace show <run> <task> <trial>` pretty-prints a trace.
-- [ ] **P3.7** **Pilot:** 5 dev tasks × candidate models × `plain`. Record seconds per trial, tokens per trial, tool-calling reliability and malformed-call rate. Then decide the final model list, the default temperature and the step limit (each as a `DECISION` entry).
+- [x] **P3.7** **Pilot:** 5 dev tasks × candidate models × `plain`. Record seconds per trial, tokens per trial, tool-calling reliability and malformed-call rate. Then decide the final model list, the default temperature and the step limit (each as a `DECISION` entry).
 - [x] **P3.8** Loop tests with a scripted fake LLM: normal path, malformed JSON, unknown tool, repeated identical calls, step limit and time limit.
 - **Done when:** one task runs end-to-end with each strategy; a recorded trace replays exactly; pilot numbers are logged.
 
@@ -478,7 +478,7 @@ Base configuration: medium model · `plain` · 8 core tools · `standard` descri
 
 | Exp | Varies | Levels | New configs |
 |---|---|---|---:|
-| E1 | Model | small, medium, large, (+ optional API) | 3–4 |
+| E1 | Model | small, medium, large (no API model, LOG-0065) | 3 |
 | E2 | Strategy | plain, react, plan_execute, reflect | 3 |
 | E3 | Tool count | 8 → 15 → 23 (adding distractors) | 2 |
 | E4 | Description quality | minimal, standard, detailed × {medium, large} | 4 |
@@ -582,8 +582,8 @@ Part-time pace, about 20 hours a week. Six to eight weeks in total.
 |---|---|---|---|
 | Final name | **Decided: ToolProof** (free on PyPI) | P1.1 | Resolved: LOG-0012 |
 | Licence | **Decided: MIT** | P1.4 | Resolved: LOG-0014 |
-| Model list and default temperature | From the P3.7 pilot | P3.7 | ISSUE in log |
-| Include an API model? | Yes (one reference point) or no (fully free) | P3.7 | — |
+| Model list and default temperature | **Decided:** qwen2.5 3b/7b/14b; temperature 0.7 | P3.7 | Resolved: LOG-0068 |
+| Include an API model? | **Decided: no** (fully free and offline) | P3.7 | LOG-0065 |
 | Live smoke test in CI | Depends on runner capacity | P7.3 | ISSUE in log |
 | Gate thresholds X and Y | From the variation seen between replay and live runs | P7.4 | — |
 

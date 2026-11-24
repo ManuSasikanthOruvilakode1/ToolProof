@@ -137,11 +137,18 @@ def pilot(
     trials: Annotated[int, typer.Option(min=1, help="Trials per task.")] = 1,
     temperature: Annotated[float, typer.Option(min=0.0, max=2.0)] = 0.7,
     max_steps: Annotated[int, typer.Option(min=1)] = 15,
+    num_ctx: Annotated[
+        int | None, typer.Option(help="Context window; default from configs/models.yaml.")
+    ] = None,
     record: Annotated[bool, typer.Option(help="Save cassettes for replay tests.")] = False,
     base_url: Annotated[str, typer.Option(help="Ollama server URL.")] = DEFAULT_OLLAMA_URL,
 ) -> None:
     """P3.7 pilot: run the pilot requests on each model and summarise speed and reliability."""
+    from toolproof.models_config import load_models_config
     from toolproof.pilot import load_pilot_tasks, run_pilot
+
+    defaults = load_models_config().defaults
+    options = {"num_ctx": num_ctx or defaults.num_ctx}
 
     if strategy not in STRATEGIES:
         err_console.print(f"[red]Unknown strategy {strategy!r}[/red]")
@@ -149,12 +156,19 @@ def pilot(
     out_dir = runs_dir() / f"pilot_{datetime.now():%Y%m%d-%H%M}"
     summary = run_pilot(
         load_pilot_tasks(),
-        {name: functools.partial(OllamaAdapter, name, base_url=base_url) for name in model},
+        {
+            name: functools.partial(OllamaAdapter, name, base_url=base_url, extra_options=options)
+            for name in model
+        },
         out_dir=out_dir,
         strategy_name=strategy,
         trials=trials,
         temperature=temperature,
-        limits=AgentLimits(max_steps=max_steps),
+        limits=AgentLimits(
+            max_steps=max_steps,
+            max_wall_seconds=defaults.max_wall_seconds,
+            max_output_tokens=defaults.max_output_tokens,
+        ),
         record=record,
         progress=lambda message: console.print(message, markup=False, highlight=False),
     )

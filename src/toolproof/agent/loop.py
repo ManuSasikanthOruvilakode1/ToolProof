@@ -26,7 +26,7 @@ MALFORMED_CALL = "MalformedCall"
 @dataclass(frozen=True)
 class AgentLimits:
     max_steps: int = 15
-    max_wall_seconds: float = 180.0
+    max_wall_seconds: float = 600.0  # safety net only; see DECISION in P3.7
     max_output_tokens: int = 1024
 
 
@@ -43,6 +43,7 @@ class AgentResult:
     llm_seconds: float = 0.0
     wall_seconds: float = 0.0
     error: str | None = None
+    context_limit_hits: int = 0  # LLM calls whose prompt filled the context window
 
     @property
     def total_calls(self) -> int:
@@ -75,6 +76,7 @@ def run_agent(
     unparsed = 0
     input_tokens = output_tokens = 0
     llm_seconds = 0.0
+    context_limit_hits = 0
     steps = 0
     final_answer: str | None = None
     error: str | None = None
@@ -114,6 +116,7 @@ def run_agent(
         input_tokens += response.usage.input_tokens
         output_tokens += response.usage.output_tokens
         llm_seconds += response.latency_seconds
+        context_limit_hits += response.context_limit_hit
         tracer.event(
             "llm_response",
             steps,
@@ -121,6 +124,7 @@ def run_agent(
                 "text": response.text,
                 "tool_calls": [call.as_message_part() for call in response.tool_calls],
                 "finish_reason": response.finish_reason,
+                "context_limit_hit": response.context_limit_hit,
             },
             tokens={"input": response.usage.input_tokens, "output": response.usage.output_tokens},
             latency=response.latency_seconds,
@@ -195,6 +199,7 @@ def run_agent(
         llm_seconds=round(llm_seconds, 4),
         wall_seconds=round(clock() - started, 4),
         error=error,
+        context_limit_hits=context_limit_hits,
     )
     tracer.event(
         "final",
@@ -205,6 +210,7 @@ def run_agent(
             "error": error,
             "tool_calls": result.total_calls,
             "malformed_calls": malformed,
+            "context_limit_hits": context_limit_hits,
         },
         tokens={"input": input_tokens, "output": output_tokens},
     )

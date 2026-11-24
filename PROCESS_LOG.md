@@ -657,3 +657,116 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - Tests: 312 passed; coverage 99%; ruff, mypy strict, pre-commit and devlog verify clean
   - Open issues: LOG-0008, LOG-0009, LOG-0043, LOG-0057
 - **Next:** Owner approves model downloads; then 'ollama pull qwen2.5:3b' and 'ollama pull qwen2.5:14b', rerun 'toolproof pilot' with 3 trials, and log the P3.7 decisions
+
+---
+
+### LOG-0060 | 2026-11-25 05:34 +11:00 | EXPERIMENT | P3.7
+
+**Summary:** Pilot run pilot_20261125-0521: qwen2.5 3b/7b/14b, plain, temperature 0.7, 5 requests x 3 trials (45 trials)
+
+- **Files:** `reports/pilot/pilot_20261125-0521_summary.json`, `reports/pilot/pilot_20261125-0521_rows.jsonl`
+- **Details:**
+  - Models pulled with the owner's approval: qwen2.5:3b (357c53fb659c), qwen2.5:14b (7cdf5a0187d5); all three report native tool calling
+  - Median s/trial: 3b 0.94, 7b 2.31, 14b 13.95 (14b mean 21.8, max 89.4 s); mean tokens/trial ~2.4k-3.0k; malformed-call rate 0.0 for all; 45/45 ended with final_answer; max 5 steps
+  - Trials with tool calls: 3b 87%, 7b 100%, 14b 87%. Sanity checks (pilot only, not a benchmark metric): 3b 20%, 7b 40%, 14b 53%
+
+---
+
+### LOG-0061 | 2026-11-25 05:34 +11:00 | FINDING | P3.7
+
+**Summary:** Ollama's default context window is 4096 tokens and it drops the start of longer prompts without an error; the harness must set num_ctx and flag full windows
+
+- **Refs:** LOG-0060
+- **Details:** Seen via /api/ps context_length=4096 for the loaded model. Pilot peak was 1,971 input tokens per request, but benchmark tasks with 50-row SQL results, doc snippets and up to 15 steps can exceed 4,096; the system prompt would be lost first
+
+---
+
+### LOG-0062 | 2026-11-25 05:34 +11:00 | EDIT | P3.7
+
+**Summary:** num_ctx is now set explicitly and every LLM call is checked for a full context window
+
+- **Refs:** LOG-0061
+- **Files:** `configs/models.yaml`, `src/toolproof/models_config.py`, `src/toolproof/agent/llm.py`, `src/toolproof/agent/loop.py`, `src/toolproof/trial.py`, `src/toolproof/pilot.py`, `src/toolproof/cli.py`, `tests/unit/test_models_config.py`
+- **Details:**
+  - LLMResponse.context_limit_hit = input_tokens + max_tokens >= num_ctx; counted as AgentResult.context_limit_hits and written to traces, trial summaries and pilot summaries
+  - configs/models.yaml holds the model list with full digests and the defaults; toolproof pilot takes num_ctx and limits from it; tests 320 passed
+
+---
+
+### LOG-0063 | 2026-11-25 05:34 +11:00 | EXPERIMENT | P3.7
+
+**Summary:** Confirmation pilot pilot_20261125-0530 with final settings (num_ctx 8192, wall limit 600 s): 3 models x 5 requests x 1 trial
+
+- **Files:** `reports/pilot/pilot_20261125-0530_summary.json`, `reports/pilot/pilot_20261125-0530_rows.jsonl`
+- **Details:**
+  - Median s/trial: 3b 1.03, 7b 2.91, 14b 21.45 (up from 13.95 at num_ctx 4096: 14b now holds 5.9 of 10.0 GB in VRAM, the rest on CPU); context_limit_hits 0 for all; /api/ps confirms context_length 8192
+  - One malformed call: qwen2.5:7b added a junk argument key ('toolbench_rapidf...') to a calculator call; rejected as a schema error and counted, as intended
+
+---
+
+### LOG-0064 | 2026-11-25 05:34 +11:00 | FINDING | P3.7
+
+**Summary:** Compute budget estimate from the pilot: about 43 h for all dev and test runs, within the plan's 46 h estimate; the 14B model dominates
+
+- **Details:**
+  - Assumes benchmark trials take 2x the pilot medians (2 s, 6 s, 43 s for small/medium/large) and 650 trials per config (500 test + 150 dev)
+  - Configs per model: small 2 (E1, E6), medium 10 (base, E2 x3, E3 x2, E4 x2, E5, E6), large 4 (E1, E4 x2, E6): about 0.7 h + 10.8 h + 31 h
+- **Findings:**
+  - If the budget is too large, the plan's existing option (run E4 on one model) saves about 15 h
+  - First trial per model includes model loading (3b 6.6 s, 14b 20 s); the P6 runner should warm each model up before timing trials
+
+---
+
+### LOG-0065 | 2026-11-25 05:34 +11:00 | DECISION | P3.7
+
+**Summary:** Model list: qwen2.5:3b (small), qwen2.5:7b (medium, base config), qwen2.5:14b (large); no API reference model
+
+- **Refs:** LOG-0008
+- **Files:** `configs/models.yaml`, `PLAN.md`
+- **Details:**
+  - One family at three sizes, so E1 varies size only; all three have native tool calling in Ollama 0.35.1 with 0 malformed calls in 45 pilot trials
+  - No API model: keeps the project free and offline, and follows the owner's instruction to skip optional extras; P3.2 therefore stays unbuilt
+
+---
+
+### LOG-0066 | 2026-11-25 05:34 +11:00 | DECISION | P3.7
+
+**Summary:** Default temperature stays 0.7 with seed = trial index; E5 compares it with 0.0
+
+- **Refs:** LOG-0008
+- **Details:** At 0.7 the same request gave different outcomes across trials (e.g. 7b pilot-004 passed 1/3, 14b pilot-003 2/3), which pass^k needs
+
+---
+
+### LOG-0067 | 2026-11-25 05:34 +11:00 | DECISION | P3.7
+
+**Summary:** Limits: max_steps 15 (unchanged), max_output_tokens 1024, num_ctx 8192, max_wall_seconds raised from 180 to 600
+
+- **Files:** `configs/models.yaml`, `src/toolproof/agent/loop.py`, `PLAN.md`
+- **Details:**
+  - Pilot used at most 5 steps. A 14B request took up to 89 s at num_ctx 4096 and 14B trials got slower at 8192; with 180 s the large model would fail on speed on this 8 GB GPU, confounding E1. The wall limit is now a safety net; the step limit is the real cap
+  - Same num_ctx for every model so context size never differs between conditions
+
+---
+
+### LOG-0068 | 2026-11-25 05:34 +11:00 | RESOLVED | P3.7
+
+**Summary:** Model list and default temperature decided (LOG-0065, LOG-0066)
+
+- **Refs:** LOG-0008, LOG-0065, LOG-0066
+
+---
+
+### LOG-0069 | 2026-11-25 05:34 +11:00 | RESOLVED | P3.7
+
+**Summary:** Small and large models downloaded and piloted; P3.7 decisions logged
+
+- **Refs:** LOG-0057, LOG-0060
+
+---
+
+### LOG-0070 | 2026-11-25 05:34 +11:00 | DONE | P3.7
+
+**Summary:** Pilot complete: 3 models piloted (60 trials over three runs); model list, temperature, step/wall limits and num_ctx decided; reports in reports/pilot/
+
+- **Files:** `configs/models.yaml`, `reports/pilot`

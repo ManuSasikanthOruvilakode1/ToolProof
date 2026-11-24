@@ -1,0 +1,27 @@
+# Models and sampling defaults, decided in the P3.7 pilot (see PROCESS_LOG.md).
+# One family (Qwen2.5) at three sizes, so model size is the only thing E1 varies.
+# Digests pin the exact weights: a run whose live digest differs is a different model and must
+# not be mixed with these results (RULES 18).
+defaults:
+  temperature: 0.7        # gives trial-to-trial variation, so pass^k is meaningful; E5 tests 0.0
+  max_steps: 15           # pilot used at most 5
+  max_wall_seconds: 600   # safety net only; a 14B request took up to 89 s on 8 GB of VRAM
+  max_output_tokens: 1024
+  num_ctx: 8192           # Ollama defaults to 4096 and silently drops the start of longer prompts
+
+models:
+  small:
+    name: qwen2.5:3b
+    digest: 357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b
+    parameters: 3.1B
+  medium:
+    name: qwen2.5:7b
+    digest: 845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e
+    parameters: 7.6B
+  large:
+    name: qwen2.5:14b
+    digest: 7cdf5a0187d5c58cc5d369b255592f7841d1c4696d45a8c8a9489440385b22f6
+    parameters: 14.8B
+
+# Server version used when the digests above were recorded.
+ollama_version: 0.35.1

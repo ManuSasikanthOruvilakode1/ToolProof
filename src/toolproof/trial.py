@@ -59,6 +59,7 @@ class TrialOutcome:
             "changed_tables": self.diff.changed_tables,
             "questions_asked": len(self.questions_asked),
             "error": agent.error,
+            "context_limit_hits": agent.context_limit_hits,
         }
 
 

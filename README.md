@@ -5,8 +5,8 @@ tools, fill arguments, recover from errors and respect policies.
 
 [![ci](https://github.com/ManuSasikanthOruvilakode1/ToolProof/actions/workflows/ci.yml/badge.svg)](https://github.com/ManuSasikanthOruvilakode1/ToolProof/actions/workflows/ci.yml)
 
-> **Status:** in development. Project setup (P1) and the sandbox world (P2) are complete; the
-> agent loop (P3) is next. No benchmark results yet. See [PLAN.md](PLAN.md) for the design and
+> **Status:** in development. Project setup (P1), the sandbox world (P2) and the agent loop
+> (P3) are complete; the benchmark tasks (P4) are next. No benchmark results yet. See [PLAN.md](PLAN.md) for the design and
 > roadmap, and [docs/DESIGN_NOTES.md](docs/DESIGN_NOTES.md) for the sandbox store and its tools.
 
 ## Setup

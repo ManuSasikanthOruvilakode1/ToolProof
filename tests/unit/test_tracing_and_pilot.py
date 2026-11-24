@@ -211,7 +211,7 @@ def test_models_cli_without_server(monkeypatch: pytest.MonkeyPatch) -> None:
 class FakeOllama(ScriptedAdapter):
     """Stands in for OllamaAdapter in CLI tests: answers every request with a short reply."""
 
-    def __init__(self, model: str, base_url: str = "") -> None:
+    def __init__(self, model: str, base_url: str = "", extra_options: object = None) -> None:
         super().__init__([say("A reply.")] * 20, model=model)
 
     def describe(self) -> dict[str, object]:
