@@ -794,3 +794,26 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - Only author and committer email fields change; file trees must be identical before and after (checked by comparing tree hashes)
   - main and tags checkpoint/CP-0002 to CP-0006 are force-pushed once; every commit hash changes, so old-to-new hashes are logged in a follow-up entry
   - A full backup bundle was made before the rewrite; merged local branches p2/... and p3/... were deleted instead of rewritten
+
+---
+
+### LOG-0073 | 2026-11-25 05:54 +11:00 | CORRECTION | -
+
+**Summary:** Commit hashes changed in the approved email rewrite; hashes cited in earlier entries map to new ones as listed
+
+- **Refs:** LOG-0021, LOG-0023, LOG-0035, LOG-0046, LOG-0058, LOG-0072
+- **Details:**
+  - c679cc2 -> 46d66a3, 2b1238c -> 3c68ccc (CP-0002), 30ef347 -> 4bc26a9, f06675f -> d7cf948 (CP-0003), c54162d -> c53a0a6, 2b2d420 -> 1bd8226, 3c9292d -> 5689f41
+  - 122a825 -> ce63221, f2e01fa -> 2883402 (CP-0004), 9b66bf7 -> 39d5d2b, ec763be -> d4ed1bd (CP-0005), cdd7cec -> 69180e2, fb4c858 -> 4c57744 (CP-0006), 9e105e6 -> 48beabe
+  - File trees are identical before and after (HEAD tree b77e0117...); only author and committer email fields changed
+
+---
+
+### LOG-0074 | 2026-11-25 05:54 +11:00 | RESOLVED | -
+
+**Summary:** Institutional email removed from all commits on main and all checkpoint tags; force-pushed once
+
+- **Refs:** LOG-0043, LOG-0072
+- **Details:** Verified: 0 institutional addresses in main or tags locally and through the GitHub API; commits still link to the owner's GitHub account via the noreply address; local backup refs and reflog purged
+- **Issues:** GitHub still serves the old, now-unreferenced commits if someone requests them by their old hash (e.g. links from old Actions run pages) until GitHub garbage-collects them; removal needs GitHub Support or recreating the repository
+- **Next:** Owner decides whether to ask GitHub Support to purge unreferenced commits
