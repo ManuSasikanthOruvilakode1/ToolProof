@@ -518,3 +518,124 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - Tests: 244 passed; ruff, mypy strict, pre-commit (now installed) and devlog verify clean
   - Open issues: LOG-0008, LOG-0009, LOG-0043
 - **Next:** Owner decision on LOG-0043; then P3.1 when the owner says to start P3
+
+---
+
+### LOG-0046 | 2026-11-25 05:02 +11:00 | RECOVERY | P3
+
+**Summary:** Full recovery after an 8-day gap (2026-11-17 to 2026-11-25): state matches CP-0004
+
+- **Details:**
+  - R2-R4: last entry LOG-0045 matches the checkpoint; devlog verify OK (45 entries); tree clean; HEAD f2e01fa = checkpoint/CP-0004; in sync with origin/main; no stashes
+  - R5: uv sync OK; pytest 244 passed; Ollama client 0.35.1 but the server is not running, so installed models are still unknown
+  - R6: no runs exist yet (runner arrives in P6)
+- **Findings:** P3.1-P3.6 and P3.8 can proceed with a scripted fake LLM; only the P3.7 pilot needs the Ollama server
+- **Next:** P3.1 LLM adapter on branch p3/p3.1-p3.8-agent-loop
+
+---
+
+### LOG-0047 | 2026-11-25 05:13 +11:00 | EDIT | P3.4
+
+**Summary:** ToolCallRecord.malformed separates schema violations (counted as malformed) from policy errors (not counted), as P3.4 requires
+
+- **Files:** `src/toolproof/env/tools/base.py`, `src/toolproof/env/toolbox.py`, `tests/unit/test_toolbox_and_faults.py`
+- **Details:** ToolError gained schema_error; pydantic validation failures and non-object arguments set it; unknown tools are malformed via error_type UnknownTool
+
+---
+
+### LOG-0048 | 2026-11-25 05:13 +11:00 | DONE | P3.1
+
+**Summary:** LLMAdapter protocol, LLMResponse/ToolCall/TokenUsage and OllamaAdapter (/api/chat native tool calling; digest from /api/tags, capabilities from /api/show, server version from /api/version)
+
+- **Files:** `src/toolproof/agent/llm.py`, `tests/unit/test_llm.py`
+- **Details:** Provider-neutral message format; adapters never repair output: arguments that are not a JSON object come back with parse_error set
+
+---
+
+### LOG-0049 | 2026-11-25 05:13 +11:00 | DECISION | P3.2
+
+**Summary:** P3.2 (optional API adapter) deferred: built only if the P3.7 decision includes an API reference model
+
+- **Files:** `PLAN.md`
+- **Details:** Follows the owner's instruction to skip optional extras unless asked; nothing else in P3 depends on it
+
+---
+
+### LOG-0050 | 2026-11-25 05:13 +11:00 | DONE | P3.3
+
+**Summary:** RecordingAdapter and ReplayAdapter: cassettes are JSONL keyed by SHA-256 of model, messages, tools, temperature, seed and max_tokens
+
+- **Files:** `src/toolproof/agent/llm.py`
+- **Details:** Repeated identical requests are served in recorded order; a missing request raises CassetteMiss
+
+---
+
+### LOG-0051 | 2026-11-25 05:13 +11:00 | DONE | P3.4
+
+**Summary:** Agent loop: max_steps 15, max_wall_seconds 180, max_output_tokens 1024; terminations final_answer/step_limit/time_limit/llm_error; malformed calls returned to the model and counted
+
+- **Files:** `src/toolproof/agent/loop.py`, `src/toolproof/trial.py`, `src/toolproof/agent/scripted.py`
+
+---
+
+### LOG-0052 | 2026-11-25 05:13 +11:00 | DONE | P3.5
+
+**Summary:** Strategies plain, react, plan_execute, reflect; prompts in configs/prompts/*.md with version lines; every strategy = base prompt + its own section
+
+- **Files:** `src/toolproof/agent/strategies.py`, `configs/prompts/base.md`, `configs/prompts/plain.md`, `configs/prompts/react.md`, `configs/prompts/plan_execute.md`, `configs/prompts/reflect.md`
+- **Details:**
+  - plan_execute: first call without tools produces a plan, one re-plan after a tool error; reflect: one self-check, first answer kept if the second is empty; react: text after 'Final answer:'
+  - Test guards that prompts name no tools and contain no digits (no task-specific hints)
+
+---
+
+### LOG-0053 | 2026-11-25 05:13 +11:00 | DONE | P3.6
+
+**Summary:** Tracing: JSONL per trial (run, task, trial, step, ts, event, payload, tokens, latency); toolproof trace show prints a timeline
+
+- **Files:** `src/toolproof/tracing.py`, `src/toolproof/cli.py`
+
+---
+
+### LOG-0054 | 2026-11-25 05:13 +11:00 | DONE | P3.8
+
+**Summary:** Loop and adapter tests with a scripted LLM: normal path, malformed JSON, unknown tool, missing fields, repeated calls -> step limit, time limit, LLM error; recorded trace replays exactly for all 4 strategies
+
+- **Files:** `tests/unit/test_agent_loop.py`, `tests/unit/test_strategies.py`, `tests/unit/test_tracing_and_pilot.py`, `tests/unit/test_llm.py`
+- **Findings:** 312 tests pass; total coverage 99% (agent/ 97-100%, cli 95%)
+
+---
+
+### LOG-0055 | 2026-11-25 05:13 +11:00 | EXPERIMENT | P3.7
+
+**Summary:** Pilot run pilot_20261125-0511: qwen2.5:7b (digest 845dbda0ea48), plain, temperature 0.7, 5 pilot requests x 1 trial
+
+- **Files:** `configs/pilot_tasks.yaml`, `src/toolproof/pilot.py`, `reports/pilot/pilot_20261125-0511_summary.json`, `reports/pilot/pilot_20261125-0511_rows.jsonl`
+- **Details:**
+  - Ollama server 0.35.1 started for this session; installed tool-calling models: qwen2.5:7b only (minicpm-v has no tool calling)
+  - Median 3.66 s per trial (first trial 48.5 s including model load); mean 3,248 tokens per trial; median 2 steps, max 5; 100% of trials made native tool calls; malformed-call rate 0.0; all 5 ended with final_answer; sanity checks 2/5
+  - Hardware: RTX 4060 Laptop GPU 8 GB (model fully in VRAM, 4.4 GB), 15 GB RAM
+
+---
+
+### LOG-0056 | 2026-11-25 05:13 +11:00 | FINDING | P3.7
+
+**Summary:** Pilot failures are genuine agent failures that map onto the taxonomy; the harness behaved correctly
+
+- **Details:**
+  - pilot-002: after an injected ToolTimeout the model asked whether to retry instead of retrying (ignored_error)
+  - pilot-004: passed SQL to the calculator twice, then fixed the query, then announced 'Now, I will calculate the average' and stopped without a tool call (wrong_tool, premature_answer)
+  - pilot-005: never searched the policy docs and stated an invented rule ('0 if more than 7 days late'); no refund issued (hallucinated_fact)
+- **Findings:**
+  - Narrated-but-not-executed next steps end the trial under the plan's rule (first message without a tool call is final). Keep the rule; it is what premature_answer measures
+  - Step limit 15 is ample (max 5 used); speed is well under the 15 s/trial budget assumption for a 7B model on this GPU
+
+---
+
+### LOG-0057 | 2026-11-25 05:13 +11:00 | ISSUE | P3.7
+
+**Summary:** P3.7 decisions blocked: only one tool-calling model (qwen2.5:7b) is installed; the plan needs small (~3-4B) and large (~14B) models too
+
+- **Refs:** LOG-0008
+- **Details:** 8 GB VRAM: a 14B model (~9 GB at q4) will partly run on CPU; its speed must be measured before fixing the E1 budget
+- **Next:** Owner approves model downloads (suggested qwen2.5:3b ~1.9 GB and qwen2.5:14b ~9 GB, optionally llama3.1:8b as a second family); rerun the pilot with 3 trials per request; then log the model list, temperature and step-limit DECISIONs

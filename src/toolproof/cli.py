@@ -6,13 +6,21 @@ task is done they exit with code 2 and name the task that will implement them.
 
 from __future__ import annotations
 
+import functools
+from datetime import datetime
 from pathlib import Path
 from typing import Annotated, NoReturn
 
 import typer
 from rich.console import Console
+from rich.table import Table
 
 from toolproof import __version__
+from toolproof.agent.llm import DEFAULT_OLLAMA_URL, LLMError, OllamaAdapter
+from toolproof.agent.loop import AgentLimits
+from toolproof.agent.strategies import STRATEGIES
+from toolproof.paths import runs_dir
+from toolproof.tracing import format_trace, read_trace, trace_path
 
 app = typer.Typer(
     name="toolproof",
@@ -27,6 +35,7 @@ app.add_typer(bench_app, name="bench")
 app.add_typer(trace_app, name="trace")
 app.add_typer(runs_app, name="runs")
 
+console = Console()
 err_console = Console(stderr=True)
 
 NOT_IMPLEMENTED_EXIT_CODE = 2
@@ -91,6 +100,81 @@ def compare(
     not_implemented("compare", "P5.7")
 
 
+@app.command()
+def models(
+    base_url: Annotated[str, typer.Option(help="Ollama server URL.")] = DEFAULT_OLLAMA_URL,
+) -> None:
+    """List local Ollama models and whether they support native tool calling."""
+    import httpx
+
+    try:
+        tags = httpx.get(f"{base_url}/api/tags", timeout=10).json().get("models", [])
+    except httpx.HTTPError as error:
+        err_console.print(f"[red]Cannot reach Ollama at {base_url}: {error}[/red]")
+        err_console.print("Start the Ollama app (or `ollama serve`) and try again.")
+        raise typer.Exit(code=1) from None
+    table = Table("model", "size", "parameters", "tool calling", "digest")
+    for entry in tags:
+        try:
+            info = OllamaAdapter(entry["name"], base_url=base_url).describe()
+        except LLMError as error:
+            err_console.print(f"[yellow]{entry['name']}: {error}[/yellow]")
+            continue
+        table.add_row(
+            entry["name"],
+            f"{entry.get('size', 0) / 1e9:.1f} GB",
+            str(info.get("parameter_size")),
+            "yes" if "tools" in info.get("capabilities", []) else "no",
+            str(info.get("digest"))[:12],
+        )
+    console.print(table)
+
+
+@app.command()
+def pilot(
+    model: Annotated[list[str], typer.Option(help="Ollama model; repeat for several.")],
+    strategy: Annotated[str, typer.Option(help=f"One of {sorted(STRATEGIES)}.")] = "plain",
+    trials: Annotated[int, typer.Option(min=1, help="Trials per task.")] = 1,
+    temperature: Annotated[float, typer.Option(min=0.0, max=2.0)] = 0.7,
+    max_steps: Annotated[int, typer.Option(min=1)] = 15,
+    record: Annotated[bool, typer.Option(help="Save cassettes for replay tests.")] = False,
+    base_url: Annotated[str, typer.Option(help="Ollama server URL.")] = DEFAULT_OLLAMA_URL,
+) -> None:
+    """P3.7 pilot: run the pilot requests on each model and summarise speed and reliability."""
+    from toolproof.pilot import load_pilot_tasks, run_pilot
+
+    if strategy not in STRATEGIES:
+        err_console.print(f"[red]Unknown strategy {strategy!r}[/red]")
+        raise typer.Exit(code=1)
+    out_dir = runs_dir() / f"pilot_{datetime.now():%Y%m%d-%H%M}"
+    summary = run_pilot(
+        load_pilot_tasks(),
+        {name: functools.partial(OllamaAdapter, name, base_url=base_url) for name in model},
+        out_dir=out_dir,
+        strategy_name=strategy,
+        trials=trials,
+        temperature=temperature,
+        limits=AgentLimits(max_steps=max_steps),
+        record=record,
+        progress=lambda message: console.print(message, markup=False, highlight=False),
+    )
+    table = Table("model", "s/trial", "tokens/trial", "with tool calls", "malformed", "sanity")
+    for name, stats in summary["models"].items():
+        if "error" in stats:
+            table.add_row(name, "unavailable", "", "", "", "")
+            continue
+        table.add_row(
+            name,
+            str(stats["median_seconds_per_trial"]),
+            str(stats["mean_tokens_per_trial"]),
+            f"{stats['share_trials_with_tool_calls']:.0%}",
+            str(stats["malformed_call_rate"]),
+            f"{stats['sanity_pass_rate']:.0%}",
+        )
+    console.print(table)
+    console.print(f"Traces and summary: {out_dir}")
+
+
 # ------------------------------------------------------------------ bench
 
 
@@ -118,7 +202,12 @@ def trace_show(
     trial: Annotated[int, typer.Argument(help="Trial index.")],
 ) -> None:
     """Pretty-print one trial's trace."""
-    not_implemented("trace show", "P3.6")
+    path = trace_path(runs_dir(), run_id, task_id, trial)
+    if not path.exists():
+        err_console.print(f"[red]No trace at {path}[/red]")
+        raise typer.Exit(code=1)
+    for line in format_trace(read_trace(path)):
+        console.print(line, markup=False, highlight=False)
 
 
 # ------------------------------------------------------------------ runs

@@ -163,3 +163,19 @@ def test_scheduled_fault_validation() -> None:
         ScheduledFault(tool="get_order", call=0)
     with pytest.raises(ValueError):
         ScheduledFault.model_validate({"tool": "get_order", "call": 1, "error": "Boom"})
+
+
+# ------------------------------------------------------------------ malformed vs policy errors
+
+
+def test_schema_errors_are_malformed_but_policy_errors_are_not(sandbox: Sandbox) -> None:
+    missing = sandbox.toolbox.call("issue_refund", {"order_id": 9001})
+    wrong_type = sandbox.toolbox.call("get_order", {"order_id": "abc"})
+    not_object = sandbox.toolbox.call("get_order", "9001")
+    unknown = sandbox.toolbox.call("refund_order", {})
+    policy = sandbox.toolbox.call(
+        "issue_refund", {"order_id": 9001, "amount": 99999, "reason": "damaged"}
+    )
+    assert all(r.malformed for r in (missing, wrong_type, not_object, unknown))
+    assert policy.error_type == "InvalidArgument" and not policy.malformed
+    assert not sandbox.toolbox.call("get_order", {"order_id": 9001}).malformed

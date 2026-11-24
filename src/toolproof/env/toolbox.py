@@ -24,6 +24,12 @@ class ToolCallRecord:
     error_message: str | None = None
     injected: bool = False
     is_write: bool = False
+    schema_error: bool = False
+
+    @property
+    def malformed(self) -> bool:
+        """Unknown tool or arguments that do not match the schema (not policy errors)."""
+        return self.error_type == UNKNOWN_TOOL or self.schema_error
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -78,7 +84,7 @@ class ToolBox:
             record.is_write = tool.is_write
             try:
                 if not isinstance(arguments, Mapping):
-                    raise InvalidArgument("Arguments must be a JSON object.")
+                    raise InvalidArgument("Arguments must be a JSON object.", schema_error=True)
                 fault = self.faults.check(name) if self.faults else None
                 if fault is not None:
                     raise fault
@@ -89,5 +95,6 @@ class ToolBox:
                 record.error_type = error.error_type
                 record.error_message = error.message
                 record.injected = error.injected
+                record.schema_error = error.schema_error
         self.history.append(record)
         return record

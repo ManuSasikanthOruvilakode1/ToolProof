@@ -30,10 +30,13 @@ class ToolError(Exception):
 
     error_type: ClassVar[str] = "ToolError"
 
-    def __init__(self, message: str, *, injected: bool = False) -> None:
+    def __init__(self, message: str, *, injected: bool = False, schema_error: bool = False) -> None:
         super().__init__(message)
         self.message = message
         self.injected = injected
+        # True when the arguments did not match the tool's schema (missing, unknown or
+        # wrongly typed fields). Counted as a malformed call, unlike policy errors.
+        self.schema_error = schema_error
 
 
 class NotFound(ToolError):
@@ -150,7 +153,7 @@ class Tool[ArgsT: ToolArgs](ABC):
         try:
             args = self.args_model.model_validate(dict(arguments))
         except ValidationError as error:
-            raise InvalidArgument(format_validation_error(error)) from None
+            raise InvalidArgument(format_validation_error(error), schema_error=True) from None
         return self.run(ctx, args)
 
     @abstractmethod

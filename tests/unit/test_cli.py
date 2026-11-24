@@ -8,7 +8,7 @@ from toolproof.cli import NOT_IMPLEMENTED_EXIT_CODE, app
 
 runner = CliRunner()
 
-EXPECTED_COMMANDS = ("run", "report", "compare", "bench", "trace", "runs")
+EXPECTED_COMMANDS = ("run", "report", "compare", "bench", "trace", "runs", "models", "pilot")
 
 
 def test_help_lists_all_commands() -> None:
@@ -32,7 +32,6 @@ def test_version_flag() -> None:
         (["compare", "a", "b"], "P5.7"),
         (["bench", "validate"], "P4.1"),
         (["bench", "oracle"], "P4.3"),
-        (["trace", "show", "run", "task", "1"], "P3.6"),
         (["runs", "list"], "P3/P6"),
     ],
 )

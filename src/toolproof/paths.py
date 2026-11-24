@@ -27,3 +27,20 @@ def docs_dir() -> Path:
 
 def base_db_path() -> Path:
     return data_dir() / "world.sqlite"
+
+
+def configs_dir() -> Path:
+    return PROJECT_ROOT / "configs"
+
+
+def prompts_dir() -> Path:
+    return configs_dir() / "prompts"
+
+
+def results_dir() -> Path:
+    override = os.environ.get("TOOLPROOF_RESULTS_DIR")
+    return Path(override) if override else PROJECT_ROOT / "results"
+
+
+def runs_dir() -> Path:
+    return results_dir() / "runs"

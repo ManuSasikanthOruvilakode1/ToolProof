@@ -1,0 +1,33 @@
+# Pilot requests for P3.7. They measure speed, token use and tool-calling reliability per model,
+# and drive the decisions on the model list, default temperature and step limit.
+# "expect" is a rough sanity check only; it is NOT the benchmark's scoring (that is P4).
+- id: pilot-001
+  prompt: How many orders have been cancelled?
+  expect:
+    answer_contains: ["80"]
+
+- id: pilot-002
+  prompt: What is the status of order 9031, and when was it delivered?
+  faults:
+    - {tool: get_order, call: 1, error: ToolTimeout}
+  expect:
+    answer_contains: ["delivered", "2025-04-14"]
+
+- id: pilot-003
+  prompt: What does our policy say about compensation for late deliveries?
+  expect:
+    answer_contains: ["10%", "50"]
+
+- id: pilot-004
+  prompt: >
+    What was the average total of delivered orders placed in February 2026?
+    Round to the nearest cent.
+  expect:
+    answer_contains: ["194.47"]
+
+- id: pilot-005
+  prompt: >
+    Order 9053 arrived late. Please issue the late-delivery compensation that our policy
+    allows.
+  expect:
+    refund: {order_id: 9053, amount: 12.10}

@@ -1,6 +1,6 @@
 # ToolProof: Project Plan
 
-> **Plan version:** 1.2 · **Created:** 2026-11-17 · **Updated:** 2026-11-17 (hosted read-only API added as optional, LOG-0038, LOG-0039) · **Status:** P0–P2 complete; P3 next.
+> **Plan version:** 1.2 · **Created:** 2026-11-17 · **Updated:** 2026-11-17 (hosted read-only API added as optional, LOG-0038, LOG-0039) · **Status:** P0–P2 complete; P3 6/8 (P3.7 pilot waiting on model downloads, P3.2 deferred).
 >
 > This file describes **what** to build and **how to judge it**. It changes only through a logged
 > decision (`DECISION` entry in [PROCESS_LOG.md](PROCESS_LOG.md)). Current progress is in
@@ -265,22 +265,22 @@ task is complete **and** a matching `DONE` entry exists in the log.
 
 ### P3: Agent loop (≈ 4–5 days)
 
-- [ ] **P3.1** `LLMAdapter` protocol: `chat(messages, tools, temperature, seed, max_tokens) -> LLMResponse`, where the response holds text, tool calls, token usage, latency and raw output. `OllamaAdapter` uses `/api/chat` with native tool calling and records the model digest (`/api/show`) and server version (`/api/version`).
-- [ ] **P3.2** Optional `ApiAdapter`, installed as an extra. The key is read from an environment variable and is **never** committed or logged.
-- [ ] **P3.3** `RecordingAdapter` (wraps any adapter and saves request/response pairs) and `ReplayAdapter` (serves them back by request hash). These are needed for CI (P7).
-- [ ] **P3.4** Agent loop:
+- [x] **P3.1** `LLMAdapter` protocol: `chat(messages, tools, temperature, seed, max_tokens) -> LLMResponse`, where the response holds text, tool calls, token usage, latency and raw output. `OllamaAdapter` uses `/api/chat` with native tool calling and records the model digest (`/api/show`) and server version (`/api/version`).
+- [ ] **P3.2** *(Deferred, LOG-0049: only if P3.7 includes an API model)* Optional `ApiAdapter`, installed as an extra. The key is read from an environment variable and is **never** committed or logged.
+- [x] **P3.3** `RecordingAdapter` (wraps any adapter and saves request/response pairs) and `ReplayAdapter` (serves them back by request hash). These are needed for CI (P7).
+- [x] **P3.4** Agent loop:
   - limits: `max_steps = 15`, `max_wall_seconds = 180`, `max_output_tokens` per step;
   - malformed tool calls (invalid JSON, unknown tool, missing fields) are returned to the model as errors and **counted**;
   - the final answer is the first assistant message with no tool call;
   - termination reason recorded: `final_answer | step_limit | time_limit | llm_error`.
-- [ ] **P3.5** Strategies, with prompts in `configs/prompts/*.md` (each prompt file has a version line):
+- [x] **P3.5** Strategies, with prompts in `configs/prompts/*.md` (each prompt file has a version line):
   1. `plain`: native function calling with a short system prompt;
   2. `react`: a written thought before each action;
   3. `plan_execute`: a numbered plan first, then execution, with re-planning allowed once;
   4. `reflect`: before answering, the model checks its result against the task and may continue.
-- [ ] **P3.6** Tracing: one JSONL line per event (`llm_request`, `llm_response`, `tool_call`, `tool_result`, `tool_error`, `final`). Fields: run ID, task ID, trial, step, timestamp, payload, tokens and latency. `toolproof trace show <run> <task> <trial>` pretty-prints a trace.
+- [x] **P3.6** Tracing: one JSONL line per event (`llm_request`, `llm_response`, `tool_call`, `tool_result`, `tool_error`, `final`). Fields: run ID, task ID, trial, step, timestamp, payload, tokens and latency. `toolproof trace show <run> <task> <trial>` pretty-prints a trace.
 - [ ] **P3.7** **Pilot:** 5 dev tasks × candidate models × `plain`. Record seconds per trial, tokens per trial, tool-calling reliability and malformed-call rate. Then decide the final model list, the default temperature and the step limit (each as a `DECISION` entry).
-- [ ] **P3.8** Loop tests with a scripted fake LLM: normal path, malformed JSON, unknown tool, repeated identical calls, step limit and time limit.
+- [x] **P3.8** Loop tests with a scripted fake LLM: normal path, malformed JSON, unknown tool, repeated identical calls, step limit and time limit.
 - **Done when:** one task runs end-to-end with each strategy; a recorded trace replays exactly; pilot numbers are logged.
 
 ### P4: Benchmark (≈ 7–9 days, the most valuable phase)
