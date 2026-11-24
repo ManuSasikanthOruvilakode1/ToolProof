@@ -974,3 +974,15 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 **Summary:** Dev calibration done; 4 checker false negatives fixed; extreme tasks reviewed and kept (DECISION above); 'toolproof bench calibrate' and trace-replay re-scoring added
 
 - **Files:** `src/toolproof/bench/calibrate.py`, `tests/unit/test_calibrate.py`, `reports/calibration`
+
+---
+
+### LOG-0091 | 2026-11-25 06:53 +11:00 | CHECKPOINT | P4
+
+**Summary:** CP-0007 saved: P4 7/9 done and merged; P4.7 waits for human raters, P4.9 (test lock) waits for P4.7
+
+- **Refs:** LOG-0081, LOG-0083, LOG-0088, LOG-0090
+- **Details:**
+  - Tests: 1,182 passed; bench validate 150 tasks 0 problems; oracle 150/150; CI runs both
+  - Open issues: LOG-0009 (P7.3), LOG-0083 (human raters)
+- **Next:** Owner recruits 2-3 raters (docs/HUMAN_VALIDATION.md); then 'toolproof bench agreement', fix flagged tasks, and lock the test set (P4.9)
