@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: docs-006
-version: 1
+version: 2
 split: dev
 category: docs
 difficulty: medium
@@ -22,7 +22,12 @@ checks:
         order_id: 9493
         amount: 97.99
         reason:
-          contains: mind
+          contains_any:
+          - mind
+          - unused
+          - return
+          - no longer want
+          - unwanted
 oracle:
   calls:
   - tool: sql_query

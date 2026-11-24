@@ -108,6 +108,44 @@ NOT_AVAILABLE = [
     "is not something",
 ]
 ESCALATE = ["approval", "supervisor", "escalat"]
+# Any of these phrasings says "the data or policy does not have this" (calibration showed
+# correct answers such as "I couldn't find a specific policy" failing a narrower list).
+CANNOT_ANSWER = sorted(
+    set(
+        NOT_FOUND
+        + NOT_AVAILABLE
+        + [
+            "no specific",
+            "not explicitly",
+            "no mention",
+            "not mentioned",
+            "isn't mentioned",
+            "not specified",
+            "isn't specified",
+            "no details",
+            "no info",
+            "not covered",
+            "isn't covered",
+            "doesn't cover",
+            "does not cover",
+            "no policy",
+            "couldn't locate",
+            "could not locate",
+            "not listed",
+            "isn't listed",
+            "no such information",
+            "no data",
+        ]
+    )
+)
+# Accepted wording for each refund reason (the policy names codes; agents paraphrase them).
+REASON_WORDS = {
+    "damag": ["damag", "broke", "crack", "smash", "defect", "shatter"],
+    "wrong": ["wrong", "incorrect", "different item", "different product", "not what"],
+    "missing": ["missing", "not received", "never arrived", "not included", "absent", "not in the"],
+    "mind": ["mind", "unused", "return", "no longer want", "unwanted"],
+    "late": ["late", "delay"],
+}
 REFUSE = [
     "can't",
     "cannot",
@@ -306,7 +344,7 @@ def refund_row(order_id: int, amount: float, reason_fragment: str, **extra: Any)
                 "match": {
                     "order_id": order_id,
                     "amount": amount,
-                    "reason": {"contains": reason_fragment},
+                    "reason": {"contains_any": REASON_WORDS[reason_fragment]},
                     **extra,
                 },
             }
@@ -622,7 +660,10 @@ def build_chain(store: Store) -> list[dict[str, Any]]:
                     ),
                 ],
                 "; ".join(f"{name}: {units} units in stock" for name, units in stock.items()),
-                answer={"contains_all": [*stock, *(str(units) for units in stock.values())]},
+                answer={
+                    "contains_all": [*stock, *(str(units) for units in stock.values())],
+                    "grounded": False,
+                },
             )
         )
     refunded_customers = store.rows(
@@ -679,6 +720,7 @@ def build_chain(store: Store) -> list[dict[str, Any]]:
                 answer={
                     "contains_all": [str(winner["customer_id"])],
                     "numeric": {"value": gap, "tolerance": 0.01},
+                    "grounded": False,
                 },
             )
         )
@@ -703,7 +745,7 @@ def build_chain(store: Store) -> list[dict[str, Any]]:
                     ),
                 ],
                 f"Customer {cid} spent ${money(spent)} on delivered orders and received ${money(refunded)} in refunds, so ${money(net)} net.",
-                answer={"numeric": {"value": net, "tolerance": 0.01}},
+                answer={"numeric": {"value": net, "tolerance": 0.01}, "grounded": False},
             )
         )
     one_refund = store.rows(
@@ -1568,7 +1610,7 @@ def build_unans(store: Store) -> list[dict[str, Any]]:
                 prompt,
                 [call("get_order", {"order_id": oid}, "NotFound")],
                 f"I couldn't find order {oid}; it does not exist in our system.",
-                answer={"contains_any": NOT_FOUND},
+                answer={"contains_any": CANNOT_ANSWER},
             )
         )
     for cid, prompt in (
@@ -1582,7 +1624,7 @@ def build_unans(store: Store) -> list[dict[str, Any]]:
                 prompt,
                 [sql(f"SELECT email, city FROM customers WHERE customer_id = {cid}")],
                 f"There is no customer {cid} in our records.",
-                answer={"contains_any": NOT_FOUND},
+                answer={"contains_any": CANNOT_ANSWER},
             )
         )
     names = {row["name"] for row in store.rows("SELECT name FROM products")}
@@ -1600,7 +1642,7 @@ def build_unans(store: Store) -> list[dict[str, Any]]:
                 prompt,
                 [sql(f"SELECT * FROM products WHERE name LIKE '%{product}%'")],
                 f"We don't sell a product called the {product}; it is not in our catalogue.",
-                answer={"contains_any": NOT_FOUND},
+                answer={"contains_any": CANNOT_ANSWER},
             )
         )
     (row,) = store.pick(store.rows("SELECT order_id FROM orders WHERE status = 'shipped'"), 1)
@@ -1630,7 +1672,7 @@ def build_unans(store: Store) -> list[dict[str, Any]]:
                 prompt,
                 calls,
                 final,
-                answer={"contains_any": NOT_AVAILABLE},
+                answer={"contains_any": CANNOT_ANSWER},
             )
         )
     zero = store.rows(
@@ -1691,7 +1733,7 @@ def build_unans(store: Store) -> list[dict[str, Any]]:
                 prompt,
                 calls,
                 final,
-                answer={"contains_any": NOT_AVAILABLE + extra},
+                answer={"contains_any": CANNOT_ANSWER + extra},
             )
         )
     for prompt, query, final, pattern in (
@@ -2286,10 +2328,17 @@ def to_yaml(task_model: Task) -> str:
     return header + yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=100)
 
 
+KEEP_FALSE = {"grounded"}  # flags whose default is True: False must be written out
+
+
 def _prune(value: Any) -> Any:
     if isinstance(value, dict):
         pruned = {k: _prune(v) for k, v in value.items()}
-        return {k: v for k, v in pruned.items() if v not in (None, [], {}, False)}
+        return {
+            k: v
+            for k, v in pruned.items()
+            if not (v in (None, [], {}) or (v is False and k not in KEEP_FALSE))
+        }
     if isinstance(value, list):
         return [_prune(v) for v in value]
     return value
@@ -2317,15 +2366,29 @@ def main(argv: list[str] | None = None) -> int:
     print(f"{len(all_tasks)} tasks; difficulty {mix}")
     if args.check:
         return 0
+    previous: dict[str, tuple[int, str]] = {}
+    for path in sorted(out.glob("*/*.yaml")):
+        text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
+        old = Task.model_validate(yaml.safe_load(text))
+        previous[old.id] = (old.version, text)
     for split in ("dev", "test"):
         target = out / split
         if target.exists():
             shutil.rmtree(target)
         target.mkdir(parents=True)
+    bumped = 0
     for item in all_tasks:
+        if item.id in previous:
+            old_version, old_text = previous[item.id]
+            unchanged = to_yaml(item.model_copy(update={"version": old_version})) == old_text
+            item = item.model_copy(
+                update={"version": old_version if unchanged else old_version + 1}
+            )
+            bumped += not unchanged
         (out / item.split / f"{item.id}.yaml").write_text(
             to_yaml(item), encoding="utf-8", newline="\n"
         )
+    print(f"{bumped} task(s) changed and got a new version (RULES 28)")
     print(f"wrote {out / 'dev'} and {out / 'test'}")
     return 0
 

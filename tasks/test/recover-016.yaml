@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: recover-016
-version: 1
+version: 2
 split: test
 category: recover
 difficulty: medium
@@ -13,6 +13,7 @@ checks:
   answer:
     numeric:
       value: 10.0
+      tolerance: 0.0
     grounded: true
 oracle:
   calls:

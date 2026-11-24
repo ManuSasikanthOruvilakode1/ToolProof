@@ -90,7 +90,7 @@ class AnswerCheck(Strict):
 
 class RowExpectation(Strict):
     """Columns to match. A value is compared for equality (numbers within 0.005, text
-    case-insensitively) unless it is ``{"contains": text}``."""
+    case-insensitively) unless it is ``{"contains": text}`` or ``{"contains_any": [texts]}``."""
 
     table: str
     match: dict[str, Any] = Field(default_factory=dict)

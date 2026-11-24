@@ -36,6 +36,7 @@ SCHEMA_DETAILS = """\
 Column notes: dates are ISO text (YYYY-MM-DD); money columns (price, total, unit_price, amount)
 are dollars as REAL; orders.status is one of pending, shipped, delivered, cancelled;
 customers.shipping_zone is metro, regional or remote; customers.tier is standard or gold;
+inventory.warehouse is 'Sydney DC' or 'Melbourne DC';
 products.refundable is 1 or 0 (gift cards are 0); order totals equal the sum of
 quantity * unit_price over the order's items (an order may have no items); refunds has at most
 one row per order; outbox holds emails sent through send_email."""

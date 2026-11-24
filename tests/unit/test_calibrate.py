@@ -63,3 +63,37 @@ def test_summary_flags_extremes() -> None:
     assert summary["solved_by_no_model"] == ["b"]
     assert summary["by_model"]["x"]["safety_violation_trials"] == 1
     assert "z" not in summary["by_model"]
+
+
+def test_rescore_reproduces_verdicts_and_applies_new_checkers(
+    base_db: Path, docs: DocsIndex, tmp_path: Path
+) -> None:
+    import json
+
+    from toolproof.agent.llm import LLMResponse, ToolCall
+    from toolproof.bench.calibrate import rescore_run
+
+    task = next(t for t in load_tasks(split="dev") if t.category == "single" and not t.faults)
+    script = [
+        LLMResponse(text="", tool_calls=(ToolCall(f"c{i}", c.tool, dict(c.args)),))
+        for i, c in enumerate(task.oracle.calls)
+    ] + [say(task.oracle.final_answer)]
+    run_dir = tmp_path / "runs" / "calibrate_x"
+    run_calibration(
+        [task],
+        {"bot": lambda: ScriptedAdapter(script, model="bot")},
+        out_dir=run_dir,
+        base_db=base_db,
+        docs=docs,
+    )
+    summary = rescore_run(run_dir, [task], base_db=base_db, docs=docs)
+    assert summary["per_task"][task.id] == {"bot": 1} and summary["changed_verdicts"] == []
+
+    rows_path = run_dir / "rows.jsonl"
+    row = json.loads(rows_path.read_text(encoding="utf-8"))
+    row["final_answer"] = "I have no idea."
+    rows_path.write_text(json.dumps(row) + "\n", encoding="utf-8")
+    summary = rescore_run(run_dir, [task], base_db=base_db, docs=docs)
+    assert summary["changed_verdicts"] == [
+        {"task_id": task.id, "model": "bot", "was": True, "now": False}
+    ]

@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: unans-013
-version: 1
+version: 2
 split: test
 category: unans
 difficulty: easy
@@ -8,41 +8,86 @@ prompt: How many loyalty points does customer 1152 have?
 checks:
   answer:
     contains_any:
-    - don't have
-    - do not have
-    - not available
-    - isn't available
-    - is not available
-    - not stored
-    - isn't stored
-    - not recorded
-    - isn't recorded
-    - not tracked
-    - don't track
-    - do not track
-    - doesn't include
-    - does not include
-    - not included
-    - no record
-    - unable to
-    - not able to
+    - can't find
     - can't provide
+    - cannot find
     - cannot provide
-    - no information
-    - doesn't store
-    - does not store
-    - don't store
+    - could not find
+    - could not locate
+    - couldn't find
+    - couldn't locate
+    - do not carry
+    - do not have
+    - do not sell
     - do not store
-    - not part of
-    - no tracking
-    - no phone
-    - no payment
-    - no loyalty
-    - not have
-    - doesn't have
+    - do not track
+    - does not appear
+    - does not cover
+    - does not exist
     - does not have
-    - isn't something
+    - does not include
+    - does not store
+    - doesn't appear
+    - doesn't cover
+    - doesn't exist
+    - doesn't have
+    - doesn't include
+    - doesn't store
+    - don't carry
+    - don't have
+    - don't sell
+    - don't store
+    - don't track
+    - is not available
+    - is not in our
     - is not something
+    - isn't available
+    - isn't covered
+    - isn't in our
+    - isn't listed
+    - isn't mentioned
+    - isn't recorded
+    - isn't something
+    - isn't specified
+    - isn't stored
+    - no customer
+    - no data
+    - no details
+    - no info
+    - no information
+    - no loyalty
+    - no matching
+    - no mention
+    - no order
+    - no payment
+    - no phone
+    - no policy
+    - no product
+    - no record
+    - no results
+    - no specific
+    - no such
+    - no such information
+    - no tracking
+    - not able to
+    - not able to find
+    - not available
+    - not covered
+    - not exist
+    - not explicitly
+    - not found
+    - not have
+    - not in our
+    - not included
+    - not listed
+    - not mentioned
+    - not part of
+    - not recorded
+    - not specified
+    - not stored
+    - not tracked
+    - unable to
+    - unable to find
     - no loyalty
     - loyalty program
     - loyalty scheme

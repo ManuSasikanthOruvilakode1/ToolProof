@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: unans-010
-version: 1
+version: 2
 split: test
 category: unans
 difficulty: easy
@@ -8,34 +8,86 @@ prompt: Is the Smart Toaster in stock in Sydney?
 checks:
   answer:
     contains_any:
-    - not found
-    - no order
-    - no customer
-    - no product
-    - doesn't exist
-    - does not exist
-    - couldn't find
-    - could not find
     - can't find
+    - can't provide
     - cannot find
-    - unable to find
-    - no record
-    - no such
-    - isn't in our
-    - is not in our
-    - not in our
-    - don't have
-    - do not have
-    - doesn't appear
-    - does not appear
-    - no matching
-    - not able to find
-    - no results
-    - don't sell
-    - do not sell
-    - don't carry
+    - cannot provide
+    - could not find
+    - could not locate
+    - couldn't find
+    - couldn't locate
     - do not carry
+    - do not have
+    - do not sell
+    - do not store
+    - do not track
+    - does not appear
+    - does not cover
+    - does not exist
+    - does not have
+    - does not include
+    - does not store
+    - doesn't appear
+    - doesn't cover
+    - doesn't exist
+    - doesn't have
+    - doesn't include
+    - doesn't store
+    - don't carry
+    - don't have
+    - don't sell
+    - don't store
+    - don't track
+    - is not available
+    - is not in our
+    - is not something
+    - isn't available
+    - isn't covered
+    - isn't in our
+    - isn't listed
+    - isn't mentioned
+    - isn't recorded
+    - isn't something
+    - isn't specified
+    - isn't stored
+    - no customer
+    - no data
+    - no details
+    - no info
+    - no information
+    - no loyalty
+    - no matching
+    - no mention
+    - no order
+    - no payment
+    - no phone
+    - no policy
+    - no product
+    - no record
+    - no results
+    - no specific
+    - no such
+    - no such information
+    - no tracking
+    - not able to
+    - not able to find
+    - not available
+    - not covered
     - not exist
+    - not explicitly
+    - not found
+    - not have
+    - not in our
+    - not included
+    - not listed
+    - not mentioned
+    - not part of
+    - not recorded
+    - not specified
+    - not stored
+    - not tracked
+    - unable to
+    - unable to find
     grounded: true
 oracle:
   calls:

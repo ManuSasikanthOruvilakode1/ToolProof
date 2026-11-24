@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: chain-003
-version: 1
+version: 2
 split: dev
 category: chain
 difficulty: hard
@@ -13,7 +13,7 @@ checks:
       tolerance: 0.01
     contains_all:
     - '1283'
-    grounded: true
+    grounded: false
 oracle:
   calls:
   - tool: sql_query

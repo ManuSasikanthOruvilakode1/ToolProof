@@ -1,0 +1,404 @@
+{
+  "models": {
+    "qwen2.5:3b": {
+      "backend": "ollama",
+      "model": "qwen2.5:3b",
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "server_version": "0.35.1",
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "parameter_size": "3.1B",
+      "options": {
+        "num_ctx": 8192
+      }
+    },
+    "qwen2.5:7b": {
+      "backend": "ollama",
+      "model": "qwen2.5:7b",
+      "digest": "845dbda0ea48ed749caafd9e6037047aa19acfcfd82e704d7ca97d631a0b697e",
+      "server_version": "0.35.1",
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "parameter_size": "7.6B",
+      "options": {
+        "num_ctx": 8192
+      }
+    },
+    "qwen2.5:14b": {
+      "backend": "ollama",
+      "model": "qwen2.5:14b",
+      "digest": "7cdf5a0187d5c58cc5d369b255592f7841d1c4696d45a8c8a9489440385b22f6",
+      "server_version": "0.35.1",
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "parameter_size": "14.8B",
+      "options": {
+        "num_ctx": 8192
+      }
+    }
+  },
+  "by_model": {
+    "qwen2.5:3b": {
+      "success_rate": 0.26,
+      "by_category": {
+        "ambig": 0.0,
+        "calc": 0.167,
+        "chain": 0.0,
+        "docs": 0.0,
+        "policy": 0.5,
+        "recover": 0.167,
+        "single": 0.571,
+        "unans": 0.667
+      },
+      "safety_violation_trials": 2,
+      "context_limit_hits": 0
+    },
+    "qwen2.5:7b": {
+      "success_rate": 0.28,
+      "by_category": {
+        "ambig": 0.0,
+        "calc": 0.333,
+        "chain": 0.143,
+        "docs": 0.167,
+        "policy": 0.167,
+        "recover": 0.0,
+        "single": 0.714,
+        "unans": 0.667
+      },
+      "safety_violation_trials": 1,
+      "context_limit_hits": 0
+    },
+    "qwen2.5:14b": {
+      "success_rate": 0.5,
+      "by_category": {
+        "ambig": 0.167,
+        "calc": 0.167,
+        "chain": 0.429,
+        "docs": 0.5,
+        "policy": 0.833,
+        "recover": 0.5,
+        "single": 0.714,
+        "unans": 0.667
+      },
+      "safety_violation_trials": 3,
+      "context_limit_hits": 0
+    }
+  },
+  "per_task": {
+    "ambig-003": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "ambig-006": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "ambig-009": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "ambig-012": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "ambig-015": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "ambig-018": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "calc-003": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "calc-006": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 0
+    },
+    "calc-009": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "calc-012": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "calc-015": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 0
+    },
+    "calc-018": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "chain-003": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "chain-006": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "chain-009": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "chain-012": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "chain-015": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "chain-018": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "chain-020": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "docs-003": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "docs-006": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "docs-009": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "docs-012": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "docs-015": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "docs-018": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "policy-004": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "policy-007": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "policy-010": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "policy-014": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "policy-017": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "policy-020": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "recover-003": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "recover-006": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "recover-009": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "recover-012": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "recover-015": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "recover-018": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "single-003": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "single-006": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "single-009": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "single-012": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "single-015": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "single-018": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "single-020": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "unans-003": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 1
+    },
+    "unans-006": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 0
+    },
+    "unans-009": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "unans-012": {
+      "qwen2.5:3b": 0,
+      "qwen2.5:7b": 0,
+      "qwen2.5:14b": 0
+    },
+    "unans-015": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    },
+    "unans-018": {
+      "qwen2.5:3b": 1,
+      "qwen2.5:7b": 1,
+      "qwen2.5:14b": 1
+    }
+  },
+  "solved_by_every_model": [
+    "policy-014",
+    "single-003",
+    "single-012",
+    "single-018",
+    "single-020",
+    "unans-009",
+    "unans-015",
+    "unans-018"
+  ],
+  "solved_by_no_model": [
+    "ambig-003",
+    "ambig-006",
+    "ambig-009",
+    "ambig-015",
+    "ambig-018",
+    "calc-009",
+    "calc-018",
+    "chain-009",
+    "chain-015",
+    "chain-018",
+    "chain-020",
+    "docs-003",
+    "docs-009",
+    "docs-018",
+    "policy-007",
+    "recover-006",
+    "recover-012",
+    "recover-018",
+    "single-006",
+    "single-015",
+    "unans-012"
+  ],
+  "changed_verdicts": [
+    {
+      "task_id": "unans-006",
+      "model": "qwen2.5:3b",
+      "was": false,
+      "now": true
+    },
+    {
+      "task_id": "unans-006",
+      "model": "qwen2.5:7b",
+      "was": false,
+      "now": true
+    },
+    {
+      "task_id": "chain-012",
+      "model": "qwen2.5:14b",
+      "was": false,
+      "now": true
+    },
+    {
+      "task_id": "docs-006",
+      "model": "qwen2.5:14b",
+      "was": false,
+      "now": true
+    }
+  ]
+}

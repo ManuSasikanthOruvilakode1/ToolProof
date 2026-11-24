@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: docs-010
-version: 1
+version: 2
 split: test
 category: docs
 difficulty: medium
@@ -20,7 +20,13 @@ checks:
         order_id: 9071
         amount: 67.99
         reason:
-          contains: missing
+          contains_any:
+          - missing
+          - not received
+          - never arrived
+          - not included
+          - absent
+          - not in the
 oracle:
   calls:
   - tool: get_order

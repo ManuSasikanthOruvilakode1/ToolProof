@@ -206,6 +206,10 @@ def check_answer(
 def value_matches(expected: Any, actual: Any) -> bool:
     if isinstance(expected, dict) and set(expected) == {"contains"}:
         return isinstance(actual, str) and str(expected["contains"]).lower() in actual.lower()
+    if isinstance(expected, dict) and set(expected) == {"contains_any"}:
+        return isinstance(actual, str) and any(
+            str(item).lower() in actual.lower() for item in expected["contains_any"]
+        )
     if isinstance(expected, bool) or isinstance(actual, bool):
         return bool(expected) == bool(actual)
     if isinstance(expected, int | float) and isinstance(actual, int | float):

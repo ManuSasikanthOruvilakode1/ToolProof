@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: docs-018
-version: 1
+version: 2
 split: dev
 category: docs
 difficulty: medium
@@ -22,7 +22,9 @@ checks:
         order_id: 9566
         amount: 5.4
         reason:
-          contains: late
+          contains_any:
+          - late
+          - delay
 oracle:
   calls:
   - tool: get_order

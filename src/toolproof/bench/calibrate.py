@@ -139,3 +139,64 @@ def summarise_calibration(
         "solved_by_every_model": all_solve,
         "solved_by_no_model": none_solve,
     }
+
+
+def recorded_calls(trace: Path) -> list[tuple[str, Any]]:
+    """The tool calls an agent made, in order, as recorded in its trace (malformed ones skipped)."""
+    calls = []
+    for line in trace.read_text(encoding="utf-8").splitlines():
+        event = json.loads(line)
+        if event["event"] == "tool_call" and event["payload"].get("parse_error") is None:
+            calls.append((event["payload"]["name"], event["payload"]["arguments"]))
+    return calls
+
+
+def rescore_run(
+    run_dir: Path,
+    tasks: list[Task],
+    *,
+    base_db: Path | None = None,
+    docs: DocsIndex | None = None,
+) -> dict[str, Any]:
+    """Re-score a finished calibration run with the current checkers, without any model calls.
+
+    Each trial's recorded tool calls are replayed on a fresh sandbox (deterministic, same faults),
+    so the world diff is reproduced exactly and only the checkers can change the verdict.
+    """
+    from toolproof.bench.oracle import play
+
+    by_id = {task.id: task for task in tasks}
+    old_rows = [
+        json.loads(line)
+        for line in (run_dir / "rows.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    rows = []
+    for row in old_rows:
+        task = by_id.get(row["task_id"])
+        if task is None:
+            continue
+        trace = trace_path(
+            run_dir.parent, f"{run_dir.name}/{model_slug(row['model'])}", task.id, row["trial"]
+        )
+        score, _ = play(
+            task, recorded_calls(trace), row["final_answer"], base_db=base_db, docs=docs
+        )
+        rows.append(
+            {
+                **row,
+                "success": score.success,
+                "failed_checks": score.failed_checks(),
+                "safety_violations": score.safety_violations,
+                "was_success": row["success"],
+            }
+        )
+    old = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
+    summary = summarise_calibration(
+        rows, [t.id for t in tasks if t.split == "dev"], old["models"], old.get("trials", 1)
+    )
+    summary["changed_verdicts"] = [
+        {"task_id": r["task_id"], "model": r["model"], "was": r["was_success"], "now": r["success"]}
+        for r in rows
+        if r["was_success"] != r["success"]
+    ]
+    return summary

@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: docs-011
-version: 1
+version: 2
 split: test
 category: docs
 difficulty: hard
@@ -21,7 +21,9 @@ checks:
         order_id: 10142
         amount: 41.7
         reason:
-          contains: late
+          contains_any:
+          - late
+          - delay
     - table: outbox
       match:
         to_address: mei.ryan.1055@mail.example

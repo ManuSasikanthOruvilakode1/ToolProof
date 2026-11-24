@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: docs-008
-version: 1
+version: 2
 split: test
 category: docs
 difficulty: hard
@@ -21,7 +21,13 @@ checks:
         order_id: 10075
         amount: 53.99
         reason:
-          contains: damag
+          contains_any:
+          - damag
+          - broke
+          - crack
+          - smash
+          - defect
+          - shatter
     - table: outbox
       match:
         to_address: sakura.taylor.1017@mail.example

@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: chain-012
-version: 1
+version: 2
 split: dev
 category: chain
 difficulty: easy
@@ -12,7 +12,7 @@ checks:
     - Weatherproof Garden Lantern
     - '241'
     - '358'
-    grounded: true
+    grounded: false
 oracle:
   calls:
   - tool: get_order

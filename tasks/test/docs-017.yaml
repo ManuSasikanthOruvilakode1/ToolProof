@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: docs-017
-version: 1
+version: 2
 split: test
 category: docs
 difficulty: medium
@@ -20,7 +20,13 @@ checks:
         order_id: 10096
         amount: 120.99
         reason:
-          contains: damag
+          contains_any:
+          - damag
+          - broke
+          - crack
+          - smash
+          - defect
+          - shatter
 oracle:
   calls:
   - tool: get_order

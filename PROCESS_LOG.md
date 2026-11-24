@@ -911,3 +911,66 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 **Summary:** Calibration runner 'toolproof bench calibrate': dev tasks only (refuses test tasks, RULES 11); per-task success per model; lists tasks solved by every model or by none
 
 - **Files:** `src/toolproof/bench/calibrate.py`, `src/toolproof/cli.py`, `tests/unit/test_calibrate.py`
+
+---
+
+### LOG-0085 | 2026-11-25 06:52 +11:00 | EXPERIMENT | P4.8
+
+**Summary:** Dev calibration calibrate_20261125-0617: 50 dev tasks x qwen2.5 3b/7b/14b x 1 trial, plain, temperature 0.7
+
+- **Files:** `reports/calibration`
+- **Details:**
+  - Success after re-scoring with fixed checkers: 3b 26%, 7b 28%, 14b 50%; 150/150 trials ended with final_answer; 0 context-limit hits; safety-violation trials 3b 2, 7b 1, 14b 3
+  - Solved by every model: 8 tasks (policy-014, single-003/012/018/020, unans-009/015/018); solved by no model: 21 tasks
+
+---
+
+### LOG-0086 | 2026-11-25 06:52 +11:00 | FINDING | P4.8
+
+**Summary:** Calibration found 4 checker false negatives; fixed and verified by replaying the recorded tool calls (no model re-runs)
+
+- **Files:** `scripts/author_tasks.py`, `src/toolproof/bench/checkers.py`, `src/toolproof/bench/calibrate.py`, `src/toolproof/env/tools/read.py`
+- **Details:**
+  - unans answers such as 'I couldn't find a specific policy' failed a narrow phrase list: unanswerable tasks now share one broad CANNOT_ANSWER list
+  - A correct change-of-mind refund failed because its free-text reason lacked 'mind': refund reasons now accept synonyms per reason (matcher contains_any)
+  - A correct stock answer (86 + 155 = 241) failed grounding because the model added numbers itself: grounding is off for sums outside the calc category (items_stock, net_spend, compare_net_spend) and for transit days
+  - Bug: the YAML writer dropped 'grounded: false', silently restoring the default; fixed. Re-scoring changed exactly 4 verdicts, all fail -> pass
+  - 63 tasks changed and were bumped to version 2 (RULES 28); bench validate and oracle still pass for 150/150
+
+---
+
+### LOG-0087 | 2026-11-25 06:52 +11:00 | FINDING | P4.8
+
+**Summary:** Genuine failure patterns in calibration (useful for P5 taxonomy and P6 analysis)
+
+- **Details:**
+  - Customer ID used as an order ID (chain-015, all three models); made-up email addresses (chain-018); unrequested emails (docs-018)
+  - Giving up after an injected fault instead of retrying (recover-006/012/018, unans-012); concluding '0 in stock' from an empty query result after filtering warehouse = 'Sydney' instead of 'Sydney DC'
+  - Asking the clarifying question in the final reply instead of with the ask tool, which ends the trial (ambig-006); acting on one of three Johns without asking (ambig-003/009)
+  - qwen2.5:14b answered in Thai in 7 of 50 dev trials
+
+---
+
+### LOG-0088 | 2026-11-25 06:52 +11:00 | DECISION | P4.8
+
+**Summary:** Tasks solved by no pilot model or by every pilot model are kept, not rewritten (deviation from the P4.8 wording)
+
+- **Files:** `PLAN.md`
+- **Details:**
+  - Each of the 21 unsolved tasks was inspected: every failure is a capability failure (above), not unclear wording or a checker error. Making them easier would tune the benchmark to three weak pilot models, and they are what strategies (E2) and better descriptions (E4) should move
+  - The 8 tasks every model solved are easy single-tool or not-found tasks; they anchor the low end (the small model scores 26%)
+  - Lessons applied to test tasks before the lock: the checker fixes above apply to all 150 tasks through scripts/author_tasks.py
+
+---
+
+### LOG-0089 | 2026-11-25 06:52 +11:00 | NOTE | P6.2
+
+**Summary:** Dev prompt-tuning candidate: say in the base prompt that a reply without a tool call ends the conversation (affects 'I will now...' and questions asked in the final reply)
+
+---
+
+### LOG-0090 | 2026-11-25 06:52 +11:00 | DONE | P4.8
+
+**Summary:** Dev calibration done; 4 checker false negatives fixed; extreme tasks reviewed and kept (DECISION above); 'toolproof bench calibrate' and trace-replay re-scoring added
+
+- **Files:** `src/toolproof/bench/calibrate.py`, `tests/unit/test_calibrate.py`, `reports/calibration`

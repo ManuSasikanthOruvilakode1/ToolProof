@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: ambig-011
-version: 1
+version: 2
 split: test
 category: ambig
 difficulty: hard
@@ -22,7 +22,13 @@ checks:
         order_id: 9049
         amount: 32.99
         reason:
-          contains: damag
+          contains_any:
+          - damag
+          - broke
+          - crack
+          - smash
+          - defect
+          - shatter
   clarification:
     must_ask_before_write: true
 oracle:

@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: chain-010
-version: 1
+version: 2
 split: test
 category: chain
 difficulty: easy
@@ -9,6 +9,7 @@ checks:
   answer:
     numeric:
       value: 160.0
+      tolerance: 0.0
     contains_all:
     - Melbourne
     grounded: true

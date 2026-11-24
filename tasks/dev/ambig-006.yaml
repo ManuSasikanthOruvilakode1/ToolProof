@@ -1,6 +1,6 @@
 # Written with scripts/author_tasks.py; see PLAN.md section 8 for the schema.
 id: ambig-006
-version: 1
+version: 2
 split: dev
 category: ambig
 difficulty: hard
@@ -22,7 +22,9 @@ checks:
         order_id: 9935
         amount: 47.7
         reason:
-          contains: late
+          contains_any:
+          - late
+          - delay
   clarification:
     must_ask_before_write: true
 oracle:
