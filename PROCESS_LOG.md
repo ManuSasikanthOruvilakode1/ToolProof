@@ -782,3 +782,15 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - Tests: 320 passed; ruff, mypy strict, pre-commit and devlog verify clean
   - Open issues: LOG-0009 (P7.3), LOG-0043 (email in early commits)
 - **Next:** Wait for the owner's go-ahead; then P4.1 task schema and 'toolproof bench validate'
+
+---
+
+### LOG-0072 | 2026-11-25 05:52 +11:00 | DECISION | -
+
+**Summary:** Owner approved a one-time history rewrite to remove the institutional email from the first 7 commits (exception to RULES 46)
+
+- **Refs:** LOG-0043
+- **Details:**
+  - Only author and committer email fields change; file trees must be identical before and after (checked by comparing tree hashes)
+  - main and tags checkpoint/CP-0002 to CP-0006 are force-pushed once; every commit hash changes, so old-to-new hashes are logged in a follow-up entry
+  - A full backup bundle was made before the rewrite; merged local branches p2/... and p3/... were deleted instead of rewritten
