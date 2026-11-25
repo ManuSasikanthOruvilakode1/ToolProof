@@ -50,7 +50,7 @@ FIELDS = [
 HELP = """Commands:
   tools                      list the tools and their parameters
   call <tool> <json args>    e.g. call get_order {"order_id": 9031}
-  answer <text>              give your final answer (ends the attempt)
+  answer <your reply>        your final reply, on the same line (ends the attempt)
   quit                       stop without recording anything"""
 
 
@@ -120,6 +120,12 @@ def run_attempt(
                 record = sandbox.toolbox.call(tool, arguments)
                 write("  " + record.content_for_model())
             elif command == "answer":
+                if not rest.strip():
+                    write(
+                        "  Type your reply on the same line, after the word answer, e.g.\n"
+                        "  answer <your reply to the colleague>"
+                    )
+                    continue
                 evidence = TrialEvidence(
                     final_answer=rest.strip(),
                     tool_calls=list(sandbox.toolbox.history),

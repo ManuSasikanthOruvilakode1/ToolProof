@@ -60,8 +60,27 @@ below, exactly as an agent would:
 |---|---|
 | `tools` | Lists the tools, their parameters and the database tables |
 | `call <tool> <json>` | Runs a tool, e.g. `call get_order {"order_id": 9031}` |
-| `answer <text>` | Your final reply to the colleague; this ends the attempt |
+| `answer <your reply>` | Your final reply to the colleague, typed on the same line; this ends the attempt |
 | `quit` | Stops without saving this task |
+
+`call` takes the tool's name, then what the tool needs inside `{ }`. The `tools` list shows
+what each tool needs in brackets: `get_order(order_id)` needs an order number, so you type
+`call get_order {"order_id": 9031}`. Put text in double quotes, e.g.
+`call search_docs {"query": "late delivery"}`. A tool with nothing in its brackets needs
+nothing: `call get_date`.
+
+An example of a whole attempt, for the request "How many products do we sell?" (not one of
+your tasks):
+
+```
+> call sql_query {"query": "SELECT COUNT(*) FROM products"}
+  {"columns": ["COUNT(*)"], "rows": [[80]], "row_count": 1, "truncated": false}
+> answer We sell 80 products.
+```
+
+`issue_refund` and `send_email` change things, so use them only when the request asks for it
+and the store's rules allow it; even a failed attempt at one counts. Other mistakes, such as
+a misspelt tool or broken JSON, just show an error and do no harm.
 
 Some tips:
 

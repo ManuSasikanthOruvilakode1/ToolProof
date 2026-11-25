@@ -1005,3 +1005,15 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 **Summary:** Rater kit fixes from a fresh-clone test: 'tools' now prints full descriptions (the sql_query table list was cut off); guide gains install steps, fairness rules and how to send results back
 
 - **Files:** `src/toolproof/bench/human.py`, `tests/unit/test_human_validation.py`, `docs/HUMAN_VALIDATION.md`, `PLAN.md`
+
+---
+
+### LOG-0094 | 2026-11-25 15:54 +11:00 | CORRECTION | P4.7
+
+**Summary:** Removed rater_a's first two validation rows (single-002, single-019): both were empty answers typed as a bare 'answer', so the 'disagree' verdicts reflected the interface, not the checker
+
+- **Refs:** LOG-0093
+- **Files:** `src/toolproof/bench/human.py`, `tests/unit/test_human_validation.py`, `docs/HUMAN_VALIDATION.md`, `data/labels/human_validation.csv`
+- **Details:**
+  - Both rows say 'no final answer'; the rater's notes show they believed the reply had been entered
+  - 'answer' with no text is now refused with a hint instead of being scored; the guide gains a worked example; the rater redoes both tasks
