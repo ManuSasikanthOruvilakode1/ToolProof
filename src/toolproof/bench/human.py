@@ -107,9 +107,9 @@ def run_attempt(
                 for schema in sandbox.toolbox.schemas():
                     function = schema["function"]
                     params = ", ".join(function["parameters"].get("properties", {}))
-                    write(
-                        f"  {function['name']}({params}): {function['description'].splitlines()[0]}"
-                    )
+                    # The full description: sql_query's lists the tables after its first line.
+                    description = function["description"].replace("\n", "\n      ")
+                    write(f"  {function['name']}({params}): {description}")
             elif command == "call":
                 tool, _, raw = rest.strip().partition(" ")
                 try:

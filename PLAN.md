@@ -1,6 +1,6 @@
 # ToolProof: Project Plan
 
-> **Plan version:** 1.5 · **Created:** 2026-11-17 · **Updated:** 2026-11-25 (P4 checker semantics and grounding, LOG-0075; calibration decision, LOG-0088) · **Status:** P0–P3 complete; P4 7/9 (P4.7 needs 2–3 human raters; P4.9 lock waits for it).
+> **Plan version:** 1.5 · **Created:** 2026-11-17 · **Updated:** 2026-11-25 (P4 checker semantics and grounding, LOG-0075; calibration decision, LOG-0088; two raters, LOG-0092) · **Status:** P0–P3 complete; P4 7/9 (P4.7 in progress with two raters; P4.9 lock waits for it).
 >
 > This file describes **what** to build and **how to judge it**. It changes only through a logged
 > decision (`DECISION` entry in [PROCESS_LOG.md](PROCESS_LOG.md)). Current progress is in
@@ -291,7 +291,7 @@ task is complete **and** a matching `DONE` entry exists in the log.
 - [x] **P4.4** Write tasks per category, using the counts in [§8.2](#82-categories-and-counts).
 - [x] **P4.5** Difficulty labels using the rules in [§8.3](#83-difficulty). Target mix: about 30% easy, 40% medium and 30% hard.
 - [x] **P4.6** Checker mutation tests: for a sample of tasks, deliberately wrong trajectories must **fail** (wrong amount, extra email, wrong customer, missing refund, answer without tool use).
-- [ ] **P4.7** Human validation: 2–3 people attempt 20 tasks using the tools through a simple CLI. Record agreement with the checker and fix or remove ambiguous tasks. **Do not record their names** (RULES 1); use `rater_a`, `rater_b`.
+- [ ] **P4.7** Human validation: 2–3 people attempt 20 tasks using the tools through a simple CLI. Record agreement with the checker and fix or remove ambiguous tasks. **Do not record their names** (RULES 1); use `rater_a`, `rater_b`. *Raters: the owner (`rater_a`) and one helper (`rater_b`), LOG-0092.*
 - [x] **P4.8** *(Done; tasks at the extremes were reviewed and kept, LOG-0088)* Difficulty calibration on **dev only**: rewrite tasks that every pilot model solves or no model solves. Apply the same lessons when reviewing test tasks, **before** the lock.
 - [ ] **P4.9** Lock the test set: write `tasks/test.lock` (SHA-256 per file plus a combined hash), set `BENCHMARK_VERSION = 1.0.0`, add a `DECISION` log entry, and create tag `benchmark-v1.0.0`. Add a CI check that the lock matches.
 - **Done when:** validation and the oracle pass for 150/150 tasks; mutation tests pass; the lock is committed and checked in CI.

@@ -986,3 +986,22 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
   - Tests: 1,182 passed; bench validate 150 tasks 0 problems; oracle 150/150; CI runs both
   - Open issues: LOG-0009 (P7.3), LOG-0083 (human raters)
 - **Next:** Owner recruits 2-3 raters (docs/HUMAN_VALIDATION.md); then 'toolproof bench agreement', fix flagged tasks, and lock the test set (P4.9)
+
+---
+
+### LOG-0092 | 2026-11-25 14:52 +11:00 | DECISION | P4.7
+
+**Summary:** Human validation uses two raters: the owner as rater_a and one helper as rater_b (the plan allowed 2-3)
+
+- **Refs:** LOG-0083
+- **Details:**
+  - Two raters still give a second, independent judgement on every task; the 20-task set is the same for both
+  - Raters work separately and do not discuss tasks until both finish; the helper sends back data/labels/human_validation.csv, which is merged before 'toolproof bench agreement'
+
+---
+
+### LOG-0093 | 2026-11-25 14:52 +11:00 | EDIT | P4.7
+
+**Summary:** Rater kit fixes from a fresh-clone test: 'tools' now prints full descriptions (the sql_query table list was cut off); guide gains install steps, fairness rules and how to send results back
+
+- **Files:** `src/toolproof/bench/human.py`, `tests/unit/test_human_validation.py`, `docs/HUMAN_VALIDATION.md`, `PLAN.md`

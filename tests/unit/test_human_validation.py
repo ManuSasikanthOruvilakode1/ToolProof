@@ -56,6 +56,8 @@ def test_human_solves_a_task_and_records_it(base_db: Path, docs: DocsIndex, tmp_
     assert any("sql_query(" in line for line in out) and any(
         "not valid JSON" in line for line in out
     )
+    listing = next(line for line in out if "sql_query(" in line)
+    assert "order_items(order_id" in listing  # the table list is not cut off
     labels = tmp_path / "labels.csv"
     row = record_attempt(attempt, "rater_a", lambda prompt: next(replies), out.append, path=labels)
     assert row["rater_agrees"] is True and row["task_clear"] is False
