@@ -1017,3 +1017,14 @@ Only the heading and **Summary** are required. Use `-` as the task ID when no ta
 - **Details:**
   - Both rows say 'no final answer'; the rater's notes show they believed the reply had been entered
   - 'answer' with no text is now refused with a hint instead of being scored; the guide gains a worked example; the rater redoes both tasks
+
+---
+
+### LOG-0095 | 2026-11-25 16:22 +11:00 | NOTE | P4.7
+
+**Summary:** rater_a got help with command syntax during validation (SQL and JSON); the rater chose every lookup and wrote every answer and verdict
+
+- **Refs:** LOG-0092
+- **Details:**
+  - Progress: 3 of 20 tasks recorded (single-002, single-019, chain-008); the rater resumes later
+  - Finding: the guide's 'no technical knowledge needed' does not hold for tasks needing SQL; a ready-made lookup list for raters is proposed, pending the owner's choice
